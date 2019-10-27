@@ -1,5 +1,6 @@
 def test_bateaux(bateaux) :
-    """Voici un algorithme qui teste si les bateaux que rentrent le joueur correspondent à une disposition valide. On attend une liste de 5 bateaux représentés par leur coordonnées, triés par ordre croissant de taille."""
+    """Voici un algorithme qui teste si les bateaux que rentrent le joueur correspondent à une disposition valide.
+    On attend une liste de 5 bateaux représentés par leur coordonnées, triés par ordre croissant de taille."""
 
     if type(bateaux) != list or bateaux == [] :
         return False
