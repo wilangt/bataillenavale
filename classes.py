@@ -21,6 +21,11 @@ class Plateau:
         """Affiche le plateau"""
         print(self.plateau)
 
+    def __repr__(self):
+        """Affiche le plateau"""
+        print(self.plateau)
+        return ""
+
     def feu(self, coor):
         """Feu sur une coordonnée"""
         cible = self.plateau[coor]
