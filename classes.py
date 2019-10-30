@@ -52,3 +52,10 @@ class Plateau:
     def defaite(self):
         """Vérifie si il reste des bateaux sur le plateau"""
         return self.bateaux == [0, 0, 0, 0, 0, 0]
+
+# Classes à creer : (par ordre croissant d'inclusion)
+# Classes de base : Humain_att(Plateau à attaquer) ; Humain_def(Plateau à defendre) ; IA_att(Plateau...) etc
+# Attaquant(classe de base qui attaque : methode attaque()) ; Defenseur (classe de base qui defend : methode place())
+# Joueur(Attaquant, Defenseur)
+# Partie(Joueur/Attaquant,Joueur/Defenseur)
+# Jeu() (optionnel, à faire à la fin)
