@@ -37,17 +37,17 @@ def main():
                 0] > pas_quad:
                 compteur += 1
                 coor = pixToCoor(event.pos[0], event.pos[1], pas_quad)
-                if plateau.plateauVisible[coor]!=0:
-                    print("boloss") # Le joueur a deja tiré à cet endroit
-                else :
+                if plateau.plateauVisible[coor] != 0:
+                    print("boloss")  # Le joueur a deja tiré à cet endroit
+                else:
                     res = plateau.feu(coor)
-                    if res == 0 :
+                    if res == 0:
                         print("plouf")
-                        dessinerRect(coor,RED, DIM, background)
-                    elif res ==1 :
+                        dessinerRect(coor, RED, DIM, background)
+                    elif res == 1:
                         print("touché")
                         dessinerRect(coor, GREEN, DIM, background)
-                    elif res == 2 :
+                    elif res == 2:
                         print("touché coulé")
                         dessinerRect(coor, BLACK, DIM, background)
 
