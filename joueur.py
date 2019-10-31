@@ -45,7 +45,7 @@ class Joueur:
 
 """
 Template pour sous-classes de joueur :
-class Humain(Joueur):
+class Joueur(Joueur):
     def __init__(self, plateau_allie, plateau_adverse):
         Joueur.__init__(self, plateau_allie, plateau_adverse)
         self.attaquant = False

@@ -1,12 +1,14 @@
 from humain import *
+from hasard import *
 from plateau import *
+from time import sleep
 
 print()
 
 
 def main():
     liste_defenseur = [Humain]
-    liste_attaquant = [Humain]
+    liste_attaquant = [Humain, HasardDebile, HasardMalin]
 
     att_def = choisir_mode()
     classe_participants = choisir_participants(att_def, liste_defenseur, liste_attaquant)
@@ -30,6 +32,7 @@ def main():
         while not (plateau1.defaite()):
             attaquant.attaquer()
             compteur += 1
+            sleep(0.01)
 
         plateau1.cacher_interface()
         pygame.display.quit()

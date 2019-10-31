@@ -10,11 +10,9 @@ class Humain(Joueur):
         self.defenseur = True
 
     def position_bateaux(self):
-        return [[(1, 1), (1, 2)], [(5, 4), (5, 5), (5, 6)], [(5, 9), (6, 9), (7, 9)], [(6, 1), (7, 1), (8, 1), (9, 1)],
-                [(1, 5), (1, 6), (1, 7), (1, 8), (1, 9)]]
+        pass
 
     def choisir_cible(self):
-        """Attaque la flotte adverse. Renvoie une coordonnée"""
         pas_quad = self.plateau_adverse.get_pas_quad()
         self.plateau_adverse.afficher_interface()
         continuer = True
@@ -37,3 +35,13 @@ class Humain(Joueur):
             print("touché")
         elif res == 2:
             print("touché coulé")
+
+class ConfigInit(Joueur):
+    def __init__(self, plateau_allie, plateau_adverse):
+        Joueur.__init__(self, plateau_allie, plateau_adverse)
+        self.attaquant = False
+        self.defenseur = True
+
+    def position_bateaux(self):
+        return [[(1, 1), (1, 2)], [(5, 4), (5, 5), (5, 6)], [(5, 9), (6, 9), (7, 9)], [(6, 1), (7, 1), (8, 1), (9, 1)],
+                [(1, 5), (1, 6), (1, 7), (1, 8), (1, 9)]]

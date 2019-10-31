@@ -114,6 +114,9 @@ class Plateau:
     def get_pas_quad(self):
         return self.dimension_fenetre // 11
 
+    def jamais_vu(self, coor):
+        return self.plateauVisible[coor] == 0
+
 
 def coor_to_pix(i, j, pas_quad):
     """Fonction qui transforme une coordonnée BN en coordonnée pixel (seulement l'interieur des cases)"""
