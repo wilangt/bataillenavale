@@ -3,19 +3,18 @@ from pygame.locals import *
 
 def fondEcran(DIM):
 
-    WHITE = (255, 255, 255)
     screen = pygame.display.set_mode((DIM, DIM))
 
     # Arrière plan
     background = pygame.Surface(screen.get_size())
     background = background.convert()
-    background.fill((0, 0, 100))
+    background.fill(couleur("bleu"))
 
     # Quadrillage
     pas_quad = (DIM) // 11
     for i in range(1, 11):
-        pygame.draw.line(background, WHITE, (i * pas_quad, 0), (i * pas_quad, DIM))
-        pygame.draw.line(background, WHITE, (0, i * pas_quad), (DIM, i * pas_quad))
+        pygame.draw.line(background, couleur("blanc"), (i * pas_quad, 0), (i * pas_quad, DIM))
+        pygame.draw.line(background, couleur("blanc"), (0, i * pas_quad), (DIM, i * pas_quad))
 
     return background
 
@@ -52,3 +51,17 @@ def dessinerRect(coor,couleur, DIM, background):
     pygame.draw.rect(background, couleur, rect)
     screen.blit(background, (0, 0))
     pygame.display.flip()
+
+def couleur(couleur):
+    if couleur == "blanc":
+        return (255, 255, 255)
+    elif couleur == "noir":
+        return (0, 0, 0)
+    elif couleur == "bleu":
+        return (0, 0, 100)
+    elif couleur == "rouge":
+        return (100, 0, 0)
+    elif couleur == "vert":
+        return (0, 100, 0)
+    else :
+        return (0, 0, 0)
