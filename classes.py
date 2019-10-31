@@ -1,23 +1,23 @@
 import numpy as np
+from interface import *
 
 
 class Plateau:
     """Classe qui permet de connaitre l'état du plateau, et de le modifier au cours de la partie
     L'argument 'bateaux' est une liste de bateaux"""
 
-    def __init__(self, bateaux):
-        self.coorBateaux = bateaux
+    def __init__(self, dimensionInterface):
         self.plateauCache = np.zeros((10, 10), dtype=int)  # Plateau pour l'arbitre (avec toutes les infos)
         self.plateauVisible = np.zeros((10, 10), dtype=int)  # Plateau visible par le joueur
         self.bateaux = [0, 2, 3, 3, 4, 5]
-        self.creerPlateau()
+        self.interface = initFondEcran(dimensionInterface)
         # exemple de coorBateaux :
         # [[(1,1),(1,2)],[(5,4),(5,5),(5,6)],[(5,9),(6,9),(7,9)],[(6,1),(7,1),(8,1),(9,1)],[(1,5),(1,6),(1,7),(1,8),(1,9)]]
 
-    def creerPlateau(self):
+    def creerPlateau(self, bateaux):
         """initialise le plateau à partir des coordonnées de bateau données à la création du plateau"""
         for k in range(5):
-            for coor in self.coorBateaux[k]:
+            for coor in bateaux[k]:
                 self.plateauCache[coor] = (k + 1)
 
     def afficherPlateauCache(self):
@@ -52,6 +52,11 @@ class Plateau:
     def defaite(self):
         """Vérifie si il reste des bateaux sur le plateau"""
         return self.bateaux == [0, 0, 0, 0, 0, 0]
+
+class Humain:
+    def __init__(self):
+        self.plateau = Plateau()
+
 
 # Classes à creer : (par ordre croissant d'inclusion)
 # Classes de base : Humain_att(Plateau à attaquer) ; Humain_def(Plateau à defendre) ; IA_att(Plateau...) etc
