@@ -1,38 +1,8 @@
 import pygame
 from pygame.locals import *
 
-def fondEcran(DIM):
+pygame.init()
 
-    screen = pygame.display.set_mode((DIM, DIM))
-
-    # Arrière plan
-    background = pygame.Surface(screen.get_size())
-    background = background.convert()
-    background.fill(couleur("bleu"))
-
-    # Quadrillage
-    pas_quad = (DIM) // 11
-    for i in range(1, 11):
-        pygame.draw.line(background, couleur("blanc"), (i * pas_quad, 0), (i * pas_quad, DIM))
-        pygame.draw.line(background, couleur("blanc"), (0, i * pas_quad), (DIM, i * pas_quad))
-
-    return background
-
-def initFenetre(DIM):
-
-    WHITE = (255, 255, 255)
-    # Initialisation de la bibliothèque Pygame
-    pygame.init()
-
-    # Création de la fenêtre
-    screen = pygame.display.set_mode((DIM, DIM))
-    pygame.display.set_caption('Bataille Navale')
-
-    background = fondEcran(DIM)
-
-    # Blitter le tout dans la fenêtre
-    screen.blit(background, (0, 0))
-    pygame.display.flip()
 
 def coorToPix(i, j, pas_quad):
     return (i + 1) * pas_quad + 1, (j + 1) * pas_quad + 1
