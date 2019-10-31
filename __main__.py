@@ -1,8 +1,6 @@
-from classes import *
+from humain import *
+from plateau import *
 from fonctions_annexes import *
-from interface import *
-import pygame
-from pygame.locals import *
 print()
 
 def main():
