@@ -9,7 +9,6 @@ class Plateau:
     L'argument 'bateaux' est une liste de bateaux"""
 
     def __init__(self):
-        # Partie Jeu
         self.plateauCache = np.zeros((10, 10), dtype=int)  # Plateau pour l'arbitre (avec toutes les infos)
         self.plateauVisible = np.zeros((10, 10), dtype=int)  # Plateau visible par le joueur
         self.bateaux = [0, 2, 3, 3, 4, 5]
@@ -33,7 +32,7 @@ class Plateau:
         print(self.plateauCache)
 
     def initInterface(self, dimensionFenetre):
-
+        """Initialise l'interface pygame"""
         # Variables partie interface
         self.dimensionFenetre = dimensionFenetre
         self.pas_quad = (dimensionFenetre) // 11
@@ -44,7 +43,6 @@ class Plateau:
         background.fill(couleur("bleu"))
 
         # Quadrillage
-
         for i in range(1, 11):
             pygame.draw.line(background, couleur("blanc"), (i * self.pas_quad, 0),
                              (i * self.pas_quad, self.dimensionFenetre))
@@ -55,6 +53,7 @@ class Plateau:
         self.interfaceInit = True
 
     def afficherInterface(self):
+        """affiche interface pygame"""
         if self.interfaceInit and not(self.interfaceAffichee):
             self.screen = pygame.display.set_mode((self.dimensionFenetre, self.dimensionFenetre))
             self.screen.blit(self.interface, (0, 0))
@@ -62,16 +61,18 @@ class Plateau:
             self.interfaceAffichee = True
 
     def rafraichirInterface(self):
+        """rafraichi interface pygame"""
         self.screen.blit(self.interface, (0, 0))
         pygame.display.flip()
 
     def cacherInterface(self):
+        """cache l'interface pygame"""
         if self.interfaceAffichee:
             pygame.display.quit()
             self.interfaceAffichee = False
 
     def __repr__(self):
-        """Affiche le plateau"""
+        """Affiche le plateau (terminal)"""
         print(self.plateauVisible)
         return ""
 
@@ -96,14 +97,17 @@ class Plateau:
         return self.bateaux == [0, 0, 0, 0, 0, 0]
 
 def coorToPix(i, j, pas_quad):
+    """Fonction qui transforme une coordonnée BN en coordonnée pixel (seulement l'interieur des cases)"""
     return (i + 1) * pas_quad + 1, (j + 1) * pas_quad + 1
 
 
 def pixToCoor(i, j, pas_quad):
+    """Fonction qui transforme une coordonnée pixel en coordonnée BN"""
     return (i // pas_quad) - 1, (j // pas_quad) - 1
 
 
 def dessinerRect(coor, couleur, DIM, background):
+    """Fonction qui dessine un rectangle"""
     pas_quad = (DIM) // 11
     screen = pygame.display.set_mode((DIM, DIM))
     i, j = coor
@@ -114,6 +118,7 @@ def dessinerRect(coor, couleur, DIM, background):
 
 
 def couleur(couleur):
+    """Fonction qui renvoie le 3-uplet RGB d'une couleur passée en argument"""
     if couleur == "blanc":
         return (255, 255, 255)
     elif couleur == "noir":

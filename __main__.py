@@ -1,10 +1,11 @@
 from humain import *
 from plateau import *
 from fonctions_annexes import *
+
 print()
 
-def main():
 
+def main():
     listeDefenseur = [Humain]
     listeAttaquant = [Humain]
 
@@ -21,9 +22,9 @@ def main():
 
         plateau.afficherInterface()
         compteur = 0
-        while not(plateau.defaite()):
+        while not (plateau.defaite()):
             attaquant.attaquer(plateauFantome, plateau)
-            compteur +=1
+            compteur += 1
 
         plateau.cacherInterface()
         pygame.display.quit()
@@ -35,21 +36,23 @@ def main():
         defenseur1, attaquant1, defenseur2, attaquant2 = classeDef1(), classeAtt1(), classeDef2(), classeAtt2()
 
 
-
-
 def choisirMode():
+    """Fonction qui permet de choisir le mode de jeu (Att VS Def ou J VS J). Renvoie le booleen AttDef"""
     mode = -1
     while not (mode in [0, 1]):
         print("Modes :")
         print("0 : Attaquant VS Défenseur")
         print("1 : Joueur VS Joueur")
-        try : mode = int(input())
-        except : pass
+        try:
+            mode = int(input())
+        except:
+            pass
         print("")
     return not (bool(mode))
 
 
 def choisirParticipants(attDef, listeD, listeA):
+    """Fonction qui demande le type de joueur à partir du mode de jeu et des liste d'attaquants/défenseurs disponible"""
     if attDef:
         return demanderPoste("Defenseur", listeD), demanderPoste("Attaquant", listeA)
     else:
@@ -58,6 +61,7 @@ def choisirParticipants(attDef, listeD, listeA):
 
 
 def demanderPoste(nomPoste, liste):
+    """Fonction qui demande le type de joueur à partir de son poste et de la liste des classes disponible"""
     poste = -1
     while not (poste in list(range(len(liste)))):
         print("{} :".format(nomPoste))
@@ -70,11 +74,16 @@ def demanderPoste(nomPoste, liste):
         print("")
     return liste[poste]
 
+
 def nomClasse(classe):
+    """Fonction qui retourne le nom de la classe passée en argument"""
     nom = str(classe)
-    if '.' in nom: point = nom.index('.')
-    else: point = 7
-    return nom[point+1:-2]
+    if '.' in nom:
+        point = nom.index('.')
+    else:
+        point = 7
+    return nom[point + 1:-2]
+
 
 if __name__ == "__main__":
     main()

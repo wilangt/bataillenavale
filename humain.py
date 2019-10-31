@@ -6,10 +6,12 @@ class Humain:
         self.type = "humain"
 
     def placerBateaux(self):
+        """Place les bateaux"""
         return [[(1, 1), (1, 2)], [(5, 4), (5, 5), (5, 6)], [(5, 9), (6, 9), (7, 9)], [(6, 1), (7, 1), (8, 1), (9, 1)],
                 [(1, 5), (1, 6), (1, 7), (1, 8), (1, 9)]]
 
     def attaquer(self, plateauAllie, plateauAdverse):
+        """Attaque la flotte adverse. Renvoie une coordonnée"""
         pas_quad = plateauAdverse.pas_quad
         dimensionFenetre = plateauAdverse.dimensionFenetre
         background = plateauAdverse.interface
