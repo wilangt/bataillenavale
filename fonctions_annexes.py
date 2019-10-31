@@ -1,49 +1,49 @@
-def test_bateaux(bateaux) :
+def test_bateaux(bateaux):
     """Voici un algorithme qui teste si les bateaux que rentrent le joueur correspondent à une disposition valide.
     On attend une liste de 5 bateaux représentés par leur coordonnées, triés par ordre croissant de taille."""
 
-    if type(bateaux) != list or bateaux == [] :
+    if type(bateaux) != list or bateaux == []:
         return False
 
-    for i in range(len(bateaux)) :
-        if type(bateaux[i]) != list or bateaux[i] == [] :
+    for i in range(len(bateaux)):
+        if type(bateaux[i]) != list or bateaux[i] == []:
             return False
 
-    def domaine_coor(i) :
-        return (i <= 9 and i >= 0)
+    def domaine_coor(c):
+        return 9 >= c >= 0
 
-    def global_coor() :
+    def global_coor():
         c = True
-        for i in range(len(bateaux)) :
-            for j in range(len(bateaux[i])) :
-                (a,b) = bateaux[i][j]
+        for k in range(len(bateaux)):
+            for j in range(len(bateaux[k])):
+                (a, b) = bateaux[k][j]
                 c = c and domaine_coor(a) and domaine_coor(b)
         return c
 
-    def recurrence_liste(L) :
+    def recurrence_liste(liste):
         c = True
-        for i in range(len(L)-1) :
-            if L[i] >= L[i+1] :
+        for k in range(len(liste) - 1):
+            if liste[k] >= liste[k + 1]:
                 c = False
         return c
 
-    def bateaux_integres() :
+    def bateaux_integres():
         c = True
-        for i in range(len(bateaux)) :
-            c = c and recurrence_liste(bateaux[i])
+        for k in range(len(bateaux)):
+            c = c and recurrence_liste(bateaux[k])
         return c
 
-    def eclate_liste(L) :
-        Lprime = []
-        for i in range(len(L)) :
-            for j in range(len(L[i])) :
-                Lprime.append(L[i][j])
-        return Lprime
+    def eclate_liste(liste):
+        listeprime = []
+        for k in range(len(liste)):
+            for j in range(len(liste[k])):
+                listeprime.append(liste[k][j])
+        return listeprime
 
-    def chevauchement() :
-        L = eclate_liste(bateaux)
-        L.sort()
-        return recurrence_liste(L)
+    def chevauchement():
+        liste = eclate_liste(bateaux)
+        liste.sort()
+        return recurrence_liste(liste)
 
     c1 = (len(bateaux) == 5)
 
@@ -59,4 +59,4 @@ def test_bateaux(bateaux) :
 
     c5 = (chevauchement())
 
-    return (c1 and c2 and c3 and c4 and c5)
+    return c1 and c2 and c3 and c4 and c5
