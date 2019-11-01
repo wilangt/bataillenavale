@@ -20,10 +20,7 @@ def main():
         classe_def, classe_att = classe_participants
         defenseur, attaquant = classe_def(plateau1, plateau2), classe_att(plateau2, plateau1)
 
-        if defenseur.est_defenseur():
-            defenseur.placer_bateaux()
-        else:
-            raise NameError("Erreur, le défenseur n'est pas défenseur")
+        defenseur.placer_bateaux()
 
         plateau1.init_interface(500)
         plateau1.afficher_interface()
@@ -39,10 +36,13 @@ def main():
         pygame.quit()
         print("Partie terminée en {} coups".format(compteur))
 
+    """
+    # A completer : flemme, et utile seulement dans longtemps
     else:
         classe_def1, classe_att1, classe_def2, classe_att2 = classe_participants
         defenseur1, attaquant1, defenseur2, attaquant2 = classe_def1(), classe_att1(), classe_def2(), classe_att2()
         # Attention, format de classe pas a jour : il manque les plateaux
+    """
 
 
 def choisir_mode():
@@ -82,6 +82,15 @@ def demander_poste(nom_poste, liste):
             pass
         print("")
     return liste[poste]
+
+def tester_liste_joueurs(liste_def,liste_att):
+    p = Plateau()
+    for i in liste_def:
+        if not i(p, p).est_defenseur():
+            raise NameError("Erreur, le defenseur {} n'est pas defenseur".format(nom_classe(i)))
+    for i in liste_att:
+        if not i(p, p).est_attaquant():
+            raise NameError("Erreur, l'attaquant {} n'est pas attaquant".format(nom_classe(i)))
 
 
 def nom_classe(classe):
