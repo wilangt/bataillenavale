@@ -11,7 +11,14 @@ def main():
     liste_attaquant = [Humain, HasardDebile, HasardMalin]
     tester_liste_joueurs(liste_defenseur, liste_attaquant)
 
-    att_def = choisir_mode()
+    att_def = True
+    # att_def = choisir_mode()
+
+    interface = demander_interface()
+    if not interface:
+        liste_defenseur = liste_defenseur[1:]
+        liste_attaquant = liste_attaquant[1:]
+
     classe_participants = choisir_participants(att_def, liste_defenseur, liste_attaquant)
 
     plateau1 = Plateau()
@@ -23,14 +30,16 @@ def main():
 
         defenseur.placer_bateaux()
 
-        plateau1.init_interface(500)
-        plateau1.afficher_interface()
+        if interface:
+            plateau1.init_interface(500)
+            plateau1.afficher_interface()
 
         compteur = 0
         while not (plateau1.defaite()):
             attaquant.attaquer()
             compteur += 1
-            sleep(0.01)
+            if interface:
+                sleep(0.01)
 
         plateau1.cacher_interface()
         pygame.display.quit()
@@ -84,7 +93,23 @@ def demander_poste(nom_poste, liste):
         print("")
     return liste[poste]
 
-def tester_liste_joueurs(liste_def,liste_att):
+
+def demander_interface():
+    """Fonction qui demande si il faut afficher une interface"""
+    interface = -1
+    while not (interface in [0, 1]):
+        print("Interface :")
+        print("0 : Non")
+        print("1 : Oui")
+        try:
+            interface = int(input())
+        except ValueError:
+            pass
+        print("")
+    return bool(interface)
+
+
+def tester_liste_joueurs(liste_def, liste_att):
     p = Plateau()
     for i in liste_def:
         if not i(p, p).est_defenseur():
