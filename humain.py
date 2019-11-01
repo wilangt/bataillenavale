@@ -18,6 +18,7 @@ class Humain(Joueur):
 
         liste_bateaux = [[], [], [], [], []]
         taille_bateaux = [2, 3, 3, 4, 5]
+        print("2 cases")
         bateau_actuel = 0
         compteur = 0
 
@@ -35,12 +36,18 @@ class Humain(Joueur):
                     self.plateau_allie.afficher_rectangle(coor, "blanc")
                     compteur += 1
                     if compteur >= taille_bateaux[bateau_actuel]:
+                        liste_bateaux[bateau_actuel].sort()
                         compteur = 0
                         bateau_actuel += 1
+                        if bateau_actuel <= 4:
+                            print("{} cases".format(taille_bateaux[bateau_actuel]))
+                        else:
+                            print("Bateaux placés")
                     if bateau_actuel >= 5:
                         continuer = False
                         self.plateau_allie.cacher_interface()
-                    print(liste_bateaux)
+                    #print(liste_bateaux)
+
         return liste_bateaux
 
     def choisir_cible(self):
