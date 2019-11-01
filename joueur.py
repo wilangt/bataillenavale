@@ -43,6 +43,7 @@ class Joueur:
         """Fonction qui permet de savoir si le joueur peut attaquer"""
         return self.attaquant
 
+
 """
 Template pour sous-classes de joueur :
 class Joueur(Joueur):

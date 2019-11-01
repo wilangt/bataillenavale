@@ -7,8 +7,9 @@ print()
 
 
 def main():
-    liste_defenseur = [Humain]
+    liste_defenseur = [Humain, HasardDefense, ConfigInit]
     liste_attaquant = [Humain, HasardDebile, HasardMalin]
+    tester_liste_joueurs(liste_defenseur, liste_attaquant)
 
     att_def = choisir_mode()
     classe_participants = choisir_participants(att_def, liste_defenseur, liste_attaquant)
