@@ -2,61 +2,80 @@ def test_bateaux(bateaux):
     """Voici un algorithme qui teste si les bateaux que rentrent le joueur correspondent à une disposition valide.
     On attend une liste de 5 bateaux représentés par leur coordonnées, triés par ordre croissant de taille."""
 
-    if type(bateaux) != list or bateaux == []:
+    if type(bateaux)!=list or len(bateaux)!=5 :
         return False
 
     for i in range(len(bateaux)):
-        if type(bateaux[i]) != list or bateaux[i] == []:
+        if type(bateaux[i])!=list :
             return False
 
-    def domaine_coor(c):
-        return 9 >= c >= 0
+    if (len(bateaux[0]),len(bateaux[1]),len(bateaux[2]),len(bateaux[3]),len(bateaux[4]))!=(2,3,3,4,5) :
+        return False
 
-    def global_coor():
+    def condition(var) :
+        return ((9>=var) and (var>=0))
+
+    def espace_valeurs() :
         c = True
-        for k in range(len(bateaux)):
+        for k in range(5):
+            bateaux[k].sort()
             for j in range(len(bateaux[k])):
-                (a, b) = bateaux[k][j]
-                c = c and domaine_coor(a) and domaine_coor(b)
+                (a,b) = bateaux[k][j]
+                c = (c and condition(a) and condition(b))
         return c
 
-    def recurrence_liste(liste):
+    if not espace_valeurs() :
+        return False
+
+    def somme(liste) :
+        somme = 0
+        for i in range(len(liste)) :
+            somme += liste[i]
+        return somme
+
+    def moyenne(liste) :
+        return somme(liste)/len(liste)
+
+    def k_termes(n,m) :
+        return ((m*(m+1))/2 - (n*(n-1))/2)
+
+    def bateaux_integres() :
         c = True
-        for k in range(len(liste) - 1):
-            if liste[k] >= liste[k + 1]:
-                c = False
+        l1,l2 = [],[]
+        c1,c2 = True,True
+        for k in range(5) :
+            l1,l2 = [],[]
+            for j in range(len(bateaux[k])) :
+                (a,b) = bateaux[k][j]
+                l1.append(a),l2.append(b)
+            c1 = moyenne(l1)==l1[0] and somme(l2)==k_termes(l2[0],l2[-1])
+            c2 = moyenne(l2)==l2[0] and somme(l1)==k_termes(l1[0],l1[-1])
+            c = (c and (c1 or c2))
         return c
 
-    def bateaux_integres():
+    if not bateaux_integres() :
+        return False
+
+    def zone(liste) :
+        (d1,d2),(f1,f2) = liste[0],liste[-1]
+        zone = []
+        for i in range(d1,f1+2) :
+            for j in range(d2-1,f2) :
+                if condition(i) and condition(j) :
+                    zone.append((i,j))
+        return zone
+
+    def chevauchement() :
         c = True
-        for k in range(len(bateaux)):
-            c = c and recurrence_liste(bateaux[k])
+        zones = []
+        for k in range(5) :
+            zones += zone(bateaux[k])
+        zones.sort()
+        for i in range (len(zones)-1) :
+            c = (c and zones[i]!=zones[i+1])
         return c
 
-    def eclate_liste(liste):
-        listeprime = []
-        for k in range(len(liste)):
-            for j in range(len(liste[k])):
-                listeprime.append(liste[k][j])
-        return listeprime
+    if not chevauchement() :
+        return False
 
-    def chevauchement():
-        liste = eclate_liste(bateaux)
-        liste.sort()
-        return recurrence_liste(liste)
-
-    c1 = (len(bateaux) == 5)
-
-    c2 = (len(bateaux[0]) == 2
-          and len(bateaux[1]) == 3
-          and len(bateaux[2]) == 3
-          and len(bateaux[3]) == 4
-          and len(bateaux[4]) == 5)
-
-    c3 = (global_coor())
-
-    c4 = (bateaux_integres())
-
-    c5 = (chevauchement())
-
-    return c1 and c2 and c3 and c4 and c5
+    return True
