@@ -29,9 +29,10 @@ class Joueur:
 
     def attaquer(self):
         """Fonction qui ouvre le feu sur une position ennemie. A ne pas toucher"""
-        self.analyser(self.plateau_adverse.feu(self.choisir_cible()))
+        cible = self.choisir_cible()
+        self.analyser(self.plateau_adverse.feu(cible), cible)
 
-    def analyser(self, resultat):
+    def analyser(self, resultat, cible):
         """Fonction qui analyse la réponse du tir. A completer ou a supprimer"""
         pass
 

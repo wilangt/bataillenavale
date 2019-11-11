@@ -67,7 +67,8 @@ class Humain(Joueur):
                         0] > pas_quad:
                     return pix_to_coor(event.pos[0], event.pos[1], pas_quad)
 
-    def analyser(self, res):
+    def analyser(self, res, cible):
+        print("{} : ".format(cible))
         if res == 0:
             print("plouf")
         elif res == 1:
