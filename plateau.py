@@ -49,6 +49,22 @@ class Plateau:
             pygame.draw.line(background, couleur_rgb("blanc"), (0, i * pas_quad),
                              (self.dimension_fenetre, i * pas_quad))
 
+        #Affichage des coordonnées
+        ligne = ["A","B","C","D","E","F","G","H","I","J"]
+        colonne = ["1","2","3","4","5","6","7","8","9","10"]
+        police = pygame.font.Font(None,pas_quad)
+        m,n = 1,1
+        for i in range(10) :
+            if i == 8 :
+                m = 1.5
+            texte = police.render(ligne[i],True,couleur_rgb("blanc"))
+            background.blit(texte,((i+1)*pas_quad+m*(pas_quad//4),pas_quad//4))
+            if i == 9 :
+                n = 0.5
+            texte = police.render(colonne[i],True,couleur_rgb("blanc"))
+            background.blit(texte,(n*(pas_quad//4),(i+1)*pas_quad+pas_quad//4))
+            m,n = 1,1
+
         self.interface = background
         self.interfaceInit = True
 
@@ -125,7 +141,7 @@ def coor_to_pix(i, j, pas_quad):
 
 def pix_to_coor(i, j, pas_quad):
     """Fonction qui transforme une coordonnée pixel en coordonnée BN"""
-    return min((i // pas_quad) - 1, 9), min((j // pas_quad) - 1, 9)
+    return (i // pas_quad) - 1, (j // pas_quad) - 1
 
 
 def dessiner_rect(coor, couleur, pas_quad, background):
