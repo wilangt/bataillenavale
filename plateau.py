@@ -125,7 +125,7 @@ def coor_to_pix(i, j, pas_quad):
 
 def pix_to_coor(i, j, pas_quad):
     """Fonction qui transforme une coordonnée pixel en coordonnée BN"""
-    return (i // pas_quad) - 1, (j // pas_quad) - 1
+    return min((i // pas_quad) - 1, 9), min((j // pas_quad) - 1, 9)
 
 
 def dessiner_rect(coor, couleur, pas_quad, background):
