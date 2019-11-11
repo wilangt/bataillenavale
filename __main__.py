@@ -1,7 +1,7 @@
 from humain import *
 from hasard import *
 from plateau import *
-from Chasse_et_peche import *
+from chasse_peche import *
 from time import sleep
 
 print()
