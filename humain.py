@@ -14,7 +14,7 @@ class Humain(Joueur):
         liste_bateaux = [[], [], [], [], []]
         while not test_bateaux(liste_bateaux):
             liste_bateaux = [[], [], [], [], []]
-            self.plateau_allie.init_interface(500)
+            self.plateau_allie.init_interface(660)
             self.plateau_allie.afficher_interface()
             pas_quad = self.plateau_allie.get_pas_quad()
             continuer = True

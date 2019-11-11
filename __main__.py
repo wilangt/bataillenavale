@@ -31,7 +31,7 @@ def main():
         defenseur.placer_bateaux()
 
         if interface:
-            plateau1.init_interface(500)
+            plateau1.init_interface(660)
             plateau1.afficher_interface()
 
         compteur = 0
