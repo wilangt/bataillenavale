@@ -1,6 +1,7 @@
 from humain import *
 from hasard import *
 from plateau import *
+from Chasse_et_peche import *
 from time import sleep
 
 print()
@@ -8,7 +9,7 @@ print()
 
 def main():
     liste_defenseur = [Humain, HasardDefense, ConfigInit]
-    liste_attaquant = [Humain, HasardDebile, HasardMalin]
+    liste_attaquant = [Humain, HasardDebile, HasardMalin, Chasse_et_peche]
     tester_liste_joueurs(liste_defenseur, liste_attaquant)
 
     att_def = True
