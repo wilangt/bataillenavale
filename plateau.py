@@ -11,6 +11,7 @@ class Plateau:
         self.plateauCache = np.zeros((10, 10), dtype=int)  # Plateau pour l'arbitre (avec toutes les infos)
         self.plateauVisible = np.zeros((10, 10), dtype=int)  # Plateau visible par le joueur
         self.bateaux = [0, 2, 3, 3, 4, 5]
+        self.nb_tours = 0
         self.interfaceInit = False
         self.interfaceAffichee = False
         self.dimension_fenetre = 0
@@ -95,6 +96,7 @@ class Plateau:
 
     def feu(self, coor):
         """Feu sur une coordonnée"""
+        self.nb_tours += 1
         cible = self.plateauCache[coor]
         if cible == 0:
             self.afficher_rectangle(coor, "rouge")
@@ -132,6 +134,9 @@ class Plateau:
 
     def jamais_vu(self, coor):
         return self.plateauVisible[coor] == 0
+    
+    def get_nb_tours(self):
+        return self.nb_tours
 
 
 def coor_to_pix(i, j, pas_quad):
