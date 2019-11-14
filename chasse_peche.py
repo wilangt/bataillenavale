@@ -7,6 +7,7 @@ from random import choice
 from random import random
 from fonctions_annexes import test_bateaux
 import numpy as np
+from fonctions_annexes import densite_proba
 
 
 class Chasse_et_peche(Joueur):
@@ -89,7 +90,8 @@ class Chasse_peche_croix(Chasse_et_peche): # A ajouter à main
         return 0
 
 
-class Chasse_peche_croix_proba(Chasse_peche_croix):
+class Chasse_peche_croix_proba(Chasse_peche_croix): # A ajouter à main
+    """Les croix sont parfaite : quelque soit la probabilité d'une case rayée, elle ne sera jamais choisi"""
     def choisir_cible_chasse(self):
         cibles_candidates = self.choix(self.chasse)
         matrice_probabilite = self.probabilite_chasse(self.chasse, self.plateau_adverse.bateaux[1:])) # Ajouter get_att
@@ -100,4 +102,21 @@ class Chasse_peche_croix_proba(Chasse_peche_croix):
         
         
     def probabilite_chasse(self, pseudo_plateau_visible, liste_bateaux_restants):
-        pass # A completer par Pierre, doit renvoyer une matrice np
+        return densite_proba(pseudo_plateau_visible,liste_bateaux_restants)
+
+class Chasse_peche_croix_proba_parfaite(Chasse_peche_croix_proba): # A ajouter à main
+    """Ne tiens pas compte des croix, uniquement de la densité de probabilité"""
+    def proba_mauvaise_croix(self, n):
+        return 1
+
+class Chasse_peche_croix_proba_decroissance_lineaire(Chasse_peche_croix_proba): # A ajouter à main
+    """L'importance des croix diminue linéairement""" 
+    def proba_mauvaise_croix(self, n):
+        return (n/100)
+
+class Chasse_peche_croix_proba_decroissance_expo(Chasse_peche_croix_proba): # A ajouter à main
+    """L'importance des croix diminue exponentiellement"""
+    def proba_mauvaise_croix(self, n):
+        lambd = 0.05
+        return (1 - (lambd * np.exp(-lambd * n)))
+    
