@@ -47,5 +47,5 @@ class HasardDefense(Joueur):
             if compteur > 1000:
                 raise NameError("Trop de tentatives ({}) pour placer les bateaux".format(compteur))
 
-        print("bateaux placés en {} coup(s)".format(compteur))
+        # print("bateaux placés en {} coup(s)".format(compteur))
         return bateaux

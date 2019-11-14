@@ -3,6 +3,7 @@ from hasard import *
 from plateau import *
 from chasse_peche import *
 from time import sleep
+import statistics as stats
 
 print()
 
@@ -11,18 +12,44 @@ def main():
     liste_defenseur = [Humain, HasardDefense, ConfigInit]
     liste_attaquant = [Humain, HasardDebile, HasardMalin, Chasse_et_peche, Chasse_peche_croix, Chasse_peche_croix_proba,
                        Chasse_peche_croix_proba_parfaite, Chasse_peche_croix_proba_decroissance_lineaire,
+                       Chasse_peche_croix_proba_decroissance_expo]
     tester_liste_joueurs(liste_defenseur, liste_attaquant)
 
     att_def = True
     # att_def = choisir_mode()
 
-    interface = demander_interface()
+    perf = performances()
+    if not perf:
+        interface = demander_interface()
+    else:
+        interface = False
+
     if not interface:
         liste_defenseur = liste_defenseur[1:]
         liste_attaquant = liste_attaquant[1:]
 
     classe_participants = choisir_participants(att_def, liste_defenseur, liste_attaquant)
 
+    if perf:
+        nb_essais = 10000
+        l = []
+        p = 0
+        for i in range(nb_essais):
+            l.append(lancer_partie(classe_participants, att_def, interface, perf))
+            v = int(p * nb_essais / 100)
+            if i == v:
+                print("{}%".format(p))
+                p += 1
+
+        moy = stats.mean(l)
+        print(nom_classe(classe_participants[1]), " :")
+        print("moyenne : {}, médiane : {}, écart-type : {} ({} essais)".format(moy, stats.median(l),
+                                                                               stats.pstdev(l, moy), nb_essais))
+    else:
+        lancer_partie(classe_participants, att_def, interface, perf)
+
+
+def lancer_partie(classe_participants, att_def, interface, perf):
     plateau1 = Plateau()
     plateau2 = Plateau()
 
@@ -41,13 +68,17 @@ def main():
             attaquant.attaquer()
             compteur += 1
             if interface:
-                sleep(0.01)
+                if not perf:
+                    sleep(0.1)
 
-        plateau1.cacher_interface()
-        pygame.display.quit()
-        pygame.quit()
-        print("Partie terminée en {} coups".format(compteur))
+        if interface:
+            plateau1.cacher_interface()
+            pygame.display.quit()
+            pygame.quit()
 
+        if not perf:
+            print("Partie terminée en {} coups".format(compteur))
+        return compteur
     """
     # A completer : flemme, et utile seulement dans longtemps
     else:
@@ -64,6 +95,20 @@ def choisir_mode():
         print("Modes :")
         print("0 : Attaquant VS Défenseur")
         print("1 : Joueur VS Joueur")
+        try:
+            mode = int(input())
+        except ValueError:
+            pass
+        print("")
+    return not (bool(mode))
+
+def performances():
+    """Fonction qui permet de choisir si on test les perfs des algorithmes"""
+    mode = -1
+    while not (mode in [0, 1]):
+        print("Modes :")
+        print("0 : performances")
+        print("1 : Jeu")
         try:
             mode = int(input())
         except ValueError:
