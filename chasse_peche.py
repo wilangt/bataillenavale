@@ -70,7 +70,7 @@ class Chasse_et_peche(Joueur):
             self.poisson = []
             self.peche = []
     
-    def choix(cibles_avant):
+    def choix(self, cibles_avant):
         """
         Renvoie une liste de cible dont les coordonnées situées sur le mauvais coté de la croix ont été enlevées avec une 
         probabilité qui dépend du nombre de tour (proba_mauvaise_croix). Si 'proba_mauvaise_croix' renvoie 1 tout le temps, la 
@@ -80,9 +80,10 @@ class Chasse_et_peche(Joueur):
         proba = proba_mauvaise_croix(self.plateau_adverse.get_nb_tours())
         return [cible for cible in cible_avant if (cible[0]+cible[1])%2 == self.croix_pair or proba > random()]
     
-    def proba_mauvaise_croix(n):
+    def proba_mauvaise_croix(self, n):
         return 1
 
 class Chasse_peche_croix(Chasse_et_peche): # A ajouter à main
     def proba_mauvaise_croix(n):
         return 0
+
