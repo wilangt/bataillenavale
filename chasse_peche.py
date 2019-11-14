@@ -6,6 +6,7 @@ from random import randint
 from random import choice
 from random import random
 from fonctions_annexes import test_bateaux
+import numpy as np
 
 
 class Chasse_et_peche(Joueur):
@@ -84,6 +85,19 @@ class Chasse_et_peche(Joueur):
         return 1
 
 class Chasse_peche_croix(Chasse_et_peche): # A ajouter à main
-    def proba_mauvaise_croix(n):
+    def proba_mauvaise_croix(self, n):
         return 0
 
+
+class Chasse_peche_croix_proba(Chasse_peche_croix):
+    def choisir_cible_chasse(self):
+        cibles_candidates = self.choix(self.chasse)
+        matrice_probabilite = self.probabilite_chasse(self.chasse, self.plateau_adverse.bateaux[1:])) # Ajouter get_att
+        for couple in cibles_candidates:
+            matrice[couple] += 100
+        cible = np.unravel_index(np.argmax(a, axis=None), a.shape)
+        return cible
+        
+        
+    def probabilite_chasse(self, pseudo_plateau_visible, liste_bateaux_restants):
+        pass # A completer par Pierre, doit renvoyer une matrice np
