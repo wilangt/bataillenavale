@@ -4,6 +4,7 @@ from pygame.locals import *
 from joueur import *
 from random import randint
 from random import choice
+from random import random
 from fonctions_annexes import test_bateaux
 
 
@@ -15,9 +16,10 @@ class Chasse_et_peche(Joueur):
         self.mode_chasse = True  # True = on tir au hasard; False = on pêche tant que le bateau visé nest pas coulé
         self.chasse = [(i, j) for i in range(10) for j in range(10)] # liste des cibles possibles lorsqu'on est dans le mode chasse
         self.poisson = []   # bateau en cours de destruction
+        self.croix_pair = randint(0,1) # positions de coordonnées pair ou impair
     
     def choisir_cible_chasse(self):
-        return choice(self.chasse)
+        return choice(self.choix(self.chasse), fonction)
     
     def choisir_cible_peche(self):
         n = len(self.poisson)
@@ -67,3 +69,20 @@ class Chasse_et_peche(Joueur):
                         self.chasse.pop(self.chasse.index((a,b)))
             self.poisson = []
             self.peche = []
+    
+    def choix(cibles_avant):
+        """
+        Renvoie une liste de cible dont les coordonnées situées sur le mauvais coté de la croix ont été enlevées avec une 
+        probabilité qui dépend du nombre de tour (proba_mauvaise_croix). Si 'proba_mauvaise_croix' renvoie 1 tout le temps, la 
+        liste renvoyée est identique à celle passée en argument. Il reste à vérifier que la distribution obtenue est bien la
+        distribution souhaitée
+        """
+        proba = proba_mauvaise_croix(self.plateau_adverse.get_nb_tours())
+        return [cible for cible in cible_avant if (cible[0]+cible[1])%2 == self.croix_pair or proba > random()]
+    
+    def proba_mauvaise_croix(n):
+        return 1
+
+class Chasse_peche_croix(Chasse_et_peche): # A ajouter à main
+    def proba_mauvaise_croix(n):
+        return 0
