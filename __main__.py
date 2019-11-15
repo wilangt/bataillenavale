@@ -11,8 +11,8 @@ print()
 def main():
     liste_defenseur = [Humain, HasardDefense, ConfigInit]
     liste_attaquant = [Humain, HasardDebile, HasardMalin, Chasse_et_peche, Chasse_peche_croix, Chasse_peche_croix_proba,
-                       Chasse_peche_croix_proba_parfaite, Chasse_peche_croix_proba_decroissance_lineaire,
-                       Chasse_peche_croix_proba_decroissance_expo]
+                       Chasse_peche_proba, Chasse_peche_proba_croix_decroissance_lineaire,
+                       Chasse_peche_proba_croix_decroissance_expo]
     tester_liste_joueurs(liste_defenseur, liste_attaquant)
 
     att_def = True

@@ -1,8 +1,8 @@
 from joueur import *
 from random import randint
 from random import choice
-from random import random
 import numpy as np
+np.set_printoptions(precision=3)
 
 
 class Chasse_et_peche(Joueur):
@@ -11,14 +11,12 @@ class Chasse_et_peche(Joueur):
         self.attaquant = True
         self.defenseur = False
         self.mode_chasse = True  # True = on tir au hasard; False = on pêche tant que le bateau visé nest pas coulé
-        self.chasse = np.mat([[True for i in range(10)] for j in range(10)])  # liste des cibles possibles lorsqu'on
+        self.chasse = np.mat([[1 for i in range(10)] for j in range(10)])  # liste des cibles possibles lorsqu'on
         # est dans le mode chasse
         self.poisson = []  # bateau en cours de destruction
-        self.croix_pair = randint(0, 1)  # positions de coordonnées pair ou impair
 
     def choisir_cible_chasse(self):
-        a_tenter = [(i, j) for i in range(10) for j in range(10) if self.chasse[i, j]]
-        return choice(self.choix(a_tenter))
+        return choice([(i, j) for i in range(10) for j in range(10) if self.chasse[i, j]])
 
     def choisir_cible_peche(self):
         n = len(self.poisson)
@@ -51,7 +49,7 @@ class Chasse_et_peche(Joueur):
             return self.choisir_cible_peche()
 
     def analyser(self, res, cible):
-        self.chasse[cible] = False
+        self.chasse[cible] = 0
         if res == 1:
             self.poisson.append(cible)
             self.poisson.sort()
@@ -63,44 +61,51 @@ class Chasse_et_peche(Joueur):
             (i, j), (k, l) = self.poisson[0], self.poisson[-1]
             for a in range(max(0, i - 1), min(10, k + 2)):
                 for b in range(max(0, j - 1), min(10, l + 2)):
-                    self.chasse[a, b] = False
+                    self.chasse[a, b] = 0
             self.poisson = []
             self.peche = []
 
-    def choix(self, cibles_avant):
-        """
-        Renvoie une liste de cible dont les coordonnées situées sur le mauvais coté de la croix ont été enlevées avec une 
-        probabilité qui dépend du nombre de tour (proba_mauvaise_croix). Si 'proba_mauvaise_croix' renvoie 1 tout le temps, la 
-        liste renvoyée est identique à celle passée en argument. Il reste à vérifier que la distribution obtenue est bien la
-        distribution souhaitée
-        """
-        proba = self.proba_mauvaise_croix(self.plateau_adverse.get_nb_tours())
-        return [cible for cible in cibles_avant if (cible[0] + cible[1]) % 2 == self.croix_pair or proba > random()]
-
-    def proba_mauvaise_croix(self, n):
-        return 1
-
 
 class Chasse_peche_croix(Chasse_et_peche):  # A ajouter à main
-    def proba_mauvaise_croix(self, n):
-        return 0
+    def __init__(self, plateau_allie, plateau_adverse):
+        Chasse_et_peche.__init__(self, plateau_allie, plateau_adverse)
+        self.croix_pair = randint(0, 1)  # positions de coordonnées pair ou impair
+
+    def choisir_cible_chasse(self):
+        # print(self.chasse)
+        matrice_croix = self.matrice_poids_croix()
+        # print(matrice_croix)
+        matrice_probabilite = self.matrice_poids_probabilite(self.chasse, self.plateau_adverse.bateaux[1:])  # Ajouter get_att
+        # print(matrice_probabilite)
+        matrice_poids = np.multiply(matrice_probabilite, matrice_croix)
+        # print(matrice_poids)
+        cibles = [(i, j) for j in range(10) for i in range(10) if matrice_poids[i, j] > matrice_poids.max() - 0.0001]
+        cible = choice(cibles)
+        # print(cible)
+        # print()
+        return cible
+
+    def matrice_poids_probabilite(self, mat, bat_restants):
+        return mat
+
+    def matrice_poids_croix(self):
+        """
+        :return: matrice np composé de 1 sur les bonnes croix et de poids sur les mauvaises
+        """
+        poids = self.poids_croix(self.plateau_adverse.get_nb_tours())
+        return np.mat([[1 - (poids * (int((i+j) % 2 == self.croix_pair))) for j in range(10)] for i in range(10)])
+
+    def poids_croix(self, n):
+        return 1
 
 
 class Chasse_peche_croix_proba(Chasse_peche_croix):  # A ajouter à main / marche pas
     """Les croix sont parfaite : quelque soit la probabilité d'une case rayée, elle ne sera jamais choisi"""
 
-    def choisir_cible_chasse(self):
-        cibles_candidates = self.choix(self.chasse)
-        matrice_probabilite = self.probabilite_chasse(self.chasse, self.plateau_adverse.bateaux[1:])  # Ajouter get_att
-        for couple in cibles_candidates:
-            matrice_probabilite[couple] += 100
-        cible = np.unravel_index(np.argmax(matrice_probabilite, axis=None), matrice_probabilite.shape)
-        return cible
-
-    def probabilite_chasse(self, mat, bat_restants):
+    def matrice_poids_probabilite(self, mat, bat_restants):
         """ATTENTION : mat est une matrice numpy de 0 et de 1 et bat_restants une liste d'entiers"""
 
-        mat = np.array(mat)
+        mat = np.array(mat, dtype=int)
         def prob_un_bateau(mat, k):
             prob = mat.copy()
             nb = bat_restants[k]
@@ -121,31 +126,32 @@ class Chasse_peche_croix_proba(Chasse_peche_croix):  # A ajouter à main / march
                             prob[i, j - l] += 1
             return prob
 
-        mat_tot = np.zeros((10, 10))
+        mat_tot = np.zeros((10, 10), dtype=int)
         for k in range(len(bat_restants)):
             mat_tot += prob_un_bateau(mat, k)
             mat_tot += prob_un_bateau(mat.transpose(), k).transpose()
+        # print(mat_tot)
         mat_tot = mat_tot/np.max(mat_tot)
         return mat_tot
 
 
-class Chasse_peche_croix_proba_parfaite(Chasse_peche_croix_proba):  # A ajouter à main
+class Chasse_peche_proba(Chasse_peche_croix_proba):  # A ajouter à main
     """Ne tiens pas compte des croix, uniquement de la densité de probabilité"""
 
-    def proba_mauvaise_croix(self, n):
-        return 1
+    def poids_croix(self, n):
+        return 0
 
 
-class Chasse_peche_croix_proba_decroissance_lineaire(Chasse_peche_croix_proba):  # A ajouter à main
+class Chasse_peche_proba_croix_decroissance_lineaire(Chasse_peche_croix_proba):  # A ajouter à main
     """L'importance des croix diminue linéairement"""
 
-    def proba_mauvaise_croix(self, n):
-        return (n / 100)
+    def poids_croix(self, n):
+        return 1 - (n / 100)
 
 
-class Chasse_peche_croix_proba_decroissance_expo(Chasse_peche_croix_proba):  # A ajouter à main
+class Chasse_peche_proba_croix_decroissance_expo(Chasse_peche_croix_proba):  # A ajouter à main
     """L'importance des croix diminue exponentiellement"""
 
-    def proba_mauvaise_croix(self, n):
+    def poids_croix(self, n):
         lambd = 0.05
-        return 1 - (lambd * np.exp(-lambd * n))
+        return (lambd * np.exp(-lambd * n))
