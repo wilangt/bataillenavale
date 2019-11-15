@@ -1,6 +1,3 @@
-from plateau import *
-from joueur import *
-from pygame.locals import *
 from joueur import *
 from random import randint
 from random import choice
@@ -14,13 +11,14 @@ class Chasse_et_peche(Joueur):
         self.attaquant = True
         self.defenseur = False
         self.mode_chasse = True  # True = on tir au hasard; False = on pêche tant que le bateau visé nest pas coulé
-        self.chasse = [(i, j) for i in range(10) for j in
-                       range(10)]  # liste des cibles possibles lorsqu'on est dans le mode chasse
+        self.chasse = np.mat([[True for i in range(10)] for j in range(10)])  # liste des cibles possibles lorsqu'on
+        # est dans le mode chasse
         self.poisson = []  # bateau en cours de destruction
         self.croix_pair = randint(0, 1)  # positions de coordonnées pair ou impair
 
     def choisir_cible_chasse(self):
-        return choice(self.choix(self.chasse))
+        a_tenter = [(i, j) for i in range(10) for j in range(10) if self.chasse[i, j]]
+        return choice(self.choix(a_tenter))
 
     def choisir_cible_peche(self):
         n = len(self.poisson)
@@ -30,7 +28,7 @@ class Chasse_et_peche(Joueur):
             k = 3
             while k >= 0:
                 (a, b) = v[k]
-                if (not ((0 <= a <= 9) and (0 <= b <= 9))):
+                if not ((0 <= a <= 9) and (0 <= b <= 9)):
                     v.pop(k)
                 k -= 1
         else:
@@ -41,7 +39,7 @@ class Chasse_et_peche(Joueur):
             k = 1
             while k >= 0:
                 (a, b) = v[k]
-                if (not ((0 <= a <= 9) and (0 <= b <= 9))) or (v[k] not in self.chasse):
+                if (not ((0 <= a <= 9) and (0 <= b <= 9))) or (not self.chasse[a, b]):
                     v.pop(k)
                 k -= 1
         return choice(v)
@@ -53,8 +51,7 @@ class Chasse_et_peche(Joueur):
             return self.choisir_cible_peche()
 
     def analyser(self, res, cible):
-        if cible in self.chasse:
-            self.chasse.pop(self.chasse.index(cible))
+        self.chasse[cible] = False
         if res == 1:
             self.poisson.append(cible)
             self.poisson.sort()
@@ -64,10 +61,9 @@ class Chasse_et_peche(Joueur):
             self.poisson.sort()
             self.mode_chasse = True
             (i, j), (k, l) = self.poisson[0], self.poisson[-1]
-            for a in range(i - 1, k + 2):
-                for b in range(j - 1, l + 2):
-                    if (a, b) in self.chasse:
-                        self.chasse.pop(self.chasse.index((a, b)))
+            for a in range(max(0, i - 1), min(10, k + 2)):
+                for b in range(max(0, j - 1), min(10, l + 2)):
+                    self.chasse[a, b] = False
             self.poisson = []
             self.peche = []
 
@@ -90,7 +86,7 @@ class Chasse_peche_croix(Chasse_et_peche):  # A ajouter à main
         return 0
 
 
-class Chasse_peche_croix_proba(Chasse_peche_croix):  # A ajouter à main
+class Chasse_peche_croix_proba(Chasse_peche_croix):  # A ajouter à main / marche pas
     """Les croix sont parfaite : quelque soit la probabilité d'une case rayée, elle ne sera jamais choisi"""
 
     def choisir_cible_chasse(self):
