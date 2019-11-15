@@ -6,7 +6,6 @@ from random import randint
 from random import choice
 from random import random
 import numpy as np
-from fonctions_annexes import densite_proba
 
 
 class Chasse_et_peche(Joueur):
@@ -102,8 +101,36 @@ class Chasse_peche_croix_proba(Chasse_peche_croix):  # A ajouter à main
         cible = np.unravel_index(np.argmax(matrice_probabilite, axis=None), matrice_probabilite.shape)
         return cible
 
-    def probabilite_chasse(self, pseudo_plateau_visible, liste_bateaux_restants):
-        return densite_proba(pseudo_plateau_visible, liste_bateaux_restants)
+    def probabilite_chasse(self, mat, bat_restants):
+        """ATTENTION : mat est une matrice numpy de 0 et de 1 et bat_restants une liste d'entiers"""
+
+        mat = np.array(mat)
+        def prob_un_bateau(mat, k):
+            prob = mat.copy()
+            nb = bat_restants[k]
+            for i in range(10):
+                compt = 1
+                for j in range(10):
+                    if prob[i, j] == 0:
+                        compt = 0
+                    prob[i, j] = compt
+                    compt += 1
+            for i in range(10):
+                for j in range(10):
+                    if prob[i, j] < nb:
+                        prob[i, j] = 0
+                    else:
+                        prob[i, j] = 1
+                        for l in range(1, nb):
+                            prob[i, j - l] += 1
+            return prob
+
+        mat_tot = np.zeros((10, 10))
+        for k in range(len(bat_restants)):
+            mat_tot += prob_un_bateau(mat, k)
+            mat_tot += prob_un_bateau(mat.transpose(), k).transpose()
+        mat_tot = mat_tot/np.max(mat_tot)
+        return mat_tot
 
 
 class Chasse_peche_croix_proba_parfaite(Chasse_peche_croix_proba):  # A ajouter à main
