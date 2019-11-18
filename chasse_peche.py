@@ -70,12 +70,13 @@ class Chasse_peche_croix(Chasse_et_peche):  # A ajouter à main
     def __init__(self, plateau_allie, plateau_adverse):
         Chasse_et_peche.__init__(self, plateau_allie, plateau_adverse)
         self.croix_pair = randint(0, 1)  # positions de coordonnées pair ou impair
+        self.bateaux = self.plateau_adverse.bateaux[1:]
 
     def choisir_cible_chasse(self):
         # print(self.chasse)
         matrice_croix = self.matrice_poids_croix()
         # print(matrice_croix)
-        matrice_probabilite = self.matrice_poids_probabilite(self.chasse, self.plateau_adverse.bateaux[1:])  # Ajouter get_att
+        matrice_probabilite = self.matrice_poids_probabilite(self.chasse, self.bateaux)  # Ajouter get_att
         # print(matrice_probabilite)
         matrice_poids = np.multiply(matrice_probabilite, matrice_croix)
         # print(matrice_poids)
@@ -103,8 +104,7 @@ class Chasse_peche_croix_proba(Chasse_peche_croix):  # A ajouter à main / march
     """Les croix sont parfaite : quelque soit la probabilité d'une case rayée, elle ne sera jamais choisi"""
 
     def matrice_poids_probabilite(self, mat, bat_restants):
-        """ATTENTION : mat est une matrice numpy de 0 et de 1 et bat_restants une liste d'entiers"""
-
+        """ATTENTION : mat est une matrice numpy de 0 et de 1 et une liste d'entiers naturels"""
         mat = np.array(mat, dtype=int)
         def prob_un_bateau(mat, k):
             prob = mat.copy()
@@ -133,6 +133,49 @@ class Chasse_peche_croix_proba(Chasse_peche_croix):  # A ajouter à main / march
         # print(mat_tot)
         mat_tot = mat_tot/np.max(mat_tot)
         return mat_tot
+
+    def choisir_cible_peche(self) :
+        n = len(self.poisson)
+        (a,b) = self.poisson[-1]
+        for (i,j) in [(a-1,b-1), (a-1,b+1), (a+1,b-1), (a+1,b+1)] :
+            if (0<=i<=9) and (0<=j<=9) :
+                self.chasse[i, j] = 0
+        if n == 1 :
+            matrice_poids = self.matrice_poids_probabilite(self.chasse, self.bateaux)
+            cibles = [(a,b-1), (a,b+1), (a-1,b), (a+1,b)]
+        if n >= 2 :
+            self.poisson.sort()
+            (a,b) = self.poisson[0]
+            (c,d) = self.poisson[-1]
+            bat = [i for i in self.bateaux if i > n]
+            matrice_poids = self.matrice_poids_probabilite(self.chasse, bat)
+            if a == c :
+                cibles = [(a, b-1), (a, d+1)]
+            else :
+                cibles = [(a-1, b), (c+1, b)]
+        cible = (0,(-1,-1))
+        for (i,j) in cibles :
+            if (0<=i<=9) and (0<=j<=9) and matrice_poids[i, j] >= cible[0] :
+                cible = (matrice_poids[i, j],(i,j))
+        return cible[1]
+
+    def analyser(self, res, cible):
+        if res == 0 :
+            self.chasse[cible] = 0
+        if res == 1 :
+            self.poisson.append(cible)
+            self.mode_chasse = False
+        if res == 2 :
+            for couple in self.poisson :
+                self.chasse[couple] = 0
+            (a,b) = cible
+            for i in range(a-1, a+1) :
+                for j in range(b-1, b+1) :
+                    if (0<=i<=9) and (0<=j<=9) :
+                        self.chasse[i, j] = 0
+            self.bateaux.remove(len(self.poisson) + 1)
+            self.poisson = []
+            self.mode_chasse = True
 
 
 class Chasse_peche_proba(Chasse_peche_croix_proba):  # A ajouter à main
