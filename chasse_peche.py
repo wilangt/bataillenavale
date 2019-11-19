@@ -50,18 +50,25 @@ class Chasse_et_peche(Joueur):
 
     def analyser(self, res, cible):
         self.chasse[cible] = 0
+        i,j=cible
         if res == 1:
             self.poisson.append(cible)
             self.poisson.sort()
             self.mode_chasse = False
+        if res != 0:
+            L =[(i-1,j-1),(i-1,j+1),(i+1,j+1),(i+1,j-1)]
+            k = 3
+            while k >= 0:
+                (a, b) = L[k]
+                if not ((0 <= a <= 9) and (0 <= b <= 9)):
+                    L.pop(k)
+                k -= 1
+            for l in L:
+                self.chasse[l] = 0
         if res == 2:
             self.poisson.append(cible)
             self.poisson.sort()
             self.mode_chasse = True
-            (i, j), (k, l) = self.poisson[0], self.poisson[-1]
-            for a in range(max(0, i - 1), min(10, k + 2)):
-                for b in range(max(0, j - 1), min(10, l + 2)):
-                    self.chasse[a, b] = 0
             self.poisson = []
             self.peche = []
 
