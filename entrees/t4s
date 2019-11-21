@@ -1,0 +1,23 @@
+pygame 1.9.6
+Hello from the pygame community. https://www.pygame.org/contribute.html
+
+Modes :
+0 : performances
+1 : Jeu
+
+Defenseur :
+0 : HasardDefense
+1 : ConfigInit
+
+Attaquant :
+0 : HasardDebile
+1 : HasardMalin
+2 : ChasseEtPeche
+3 : ChassePecheCroix
+4 : ChassePecheCroixProba
+5 : ChassePecheProba
+6 : ChassePecheProbaCroixDecroissanceLineaire
+7 : ChassePecheProbaCroixDecroissanceExpo
+
+Nombre d'essais : ChassePecheCroixProba  :
+moyenne : 39.74, médiane : 40.0, écart-type : 5.516556897195931 (100 essais)
