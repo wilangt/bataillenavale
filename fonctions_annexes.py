@@ -63,3 +63,6 @@ def test_bateaux(bateaux):
                 return False
 
     return True
+
+def coor(a,b) :
+    return (0<=a<=9) and (0<=b<=9)

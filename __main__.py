@@ -10,9 +10,9 @@ print()
 
 def main():
     liste_defenseur = [Humain, HasardDefense, ConfigInit]
-    liste_attaquant = [Humain, HasardDebile, HasardMalin, Chasse_et_peche, Chasse_peche_croix, Chasse_peche_croix_proba,
-                       Chasse_peche_proba, Chasse_peche_proba_croix_decroissance_lineaire,
-                       Chasse_peche_proba_croix_decroissance_expo]
+    liste_attaquant = [Humain, HasardDebile, HasardMalin, ChasseEtPeche, ChassePecheCroix, ChassePecheCroixProba,
+                       ChassePecheProba, ChassePecheProbaCroixDecroissanceLineaire,
+                       ChassePecheProbaCroixDecroissanceExpo]
     tester_liste_joueurs(liste_defenseur, liste_attaquant)
 
     att_def = True
@@ -31,7 +31,7 @@ def main():
     classe_participants = choisir_participants(att_def, liste_defenseur, liste_attaquant)
 
     if perf:
-        nb_essais = 10000
+        nb_essais = int(input("Nombre d'essais : "))
         l = []
         p = 0
         for i in range(nb_essais):
