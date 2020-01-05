@@ -27,32 +27,32 @@ Intelligence artificielle / Artificial Intelligence
 Apprentissage supervisé / Supervised learning
 Apprentissage par renforcement / Reinforcement learning
 
+
 motivation :
-
-
+Le jeu de la bataille navale est un jeu aussi divertissant qu'intéressant à étudier. C'est donc avant tout son coté ludique et l'optique d'implémenter un programme capable de battre un être humain qui m'a poussé à choisir ce sujet. (44 mots)
 
 ancrage :
-
+Le jeu de la bataille navale est le jeu de société de référence lorsqu'il s'agit d'affrontements en mer. C'est pour cette raison que son étude et en particulier l'implémentation d'un amiral artificiel performant rentre parfaitement dans le cadre du thème "Océan". (47 mots)
 
 
 Problématique :
 Qu'est-ce que la bataille navale et quelles sont les stratégies classiques permettant de gagner en un minimum de coups ?
 Quelles sont les différentes formes d'intelligence artificielles adapté à ce problème ?
-Comment entrainer les IA qui le nécéssite ?
-Quelles performances peut on attendre de ces IA ? 
+Comment entraîner les IA qui le nécessite ?
+Quelles performances peut on attendre de ces IA ?
 
 Objectifs :
 - Comprendre les enjeux du jeu de la bataille navale
-- Implémenter un environnement et une interface permettant de jouer à la bataile navale
-- Concevoir et Implémenter une IA utilisant une statégie probabiliste
-- Concevoir, implémenter et entrainer une IA utilisant l'apprentissage supervisé grâce à un réseau de neuronne
-- Concevoir, implémenter et entrainer une IA utilisant l'apprentissage par renforcement
+- Implémenter un environnement et une interface permettant de jouer à la bataille navale
+- Concevoir et Implémenter une IA utilisant une stratégie probabiliste
+- Concevoir, implémenter et entraîner une IA utilisant l'apprentissage supervisé grâce à un réseau de neuronne
+- Concevoir, implémenter et entraîner une IA utilisant l'apprentissage par renforcement
 - Comparer les performances des différentes IA et en tirer une conclusion
 
 
 Références bibliographiques
 
-Bataille navale (jeu), Wikipedia, https://fr.wikipedia.org/wiki/Bataille_navale_%28jeu%29
+Bataille navale (jeu), Wikipédia, https://fr.wikipedia.org/wiki/Bataille_navale_%28jeu%29
 Battleship, Nick Berry, 2011, http://www.datagenetics.com/blog/december32011/index.html
 The Linear Theory of Battleship, Alex Alemi, 2011, https://thephysicsvirtuosi.com/posts/old/the-linear-theory-of-battleship
 Introduction au Machine Learning, Chloé-Agathe Azencott, 2019, Dunod
@@ -63,11 +63,12 @@ Deep reinforcement learning, battleship, Jonathan Landy, 2016, http://efavdb.com
 TensorFlow for Deep Learning, Bharath Ramsundar & Reza Bosagh Zadeh, 2018, O'Reilly
 (http://incompleteideas.net/sutton/book/RLbook2018.pdf) --> pas sur
 
-Bibliographie commentée
-- Bataille Navale (regles et culture vitaf) --> wiki
+Bibliographie commentée (plan détaillé) :
+- Bataille Navale (règles et culture) --> wiki
 - Stratégies sans apprentissage --> nick berry
 TR : DL + intro DL
-- differentes methodes
+- différentes méthodes
 - supervisé
 - RL
-CC : certaines des méthodes deja fait, d'autres non, mais ce qui est sur : jamais comparé --> c'est le but
+CC : certaines des méthodes déjà fait, d'autres non, mais ce qui est sur : jamais comparé --> c'est le but
+
