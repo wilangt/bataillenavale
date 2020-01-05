@@ -1,0 +1,73 @@
+Titre
+(prof encadrant + coéquipiers)
+motivations
+ancrage au thème 
+MCOT -> Positionnement thèmatique (info et tout)
+     -> Mots clefs
+     -> Bibliographie commentée
+     -> Problématique 
+     -> Objectifs
+     -> Bibliographie
+
+Plus tard:
+Abstract
+DOT
+ajustement de Positionnement et bibliographie
+
+Titre : Conception, Implémentation et optimisation de plusieurs intelligences artificielles capables de gagner à la bataille navale.
+
+motivation :
+Le theme c'est de la merde donc on a choisi le moins pire
+
+
+mots-clefs
+Bataille navale / Battleship
+Théorie des Jeux / Game theory
+Intelligence artificielle / Artificial Intelligence
+Apprentissage supervisé / Supervised learning
+Apprentissage par renforcement / Reinforcement learning
+
+motivation :
+
+
+
+ancrage :
+
+
+
+Problématique :
+Qu'est-ce que la bataille navale et quelles sont les stratégies classiques permettant de gagner en un minimum de coups ?
+Quelles sont les différentes formes d'intelligence artificielles adapté à ce problème ?
+Comment entrainer les IA qui le nécéssite ?
+Quelles performances peut on attendre de ces IA ? 
+
+Objectifs :
+- Comprendre les enjeux du jeu de la bataille navale
+- Implémenter un environnement et une interface permettant de jouer à la bataile navale
+- Concevoir et Implémenter une IA utilisant une statégie probabiliste
+- Concevoir, implémenter et entrainer une IA utilisant l'apprentissage supervisé grâce à un réseau de neuronne
+- Concevoir, implémenter et entrainer une IA utilisant l'apprentissage par renforcement
+- Comparer les performances des différentes IA et en tirer une conclusion
+
+
+Références bibliographiques
+
+Bataille navale (jeu), Wikipedia, https://fr.wikipedia.org/wiki/Bataille_navale_%28jeu%29
+Battleship, Nick Berry, 2011, http://www.datagenetics.com/blog/december32011/index.html
+The Linear Theory of Battleship, Alex Alemi, 2011, https://thephysicsvirtuosi.com/posts/old/the-linear-theory-of-battleship
+Introduction au Machine Learning, Chloé-Agathe Azencott, 2019, Dunod
+(Deep learning en action : la référence du praticien, Adam Gibson, 2018, O'Reilly) --> pas sur
+Neural Network and Deep Learning, Michael Nielsen, http://neuralnetworksanddeeplearning.com
+A Beginner's Guide to Deep Reinforcement Learning, Chris Nicholson, https://pathmind.com/wiki/deep-reinforcement-learning
+Deep reinforcement learning, battleship, Jonathan Landy, 2016, http://efavdb.com/battleship
+TensorFlow for Deep Learning, Bharath Ramsundar & Reza Bosagh Zadeh, 2018, O'Reilly
+(http://incompleteideas.net/sutton/book/RLbook2018.pdf) --> pas sur
+
+Bibliographie commentée
+- Bataille Navale (regles et culture vitaf) --> wiki
+- Stratégies sans apprentissage --> nick berry
+TR : DL + intro DL
+- differentes methodes
+- supervisé
+- RL
+CC : certaines des méthodes deja fait, d'autres non, mais ce qui est sur : jamais comparé --> c'est le but
