@@ -2,6 +2,7 @@ from joueur import *
 from random import randint
 from random import choice
 from fonctions_annexes import test_bateaux
+import pickle as cornichon
 
 
 class HasardDebile(Joueur):
@@ -30,22 +31,38 @@ class HasardDefense(Joueur):
         self.defenseur = True
 
     def position_bateaux(self):
-        def position_1_bateau(taille):
-            xpoupe = randint(0, 9 - taille)
-            ypoupe = randint(0, 9)
-            if bool(randint(0, 1)):  # Horizontal ou vertical
-                bateau = [(xpoupe + i, ypoupe) for i in range(taille)]
-            else:
-                bateau = [(ypoupe, xpoupe + i) for i in range(taille)]
-            return bateau
+        return position_bateaux_global()
 
-        bateaux=[[], [], [], [], []]
-        compteur = 0
-        while not test_bateaux(bateaux):
-            compteur += 1
-            bateaux = [position_1_bateau(k) for k in [2, 3, 3, 4, 5]]
-            if compteur > 1000:
-                raise NameError("Trop de tentatives ({}) pour placer les bateaux".format(compteur))
 
-        # print("bateaux placés en {} coup(s)".format(compteur))
+class HasardDefenseCornichon(HasardDefense):
+    def position_bateaux(self):
+        file = open("meta_cornichon.txt", "r")
+        dernier_plus_1 = int(file.read())
+        file.close()
+        n = randint(0, dernier_plus_1 - 1)
+        file = open("donnees/defense-"+str(n), "rb")
+        bateaux = cornichon.load(file)
+        file.close()
         return bateaux
+
+
+def position_bateaux_global():
+    def position_1_bateau(taille):
+        xpoupe = randint(0, 9 - taille)
+        ypoupe = randint(0, 9)
+        if bool(randint(0, 1)):  # Horizontal ou vertical
+            bateau = [(xpoupe + i, ypoupe) for i in range(taille)]
+        else:
+            bateau = [(ypoupe, xpoupe + i) for i in range(taille)]
+        return bateau
+
+    bateaux = [[], [], [], [], []]
+    compteur = 0
+    while not test_bateaux(bateaux):
+        compteur += 1
+        bateaux = [position_1_bateau(k) for k in [2, 3, 3, 4, 5]]
+        if compteur > 10000:
+            raise NameError("Trop de tentatives ({}) pour placer les bateaux".format(compteur))
+
+    # print("bateaux placés en {} coup(s)".format(compteur))
+    return bateaux

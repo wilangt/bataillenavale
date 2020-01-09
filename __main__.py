@@ -4,12 +4,13 @@ from plateau import *
 from chasse_peche import *
 from time import sleep
 import statistics as stats
+import pickle as cornichon
 
 print()
 
 
 def main():
-    liste_defenseur = [Humain, HasardDefense, ConfigInit]
+    liste_defenseur = [Humain, HasardDefense, HasardDefenseCornichon, ConfigInit]
     liste_attaquant = [Humain, HasardDebile, HasardMalin, ChasseEtPeche, ChassePecheCroix, ChassePecheCroixProba,
                        ChassePecheProba, ChassePecheProbaCroixDecroissanceLineaire,
                        ChassePecheProbaCroixDecroissanceExpo]
@@ -102,6 +103,7 @@ def choisir_mode():
         print("")
     return not (bool(mode))
 
+
 def performances():
     """Fonction qui permet de choisir si on test les perfs des algorithmes"""
     mode = -1
@@ -176,5 +178,20 @@ def nom_classe(classe):
     return nom[point + 1:-2]
 
 
+def enregistrer_defense_alea(iterations):
+    file = open("donnees/meta_cornichon.txt", "r")
+    debut = int(file.read())
+    file.close()
+    fin = debut + iterations
+    for i in range(debut, fin):
+        file = open('donnees/defense-' + str(i), 'wb')
+        bateaux = position_bateaux_global()
+        cornichon.dump(bateaux, file)
+        file.close()
+    file = open("donnees/meta_cornichon.txt", "w")
+    file.write(str(fin))
+
+
 if __name__ == "__main__":
-    main()
+    # main()
+    pass
