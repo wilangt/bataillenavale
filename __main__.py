@@ -5,6 +5,7 @@ from chasse_peche import *
 from time import sleep
 import statistics as stats
 import pickle as cornichon
+import matplotlib.pyplot as plt
 
 print()
 
@@ -46,6 +47,8 @@ def main():
         print(nom_classe(classe_participants[1]), " :")
         print("moyenne : {}, médiane : {}, écart-type : {} ({} essais)".format(moy, stats.median(l),
                                                                                stats.pstdev(l, moy), nb_essais))
+        plt.hist(l, range=(1, 100), bins=99)
+        plt.show()
     else:
         lancer_partie(classe_participants, att_def, interface, perf)
 
