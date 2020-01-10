@@ -21,7 +21,8 @@ def main():
     # att_def = choisir_mode()
 
     perf = performances()
-    if not perf:
+    superperf = superperformances()
+    if not perf or not superperf:
         interface = demander_interface()
     else:
         interface = False
@@ -30,27 +31,56 @@ def main():
         liste_defenseur = liste_defenseur[1:]
         liste_attaquant = liste_attaquant[1:]
 
-    classe_participants = choisir_participants(att_def, liste_defenseur, liste_attaquant)
+    if not superperf :
+        classe_participants = choisir_participants(att_def, liste_defenseur, liste_attaquant)
 
-    if perf:
-        nb_essais = int(input("Nombre d'essais : "))
-        l = []
-        p = 0
-        for i in range(nb_essais):
-            l.append(lancer_partie(classe_participants, att_def, interface, perf))
-            v = int(p * nb_essais / 100)
-            if i == v:
-                print("{}%".format(p))
-                p += 1
+        if perf:
+            nb_essais = int(input("Nombre d'essais : "))
+            l,Y = [],[0 for x in range(100)]
+            p,val = 0,0
+            for i in range(nb_essais):
+                val = lancer_partie(classe_participants, att_def, interface, perf)
+                l.append(val)
+                Y[val] += 1
+                v = int(p * nb_essais / 100)
+                if i == v:
+                    print("{}%".format(p))
+                    p += 1
 
-        moy = stats.mean(l)
-        print(nom_classe(classe_participants[1]), " :")
-        print("moyenne : {}, médiane : {}, écart-type : {} ({} essais)".format(moy, stats.median(l),
+            moy = stats.mean(l)
+            print(nom_classe(classe_participants[1]), " :")
+            print("moyenne : {}, médiane : {}, écart-type : {} ({} essais)".format(moy, stats.median(l),
                                                                                stats.pstdev(l, moy), nb_essais))
-        plt.hist(l, range=(1, 100), bins=99)
-        plt.show()
+            plt.hist(l, range=(1, 100), bins=99)
+            plt.show()
+        else:
+            lancer_partie(classe_participants, att_def, interface, perf)
+
     else:
-        lancer_partie(classe_participants, att_def, interface, perf)
+        super_defenseur, super_attaquants = superchoisir_participants(liste_defenseur, liste_attaquant)
+        nb_classes = len(super_attaquants)
+        nb_essais = int(input("Nombre d'essais : "))
+        superpositions_bateaux = superchoisir_positions_bateaux(super_defenseur,nb_essais)
+        superl = []
+        p = 0
+        for i in range(nb_classes):
+            l,Y = [],[0 for x in range(100)]
+            val = 0
+            for j in range(nb_essais):
+                val = superlancer_partie(super_defenseur,super_attaquants[i],superpositions_bateaux[j])
+                l.append(val)
+                Y[val] += 1
+                v = int(p * nb_essais * nb_classes / 100) - i*nb_essais
+                if j == v:
+                    print("{}%".format(p))
+                    p += 1
+            superl.append(l)
+            plt.plot([x for x in range(100)], Y)
+        for l in superl:
+            moy = stats.mean(l)
+            print(nom_classe(super_attaquants[i]), " :")
+            print("moyenne : {}, médiane : {}, écart-type : {} ({} essais)".format(moy, stats.median(l), stats.pstdev(l, moy), nb_essais))
+        plt.show()
 
 
 def lancer_partie(classe_participants, att_def, interface, perf):
@@ -91,6 +121,17 @@ def lancer_partie(classe_participants, att_def, interface, perf):
         # Attention, format de classe pas a jour : il manque les plateaux
     """
 
+def superlancer_partie(super_defenseur,super_attaquant,superposition_bateaux):
+    plateau1 = Plateau()
+    plateau2 = Plateau()
+    defenseur, attaquant = super_defenseur(plateau1, plateau2), super_attaquant(plateau2, plateau1)
+    defenseur.plateau_allie.placer_bateaux(superposition_bateaux)
+    compteur = 0
+    while not (plateau1.defaite()):
+        attaquant.attaquer()
+        compteur += 1
+    return compteur
+
 
 def choisir_mode():
     """Fonction qui permet de choisir le mode de jeu (Att VS Def ou J VS J). Renvoie le booleen AttDef"""
@@ -121,6 +162,20 @@ def performances():
         print("")
     return not (bool(mode))
 
+def superperformances():
+    """Fonction qui permet de choisir si on teste les perf sur un ou plusieurs algorithmes"""
+    mode = -1
+    while not (mode in [0, 1]):
+        print("Modes :")
+        print("0 : performances")
+        print("1 : Superperformances")
+        try:
+            mode = int(input())
+        except ValueError:
+            pass
+        print("")
+    return (bool(mode))
+
 
 def choisir_participants(att_def, liste_d, liste_a):
     """Fonction qui demande le type de joueur à partir du mode de jeu et des liste d'attaquants/défenseurs disponible"""
@@ -129,6 +184,10 @@ def choisir_participants(att_def, liste_d, liste_a):
     else:
         return demander_poste("Defenseur 1", liste_d), demander_poste("Attaquant 1", liste_a), \
                demander_poste("Defenseur 2", liste_d), demander_poste("Attaquant 2", liste_a)
+
+def superchoisir_participants(liste_d, liste_a):
+    """Fonction qui demande une liste de joueurs"""
+    return demander_poste("Defenseur", liste_d), superdemander_postes("Attaquants", liste_a)
 
 
 def demander_poste(nom_poste, liste):
@@ -144,6 +203,33 @@ def demander_poste(nom_poste, liste):
             pass
         print("")
     return liste[poste]
+
+def superdemander_postes(nom_poste, liste):
+    """Fonction qui demande une liste de types de joueur"""
+    postes = []
+    p = -1
+    compt = 0
+    print("{} :".format(nom_poste))
+    for i in range(len(liste)):
+        print("{} : {}".format(i, nom_classe(liste[i])))
+    print("")
+    print("Combien de classes souhaitez-vous comparer ?")
+    nb = int(input())
+    print("")
+    print("Tapez une classe, faites entrez, et réitérez jusqu'à avoir choisi toutes les classes à comparer.")
+    while compt != nb:
+        p = -1
+        while not (p in list(range(len(liste)))):
+            try:
+                p = int(input())
+            except ValueError:
+                pass
+        if p not in postes:
+            postes.append(p)
+            compt += 1
+    print("")
+    postes.sort()
+    return [liste[p] for p in postes]
 
 
 def demander_interface():
@@ -195,6 +281,12 @@ def enregistrer_defense_alea(iterations):
     file.write(str(fin))
 
 
+def superchoisir_positions_bateaux(super_defenseur,nb_essais):
+    plateau1, plateau2 = Plateau(), Plateau()
+    defenseur = super_defenseur(plateau1, plateau2)
+    return [defenseur.position_bateaux() for x in range(nb_essais)]
+
+
 if __name__ == "__main__":
-    # main()
-    pass
+    main()
+    #pass
