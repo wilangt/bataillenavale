@@ -64,7 +64,8 @@ def main():
         superl = []
         p = 0
         fig = plt.figure()
-        fig.suptitle('Comparaison des performances des algorithmes', fontsize=14, fontweight='bold')
+        fig.suptitle('Comparaison des performances des algorithmes pour {} essais'.format(nb_essais), fontsize=14, fontweight='bold')
+        ax1,ax2 = plt.subplot(121),plt.subplot(122)
         for i in range(nb_classes):
             l,Y,Ycumul = [],[0 for x in range(101)],[0 for x in range(101)]
             val = 0
@@ -81,18 +82,14 @@ def main():
                     print("{}%".format(p))
                     p += 1
             superl.append(l)
-            plt.subplot(121)
-            plt.plot([x for x in range(101)], Y, label=nom_classe(super_attaquants[i]))
-            plt.subplot(122)
-            plt.plot([x for x in range(101)], Ycumul, label=nom_classe(super_attaquants[i]))
-        ax1 = fig.add_subplot(121)
-        ax1.set_xlabel("Nombre de parties")
-        ax1.set_ylabel("Nombre de coups nécessaires pour gagner")
-        plt.legend()
-        ax2 = fig.add_subplot(122)
-        ax2.set_xlabel("Nombre de parties cumulées")
-        ax2.set_ylabel("Nombre de coups nécessaires pour gagner")
-        plt.legend()
+            ax1.plot([x for x in range(101)], Y, label=nom_classe(super_attaquants[i]))
+            ax2.plot([x for x in range(101)], Ycumul, label=nom_classe(super_attaquants[i]))
+        ax1.set_xlabel("Nombre de coups nécessaires pour gagner")
+        ax1.set_ylabel("Nombre de parties")
+        ax1.legend()
+        ax2.set_xlabel("Nombre de coups nécessaires pour gagner")
+        ax2.set_ylabel("Nombre de parties cumulées")
+        ax2.legend()
         print("Nombre d'essais : {}".format(nb_essais))
         for l in superl:
             moy = stats.mean(l)
