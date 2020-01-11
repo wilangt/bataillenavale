@@ -63,19 +63,37 @@ def main():
         superpositions_bateaux = superchoisir_positions_bateaux(super_defenseur,nb_essais)
         superl = []
         p = 0
+        fig = plt.figure()
+        fig.suptitle('Comparaison des performances des algorithmes', fontsize=14, fontweight='bold')
         for i in range(nb_classes):
-            l,Y = [],[0 for x in range(100)]
+            l,Y,Ycumul = [],[0 for x in range(101)],[0 for x in range(101)]
             val = 0
             for j in range(nb_essais):
                 val = superlancer_partie(super_defenseur,super_attaquants[i],superpositions_bateaux[j])
+                if val > 100 :
+                    val = 100
                 l.append(val)
                 Y[val] += 1
+                for k in range(val,101):
+                    Ycumul[k] += 1
                 v = int(p * nb_essais * nb_classes / 100) - i*nb_essais
                 if j == v:
                     print("{}%".format(p))
                     p += 1
             superl.append(l)
-            plt.plot([x for x in range(100)], Y)
+            plt.subplot(121)
+            plt.plot([x for x in range(101)], Y, label=nom_classe(super_attaquants[i]))
+            plt.subplot(122)
+            plt.plot([x for x in range(101)], Ycumul, label=nom_classe(super_attaquants[i]))
+        ax1 = fig.add_subplot(121)
+        ax1.set_xlabel("Nombre de parties")
+        ax1.set_ylabel("Nombre de coups nécessaires pour gagner")
+        plt.legend()
+        ax2 = fig.add_subplot(122)
+        ax2.set_xlabel("Nombre de parties cumulées")
+        ax2.set_ylabel("Nombre de coups nécessaires pour gagner")
+        plt.legend()
+        print("Nombre d'essais : {}".format(nb_essais))
         for l in superl:
             moy = stats.mean(l)
             print(nom_classe(super_attaquants[i]), " :")
@@ -153,7 +171,7 @@ def performances():
     mode = -1
     while not (mode in [0, 1]):
         print("Modes :")
-        print("0 : performances")
+        print("0 : Performances")
         print("1 : Jeu")
         try:
             mode = int(input())
@@ -167,7 +185,7 @@ def superperformances():
     mode = -1
     while not (mode in [0, 1]):
         print("Modes :")
-        print("0 : performances")
+        print("0 : Performances")
         print("1 : Superperformances")
         try:
             mode = int(input())
