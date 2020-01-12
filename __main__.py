@@ -63,6 +63,7 @@ def main():
         superpositions_bateaux = superchoisir_positions_bateaux(super_defenseur,nb_essais)
         superl = []
         p = 0
+        barre = BarreDeProgression(30, 'Sabordage en cours...')
         fig = plt.figure()
         fig.suptitle('Comparaison des performances des algorithmes pour {} essais'.format(nb_essais), fontsize=14, fontweight='bold')
         ax1,ax2 = plt.subplot(121),plt.subplot(122)
@@ -79,8 +80,8 @@ def main():
                     Ycumul[k] += 1
                 v = int(p * nb_essais * nb_classes / 100) - i*nb_essais
                 if j == v:
-                    print("{}%".format(p))
                     p += 1
+                    barre.maj(True,p)
             superl.append(l)
             ax1.plot([x for x in range(101)], Y, label=nom_classe(super_attaquants[i]))
             ax2.plot([x for x in range(101)], Ycumul, label=nom_classe(super_attaquants[i]))
@@ -90,7 +91,7 @@ def main():
         ax2.set_xlabel("Nombre de coups nécessaires pour gagner")
         ax2.set_ylabel("Nombre de parties cumulées")
         ax2.legend()
-        print("Nombre d'essais : {}".format(nb_essais))
+        print("\nNombre d'essais : {}".format(nb_essais))
         for l in superl:
             moy = stats.mean(l)
             print(nom_classe(super_attaquants[i]), " :")

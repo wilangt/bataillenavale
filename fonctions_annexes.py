@@ -1,3 +1,7 @@
+import sys
+import os
+
+
 def test_bateaux(bateaux):
     """Voici un algorithme qui teste si les bateaux que rentrent le joueur correspondent à une disposition valide.
     On attend une liste de 5 bateaux représentés par leur coordonnées, triés par ordre croissant de taille."""
@@ -61,6 +65,31 @@ def test_bateaux(bateaux):
 
     return True
 
+def coor(a,b) :
+    return (0<=a<=9) and (0<=b<=9)
 
-def coor(a, b):
-    return (0 <= a <= 9) and (0 <= b <= 9)
+class BarreDeProgression:
+    """Cette classe permet de créer des barres de chargement"""
+
+    def __init__(self, taille=100, titre='Chargement'):
+        self.taille = taille
+        self.titre = titre
+        self.pourcentage = 0
+
+        print("\nC'est parti !")
+        self.maj(False,0)
+
+    def maj(self, increase=True, pourcentage=0):
+        self.pourcentage = pourcentage
+        etapes = int(self.pourcentage / 100 * self.taille)
+
+        if etapes == 0:
+            visuel = self.taille * ' '
+        else:
+            visuel = etapes * '=' + (self.taille - etapes) * ' '
+
+        if self.pourcentage == 100:
+            sys.stdout.write('\rTerminé !' + 100 * ' ' + '\n')
+        else:
+            sys.stdout.write('\r' + self.titre + ' [' + visuel + '] ' + str(self.pourcentage) + '%')
+        sys.stdout.flush()
