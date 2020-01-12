@@ -1,6 +1,4 @@
 import sys
-import os
-
 
 def test_bateaux(bateaux):
     """Voici un algorithme qui teste si les bateaux que rentrent le joueur correspondent à une disposition valide.
