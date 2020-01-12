@@ -31,9 +31,9 @@ class Humain(Joueur):
                         raise NameError("Abandon")
                     if event.type == MOUSEBUTTONDOWN and event.button == 1 and event.pos[1] > pas_quad and event.pos[
                             0] > pas_quad:
-                        coor = pix_to_coor(event.pos[0], event.pos[1], pas_quad)
-                        liste_bateaux[bateau_actuel].append(coor)
-                        self.plateau_allie.afficher_rectangle(coor, "blanc")
+                        coordonnees = pix_to_coor(event.pos[0], event.pos[1], pas_quad)
+                        liste_bateaux[bateau_actuel].append(coordonnees)
+                        self.plateau_allie.afficher_rectangle(coordonnees, "blanc")
                         compteur += 1
                         if compteur >= taille_bateaux[bateau_actuel]:
                             liste_bateaux[bateau_actuel].sort()

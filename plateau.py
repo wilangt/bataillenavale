@@ -22,8 +22,8 @@ class Plateau:
     def placer_bateaux(self, bateaux):
         """initialise le plateau à partir des coordonnées de bateau données à la création du plateau"""
         for k in range(5):
-            for coor in bateaux[k]:
-                self.plateauCache[coor] = (k + 1)
+            for coordonnees in bateaux[k]:
+                self.plateauCache[coordonnees] = (k + 1)
 
     def afficher_plateau_cache(self):
         """Affiche le plateau"""
@@ -50,21 +50,21 @@ class Plateau:
             pygame.draw.line(background, couleur_rgb("blanc"), (0, i * pas_quad),
                              (self.dimension_fenetre, i * pas_quad))
 
-        #Affichage des coordonnées
-        ligne = ["A","B","C","D","E","F","G","H","I","J"]
-        colonne = ["1","2","3","4","5","6","7","8","9","10"]
-        police = pygame.font.Font(None,pas_quad)
-        m,n = 1,1
-        for i in range(10) :
-            if i == 8 :
+        # Affichage des coordonnées
+        ligne = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
+        colonne = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
+        police = pygame.font.Font(None, pas_quad)
+        m, n = 1, 1
+        for i in range(10):
+            if i == 8:
                 m = 1.5
-            texte = police.render(ligne[i],True,couleur_rgb("blanc"))
-            background.blit(texte,((i+1)*pas_quad+m*(pas_quad//4),pas_quad//4))
-            if i == 9 :
+            texte = police.render(ligne[i], True, couleur_rgb("blanc"))
+            background.blit(texte, ((i + 1) * pas_quad + m * (pas_quad // 4), pas_quad // 4))
+            if i == 9:
                 n = 0.5
-            texte = police.render(colonne[i],True,couleur_rgb("blanc"))
-            background.blit(texte,(n*(pas_quad//4),(i+1)*pas_quad+pas_quad//4))
-            m,n = 1,1
+            texte = police.render(colonne[i], True, couleur_rgb("blanc"))
+            background.blit(texte, (n * (pas_quad // 4), (i + 1) * pas_quad + pas_quad // 4))
+            m, n = 1, 1
 
         self.interface = background
         self.interfaceInit = True
@@ -94,29 +94,29 @@ class Plateau:
         print(self.plateauVisible)
         return ""
 
-    def feu(self, coor):
+    def feu(self, coordonnees):
         """Feu sur une coordonnée"""
         self.nb_tours += 1
-        cible = self.plateauCache[coor]
+        cible = self.plateauCache[coordonnees]
         if cible == 0:
-            self.afficher_rectangle(coor, "rouge")
-            self.plateauVisible[coor] = -1
+            self.afficher_rectangle(coordonnees, "rouge")
+            self.plateauVisible[coordonnees] = -1
             return 0
         else:
-            self.plateauCache[coor] = 0
+            self.plateauCache[coordonnees] = 0
             self.bateaux[cible] -= 1
             if self.bateaux[cible] == 0:
-                self.afficher_rectangle(coor, "noir")
-                self.plateauVisible[coor] = 2
+                self.afficher_rectangle(coordonnees, "noir")
+                self.plateauVisible[coordonnees] = 2
                 return 2
             else:
-                self.afficher_rectangle(coor, "vert")
-                self.plateauVisible[coor] = 1
+                self.afficher_rectangle(coordonnees, "vert")
+                self.plateauVisible[coordonnees] = 1
                 return 1
 
-    def afficher_rectangle(self, coor, couleur):
-        if self.interfaceInit and self.plateauVisible[coor] == 0:
-            dessiner_rect(coor, couleur_rgb(couleur), self.get_pas_quad(), self.interface)
+    def afficher_rectangle(self, coordonnees, couleur):
+        if self.interfaceInit and self.plateauVisible[coordonnees] == 0:
+            dessiner_rect(coordonnees, couleur_rgb(couleur), self.get_pas_quad(), self.interface)
             if self.interfaceAffichee:
                 screen = pygame.display.set_mode((self.dimension_fenetre, self.dimension_fenetre))
                 screen.blit(self.interface, (0, 0))
@@ -132,9 +132,9 @@ class Plateau:
     def get_pas_quad(self):
         return self.dimension_fenetre // 11
 
-    def jamais_vu(self, coor):
-        return self.plateauVisible[coor] == 0
-    
+    def jamais_vu(self, coordonnees):
+        return self.plateauVisible[coordonnees] == 0
+
     def get_nb_tours(self):
         return self.nb_tours
 

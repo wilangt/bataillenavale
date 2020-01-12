@@ -3,8 +3,6 @@ from random import randint
 from random import choice
 import numpy as np
 
-''' np.set_printoptions(precision=3) '''
-
 
 class ChasseEtPeche(Joueur):
     def __init__(self, plateau_allie, plateau_adverse):
@@ -12,10 +10,11 @@ class ChasseEtPeche(Joueur):
         self.attaquant = True
         self.defenseur = False
         self.mode_chasse = True  # True = on tir au hasard; False = on pêche tant que le bateau visé nest pas coulé
-        self.chasse = np.mat([[1 for i in range(10)] for j in range(10)])  # liste des cibles possibles lorsqu'on
+        self.chasse = np.mat([[1 for _ in range(10)] for _ in range(10)])  # liste des cibles possibles lorsqu'on
         # est dans le mode chasse
         self.poisson = []  # bateau en cours de destruction
         self.colonne = True  # si le poisson est en colonne
+        self.peche = []
 
     def choisir_cible_chasse(self):
         return choice([(i, j) for i in range(10) for j in range(10) if self.chasse[i, j]])
@@ -60,15 +59,15 @@ class ChasseEtPeche(Joueur):
             self.poisson.sort()
             self.mode_chasse = False
         if res != 0:
-            L = [(i - 1, j - 1), (i - 1, j + 1), (i + 1, j + 1), (i + 1, j - 1)]
+            l_maj = [(i - 1, j - 1), (i - 1, j + 1), (i + 1, j + 1), (i + 1, j - 1)]
             k = 3
             while k >= 0:
-                (a, b) = L[k]
+                (a, b) = l_maj[k]
                 if not (coor(a, b)):
-                    L.pop(k)
+                    l_maj.pop(k)
                 k -= 1
-            for l in L:
-                self.chasse[l] = 0
+            for l_min in l_maj:
+                self.chasse[l_min] = 0
         if res == 2:
             self.poisson.append(cible)
             self.poisson.sort()
@@ -130,24 +129,24 @@ class ChassePecheCroixProba(ChassePecheCroix):  # A ajouter à main / marche pas
         """ATTENTION : mat est une matrice numpy de 0 et de 1 et une liste d'entiers naturels"""
         mat = np.array(mat, dtype=int)
 
-        def prob_un_bateau(mat, k):
-            prob = mat.copy()
-            nb = bat_restants[k]
+        def prob_un_bateau(matrice, n):
+            prob = matrice.copy()
+            nb = bat_restants[n]
             for i in range(10):
-                compt = 1
+                compteur = 1
                 for j in range(10):
                     if prob[i, j] == 0:
-                        compt = 0
-                    prob[i, j] = compt
-                    compt += 1
+                        compteur = 0
+                    prob[i, j] = compteur
+                    compteur += 1
             for i in range(10):
                 for j in range(10):
                     if prob[i, j] < nb:
                         prob[i, j] = 0
                     else:
                         prob[i, j] = 1
-                        for l in range(1, nb):
-                            prob[i, j - l] += 1
+                        for m in range(1, nb):
+                            prob[i, j - m] += 1
             return prob
 
         mat_tot = np.zeros((10, 10), dtype=int)
@@ -227,5 +226,5 @@ class ChassePecheProbaCroixDecroissanceExpo(ChassePecheCroixProba):  # A ajouter
     """L'importance des croix diminue exponentiellement"""
 
     def poids_croix(self, n):
-        lambd = 0.05
-        return lambd * np.exp(-lambd * n)
+        lambdaa = 0.05
+        return lambdaa * np.exp(-lambdaa * n)

@@ -34,20 +34,20 @@ def main():
 
     if perf:
         nb_essais = int(input("Nombre d'essais : "))
-        l = []
+        liste = []
         p = 0
         for i in range(nb_essais):
-            l.append(lancer_partie(classe_participants, att_def, interface, perf))
+            liste.append(lancer_partie(classe_participants, att_def, interface, perf))
             v = int(p * nb_essais / 100)
             if i == v:
                 print("{}%".format(p))
                 p += 1
 
-        moy = stats.mean(l)
+        moy = stats.mean(liste)
         print(nom_classe(classe_participants[1]), " :")
-        print("moyenne : {}, médiane : {}, écart-type : {} ({} essais)".format(moy, stats.median(l),
-                                                                               stats.pstdev(l, moy), nb_essais))
-        plt.hist(l, range=(1, 100), bins=99)
+        print("moyenne : {}, médiane : {}, écart-type : {} ({} essais)".format(moy, stats.median(liste),
+                                                                               stats.pstdev(liste, moy), nb_essais))
+        plt.hist(liste, range=(1, 100), bins=99)
         plt.show()
     else:
         lancer_partie(classe_participants, att_def, interface, perf)
@@ -108,7 +108,7 @@ def choisir_mode():
 
 
 def performances():
-    """Fonction qui permet de choisir si on test les perfs des algorithmes"""
+    """Fonction qui permet de choisir si on test les performances des algorithmes"""
     mode = -1
     while not (mode in [0, 1]):
         print("Modes :")

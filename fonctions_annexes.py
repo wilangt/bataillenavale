@@ -1,4 +1,3 @@
-
 def test_bateaux(bateaux):
     """Voici un algorithme qui teste si les bateaux que rentrent le joueur correspondent à une disposition valide.
     On attend une liste de 5 bateaux représentés par leur coordonnées, triés par ordre croissant de taille."""
@@ -25,8 +24,8 @@ def test_bateaux(bateaux):
 
     def somme(liste):
         s = 0
-        for i in range(len(liste)):
-            s += liste[i]
+        for n in range(len(liste)):
+            s += liste[n]
         return s
 
     def moyenne(liste):
@@ -35,8 +34,6 @@ def test_bateaux(bateaux):
     def k_termes(n, m):
         return (m * (m + 1)) / 2 - (n * (n - 1)) / 2
 
-    l1, l2 = [], []
-    c1, c2 = True, True
     for k in range(5):
         l1, l2 = [], []
         for j in range(len(bateaux[k])):
@@ -47,7 +44,7 @@ def test_bateaux(bateaux):
         if not (c1 or c2):
             return False
 
-    interface = [[0 for i in range(10)] for j in range(10)]
+    interface = [[0 for _ in range(10)] for _ in range(10)]
     for k in range(5):
         (d1, d2), (f1, f2) = bateaux[k][0], bateaux[k][-1]
         for i in range(d1 - 1, f1 + 2):
@@ -64,5 +61,6 @@ def test_bateaux(bateaux):
 
     return True
 
-def coor(a,b) :
-    return (0<=a<=9) and (0<=b<=9)
+
+def coor(a, b):
+    return (0 <= a <= 9) and (0 <= b <= 9)

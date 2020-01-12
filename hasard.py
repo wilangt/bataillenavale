@@ -48,12 +48,12 @@ class HasardDefenseCornichon(HasardDefense):
 
 def position_bateaux_global():
     def position_1_bateau(taille):
-        xpoupe = randint(0, 9 - taille)
-        ypoupe = randint(0, 9)
+        x_poupe = randint(0, 9 - taille)
+        y_poupe = randint(0, 9)
         if bool(randint(0, 1)):  # Horizontal ou vertical
-            bateau = [(xpoupe + i, ypoupe) for i in range(taille)]
+            bateau = [(x_poupe + i, y_poupe) for i in range(taille)]
         else:
-            bateau = [(ypoupe, xpoupe + i) for i in range(taille)]
+            bateau = [(y_poupe, x_poupe + i) for i in range(taille)]
         return bateau
 
     bateaux = [[], [], [], [], []]
