@@ -195,7 +195,7 @@ def superperformances():
         except ValueError:
             pass
         print("")
-    return (bool(mode))
+    return bool(mode)
 
 
 def choisir_participants(att_def, liste_d, liste_a):
@@ -230,7 +230,6 @@ def demander_poste(nom_poste, liste):
 def superdemander_postes(nom_poste, liste):
     """Fonction qui demande une liste de types de joueur"""
     postes = []
-    p = -1
     compt = 0
     print("{} :".format(nom_poste))
     for i in range(len(liste)):
@@ -309,7 +308,7 @@ def enregistrer_defense_alea(iterations):
 def superchoisir_positions_bateaux(super_defenseur, nb_essais):
     plateau1, plateau2 = Plateau(), Plateau()
     defenseur = super_defenseur(plateau1, plateau2)
-    return [defenseur.position_bateaux() for x in range(nb_essais)]
+    return [defenseur.position_bateaux() for _ in range(nb_essais)]
 
 
 if __name__ == "__main__":
