@@ -19,7 +19,6 @@ class Resal:
         self.couches = couches
         self.nombre_couche = len(couches)
         self.biais = [np.random.randn(y, 1) for y in couches[1:]]
-        # self.weights = [np.random.randn(y, x) for y in couches[1:] for x in couches[:-1]]
         self.poids = [np.random.randn(y, x) for (x, y) in zip(couches[:-1], couches[1:])]
         print(self.biais)
         print(self.poids)

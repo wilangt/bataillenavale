@@ -63,7 +63,7 @@ def main():
         superpositions_bateaux = superchoisir_positions_bateaux(super_defenseur, nb_essais)
         superl = []
         p = 0
-        barre = BarreDeProgression(30, 'Sabordage en cours...')
+        barre = BarreDeProgression(titre='Sabordage en cours...')
         fig = plt.figure()
         fig.suptitle('Comparaison des performances des algorithmes pour {} essais'.format(nb_essais), fontsize=14,
                      fontweight='bold')
@@ -313,4 +313,4 @@ def superchoisir_positions_bateaux(super_defenseur, nb_essais):
 
 if __name__ == "__main__":
     main()
-    # enregistrer_defense_alea(100000)
+    # enregistrer_defense_alea(10000)
