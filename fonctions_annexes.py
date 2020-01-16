@@ -87,7 +87,7 @@ class BarreDeProgression:
             visuel = etapes * '=' + (self.taille - etapes) * ' '
 
         if self.pourcentage == 100:
-            sys.stdout.write('\rTerminé !' + (self.taill + 30) * ' ' + '\n')
+            sys.stdout.write('\rTerminé !' + (self.taille + 30) * ' ' + '\n')
         else:
             sys.stdout.write('\r' + self.titre + ' [' + visuel + '] ' + str(self.pourcentage) + '%')
         sys.stdout.flush()
