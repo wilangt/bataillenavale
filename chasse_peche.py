@@ -89,10 +89,11 @@ class ChasseEtPeche(Joueur):
 
 
 class ChassePecheCroix(ChasseEtPeche):
-    def __init__(self, plateau_allie, plateau_adverse):
+    def __init__(self, plateau_allie, plateau_adverse, enregistrer_nacho=False):
         ChasseEtPeche.__init__(self, plateau_allie, plateau_adverse)
         self.croix_pair = randint(0, 1)  # positions de coordonnées pair ou impair
         self.bateaux = self.plateau_adverse.bateaux[1:]
+        self.enregistrer_nacho = enregistrer_nacho
 
     def choisir_cible_chasse(self):
         # print(self.chasse)
@@ -125,7 +126,7 @@ class ChassePecheCroix(ChasseEtPeche):
 class ChassePecheCroixProba(ChassePecheCroix):  # A ajouter à main / marche pas
     """Les croix sont parfaite : quelque soit la probabilité d'une case rayée, elle ne sera jamais choisi"""
 
-    def matrice_poids_probabilite(self, mat, bat_restants):
+    def matrice_poids_probabilite(self, mat, bat_restants):  # ici
         """ATTENTION : mat est une matrice numpy de 0 et de 1 et une liste d'entiers naturels"""
         mat = np.array(mat, dtype=int)
 
@@ -157,7 +158,7 @@ class ChassePecheCroixProba(ChassePecheCroix):  # A ajouter à main / marche pas
         mat_tot = mat_tot / np.max(mat_tot)
         return mat_tot
 
-    def choisir_cible_peche(self):
+    def choisir_cible_peche(self):  # ici
         n = len(self.poisson)
         cibles = []
         matrice_poids = np.zeros((10, 10), dtype=int)

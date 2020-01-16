@@ -138,6 +138,25 @@ class Plateau:
     def get_nb_tours(self):
         return self.nb_tours
 
+    def renvoyer_nacho(self):
+        nacho = []
+        for i in range(100):
+            case = self.plateauVisible[i // 10, i % 10]
+            if case == -1:  # plouf
+                nacho += [0, 1]
+            elif case == 0:  # On sait pas
+                nacho += [0, 0]
+            elif case == 1:  # touché
+                nacho += [1, 0]
+            elif case == 2:  # touché coulé
+                nacho += [1, 1]
+        for i in self.bateaux[1:]:
+            if i > 0:
+                nacho.append(1)
+            else:
+                nacho.append(0)
+        return nacho
+
 
 def coor_to_pix(i, j, pas_quad):
     """Fonction qui transforme une coordonnée BN en coordonnée pixel (seulement l'interieur des cases)"""
