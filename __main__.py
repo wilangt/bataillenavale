@@ -313,4 +313,4 @@ def superchoisir_positions_bateaux(super_defenseur, nb_essais):
 
 if __name__ == "__main__":
     main()
-    # enregistrer_defense_alea(100)
+    # enregistrer_defense_alea(100000)

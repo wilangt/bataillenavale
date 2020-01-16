@@ -89,5 +89,5 @@ class BarreDeProgression:
         if self.pourcentage == 100:
             sys.stdout.write('\rTerminé !' + (self.taille + 30) * ' ' + '\n')
         else:
-            sys.stdout.write('\r' + self.titre + ' [' + visuel + '] ' + str(self.pourcentage) + '%')
+            sys.stdout.write('\r' + self.titre + ' [' + visuel + '] ' + str(round(self.pourcentage,2)) + '%')
         sys.stdout.flush()
