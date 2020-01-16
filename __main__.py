@@ -31,13 +31,13 @@ def main():
         liste_defenseur = liste_defenseur[1:]
         liste_attaquant = liste_attaquant[1:]
 
-    if not superperf :
+    if not superperf:
         classe_participants = choisir_participants(att_def, liste_defenseur, liste_attaquant)
 
         if perf:
             nb_essais = int(input("Nombre d'essais : "))
-            l,Y = [],[0 for x in range(100)]
-            p,val = 0,0
+            l, Y = [], [0 for x in range(100)]
+            p, val = 0, 0
             for i in range(nb_essais):
                 val = lancer_partie(classe_participants, att_def, interface, perf)
                 l.append(val)
@@ -50,7 +50,7 @@ def main():
             moy = stats.mean(l)
             print(nom_classe(classe_participants[1]), " :")
             print("moyenne : {}, médiane : {}, écart-type : {} ({} essais)".format(moy, stats.median(l),
-                                                                               stats.pstdev(l, moy), nb_essais))
+                                                                                   stats.pstdev(l, moy), nb_essais))
             plt.hist(l, range=(1, 100), bins=99)
             plt.show()
         else:
@@ -60,25 +60,26 @@ def main():
         super_defenseur, super_attaquants = superchoisir_participants(liste_defenseur, liste_attaquant)
         nb_classes = len(super_attaquants)
         nb_essais = int(input("Nombre d'essais : "))
-        superpositions_bateaux = superchoisir_positions_bateaux(super_defenseur,nb_essais)
+        superpositions_bateaux = superchoisir_positions_bateaux(super_defenseur, nb_essais)
         superl = []
         p = 0
         barre = BarreDeProgression(30, 'Sabordage en cours...')
         fig = plt.figure()
-        fig.suptitle('Comparaison des performances des algorithmes pour {} essais'.format(nb_essais), fontsize=14, fontweight='bold')
-        ax1,ax2 = plt.subplot(121),plt.subplot(122)
+        fig.suptitle('Comparaison des performances des algorithmes pour {} essais'.format(nb_essais), fontsize=14,
+                     fontweight='bold')
+        ax1, ax2 = plt.subplot(121), plt.subplot(122)
         for i in range(nb_classes):
-            l,Y,Ycumul = [],[0 for x in range(101)],[0 for x in range(101)]
+            l, Y, Ycumul = [], [0 for x in range(101)], [0 for x in range(101)]
             val = 0
             for j in range(nb_essais):
-                val = superlancer_partie(super_defenseur,super_attaquants[i],superpositions_bateaux[j])
-                if val > 100 :
+                val = superlancer_partie(super_defenseur, super_attaquants[i], superpositions_bateaux[j])
+                if val > 100:
                     val = 100
                 l.append(val)
                 Y[val] += 1
-                for k in range(val,101):
+                for k in range(val, 101):
                     Ycumul[k] += 1
-                v = int(p * nb_essais * nb_classes / 100) - i*nb_essais
+                v = int(p * nb_essais * nb_classes / 100) - i * nb_essais
                 if j == v:
                     p += 1
                     barre.maj(p)
@@ -95,7 +96,8 @@ def main():
         for l in superl:
             moy = stats.mean(l)
             print(nom_classe(super_attaquants[i]), " :")
-            print("moyenne : {}, médiane : {}, écart-type : {} ({} essais)".format(moy, stats.median(l), stats.pstdev(l, moy), nb_essais))
+            print("moyenne : {}, médiane : {}, écart-type : {} ({} essais)".format(moy, stats.median(l),
+                                                                                   stats.pstdev(l, moy), nb_essais))
         plt.show()
 
 
@@ -137,7 +139,8 @@ def lancer_partie(classe_participants, att_def, interface, perf):
         # Attention, format de classe pas a jour : il manque les plateaux
     """
 
-def superlancer_partie(super_defenseur,super_attaquant,superposition_bateaux):
+
+def superlancer_partie(super_defenseur, super_attaquant, superposition_bateaux):
     plateau1 = Plateau()
     plateau2 = Plateau()
     defenseur, attaquant = super_defenseur(plateau1, plateau2), super_attaquant(plateau2, plateau1)
@@ -178,6 +181,7 @@ def performances():
         print("")
     return not (bool(mode))
 
+
 def superperformances():
     """Fonction qui permet de choisir si on teste les perf sur un ou plusieurs algorithmes"""
     mode = -1
@@ -201,6 +205,7 @@ def choisir_participants(att_def, liste_d, liste_a):
         return demander_poste("Defenseur 1", liste_d), demander_poste("Attaquant 1", liste_a), \
                demander_poste("Defenseur 2", liste_d), demander_poste("Attaquant 2", liste_a)
 
+
 def superchoisir_participants(liste_d, liste_a):
     """Fonction qui demande une liste de joueurs"""
     return demander_poste("Defenseur", liste_d), superdemander_postes("Attaquants", liste_a)
@@ -219,6 +224,7 @@ def demander_poste(nom_poste, liste):
             pass
         print("")
     return liste[poste]
+
 
 def superdemander_postes(nom_poste, liste):
     """Fonction qui demande une liste de types de joueur"""
@@ -288,7 +294,9 @@ def enregistrer_defense_alea(iterations):
     debut = int(file.read())
     file.close()
     fin = debut + iterations
+    barre = BarreDeProgression()
     for i in range(debut, fin):
+        barre.maj(100*(i-debut+1)/iterations)
         file = open('donnees/defense-' + str(i), 'wb')
         bateaux = position_bateaux_global()
         cornichon.dump(bateaux, file)
@@ -297,7 +305,7 @@ def enregistrer_defense_alea(iterations):
     file.write(str(fin))
 
 
-def superchoisir_positions_bateaux(super_defenseur,nb_essais):
+def superchoisir_positions_bateaux(super_defenseur, nb_essais):
     plateau1, plateau2 = Plateau(), Plateau()
     defenseur = super_defenseur(plateau1, plateau2)
     return [defenseur.position_bateaux() for x in range(nb_essais)]
@@ -305,4 +313,4 @@ def superchoisir_positions_bateaux(super_defenseur,nb_essais):
 
 if __name__ == "__main__":
     main()
-    #pass
+    # enregistrer_defense_alea(100)
