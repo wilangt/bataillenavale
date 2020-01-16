@@ -1,0 +1,94 @@
+import numpy as np
+import random
+
+
+def sigmoid(z):
+    return 1 / (1 + np.exp(-z))
+
+
+def sigmoid_prime(z):
+    return sigmoid(z) * (1 - sigmoid(z))
+
+
+def derivee_couteuse(sortie, y):
+    return sortie - y
+
+
+class Resal:
+    def __init__(self, couches):
+        self.couches = couches
+        self.nombre_couche = len(couches)
+        self.biais = [np.random.randn(y, 1) for y in couches[1:]]
+        # self.weights = [np.random.randn(y, x) for y in couches[1:] for x in couches[:-1]]
+        self.poids = [np.random.randn(y, x) for (x, y) in zip(couches[:-1], couches[1:])]
+        print(self.biais)
+        print(self.poids)
+
+    def evaluation(self, a):
+        for b, p in zip(self.biais, self.poids):
+            a = sigmoid(np.dot(p, a) + b)
+        return a
+
+    def DGS(self, donnees_entrainement, epoque, taille_mini_nacho, eta, donnees_test=None):
+        n_test = 0
+        if donnees_test:
+            n_test = len(donnees_test)
+        n = len(donnees_entrainement)
+        for j in range(epoque):
+            random.shuffle(donnees_entrainement)
+            mini_nachos = [
+                donnees_entrainement[k:k + taille_mini_nacho] for k in range(0, n, taille_mini_nacho)
+            ]
+            for mini_nacho in mini_nachos:
+                self.maj_mini_nacho(mini_nacho, eta)
+            if donnees_test:
+                print("Époque {}: {} / {}".format(j, self.tester_IA(donnees_test), n_test))
+            else:
+                print("Époque {} terminée".format(j))
+
+    def maj_mini_nacho(self, mini_nacho, eta):
+        nabla_b = [np.zeros(b.shape) for b in self.biais]
+        nabla_p = [np.zeros(p.shape) for p in self.poids]
+        for (x, y) in mini_nacho:
+            delta_nabla_b, delta_nabla_p = self.backprop(x, y)
+            nabla_b = [nb + dnb for nb, dnb in zip(nabla_b, delta_nabla_b)]
+            nabla_p = [nw + dnw for nw, dnw in zip(nabla_p, delta_nabla_p)]
+        self.poids = [w - (eta / len(mini_nacho)) * nw for w, nw in zip(self.poids, nabla_p)]
+        self.biais = [b - (eta / len(mini_nacho)) * nb for b, nb in zip(self.biais, nabla_b)]
+
+    def tester_IA(self, donnees_test):
+        return 0
+
+    def backprop(self, x, y):
+        """Return a tuple ``(nabla_b, nabla_w)`` representing the
+        gradient for the cost function C_x.  ``nabla_b`` and
+        ``nabla_w`` are layer-by-layer lists of numpy arrays, similar
+        to ``self.biases`` and ``self.weights``."""
+        nabla_b = [np.zeros(b.shape) for b in self.biais]
+        nabla_w = [np.zeros(w.shape) for w in self.poids]
+        # feedforward
+        activation = x
+        activations = [x]  # list to store all the activations, layer by layer
+        zs = []  # list to store all the z vectors, layer by layer
+        for b, w in zip(self.biais, self.poids):
+            z = np.dot(w, activation) + b
+            zs.append(z)
+            activation = sigmoid(z)
+            activations.append(activation)
+        # backward pass
+        delta = derivee_couteuse(activations[-1], y) * sigmoid_prime(zs[-1])
+        nabla_b[-1] = delta
+        nabla_w[-1] = np.dot(delta, activations[-2].transpose())
+        # Note that the variable c in the loop below is used a little
+        # differently to the notation in Chapter 2 of the book.  Here,
+        # c = 1 means the last layer of neurons, c = 2 is the
+        # second-last layer, and so on.  It's a renumbering of the
+        # scheme in the book, used here to take advantage of the fact
+        # that Python can use negative indices in lists.
+        for c in range(2, self.nombre_couche):
+            z = zs[-c]
+            sp = sigmoid_prime(z)
+            delta = np.dot(self.poids[-c + 1].transpose(), delta) * sp
+            nabla_b[-c] = delta
+            nabla_w[-c] = np.dot(delta, activations[-c - 1].transpose())
+        return nabla_b, nabla_w
