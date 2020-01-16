@@ -93,11 +93,12 @@ def main():
         ax2.set_ylabel("Nombre de parties cumulées")
         ax2.legend()
         print("\nNombre d'essais : {}".format(nb_essais))
-        for l in superl:
+        for i in range(len(super_attaquants)):
+            l = superl[i]
             moy = stats.mean(l)
             print(nom_classe(super_attaquants[i]), " :")
-            print("moyenne : {}, médiane : {}, écart-type : {} ({} essais)".format(moy, stats.median(l),
-                                                                                   stats.pstdev(l, moy), nb_essais))
+            print("moyenne : {}, médiane : {}, écart-type : {}".format(round(moy,2), round(stats.median(l),2),
+                                                                                   round(stats.pstdev(l, moy),2)))
         plt.show()
 
 
