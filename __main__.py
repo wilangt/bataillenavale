@@ -81,7 +81,7 @@ def main():
                 v = int(p * nb_essais * nb_classes / 100) - i*nb_essais
                 if j == v:
                     p += 1
-                    barre.maj(True,p)
+                    barre.maj(p)
             superl.append(l)
             ax1.plot([x for x in range(101)], Y, label=nom_classe(super_attaquants[i]))
             ax2.plot([x for x in range(101)], Ycumul, label=nom_classe(super_attaquants[i]))

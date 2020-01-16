@@ -75,9 +75,9 @@ class BarreDeProgression:
         self.pourcentage = 0
 
         print("\nC'est parti !")
-        self.maj(False,0)
+        self.maj(0)
 
-    def maj(self, increase=True, pourcentage=0):
+    def maj(self, pourcentage=0):
         self.pourcentage = pourcentage
         etapes = int(self.pourcentage / 100 * self.taille)
 
