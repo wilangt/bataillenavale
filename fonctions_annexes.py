@@ -85,8 +85,8 @@ class BarreDeProgression:
         self.pourcentage = pourcentage
         etapes = int(self.pourcentage / 100 * self.taille)
 
-        if self.pourcentage - self.pourcentage_precedent >= 5:
-            self.temps_restant = (time.time()-self.temps)*(100-pourcentage)/5
+        if self.pourcentage - self.pourcentage_precedent >= 2:
+            self.temps_restant = (time.time()-self.temps)*(100-pourcentage)/2
             self.temps = time.time()
             self.pourcentage_precedent = self.pourcentage
 

@@ -89,24 +89,20 @@ class ChasseEtPeche(Joueur):
 
 
 class ChassePecheCroix(ChasseEtPeche):
-    def __init__(self, plateau_allie, plateau_adverse, enregistrer_nacho=False):
+    def __init__(self, plateau_allie, plateau_adverse, enregistrer_vecteur=False):
         ChasseEtPeche.__init__(self, plateau_allie, plateau_adverse)
         self.croix_pair = randint(0, 1)  # positions de coordonnées pair ou impair
         self.bateaux = self.plateau_adverse.bateaux[1:]
-        self.enregistrer_nacho = enregistrer_nacho
+        self.enregistrer_vecteur = enregistrer_vecteur
 
     def choisir_cible_chasse(self):
-        # print(self.chasse)
         matrice_croix = self.matrice_poids_croix()
-        # print(matrice_croix)
         matrice_probabilite = self.matrice_poids_probabilite(self.chasse, self.bateaux)  # Ajouter get_att
-        # print(matrice_probabilite)
         matrice_poids = np.multiply(matrice_probabilite, matrice_croix)
-        # print(matrice_poids)
         cibles = [(i, j) for j in range(10) for i in range(10) if matrice_poids[i, j] > matrice_poids.max() - 0.0001]
         cible = choice(cibles)
-        # print(cible)
-        # print()
+        if self.enregistrer_vecteur :
+            enregistrer_tuple(self.plateau_adverse.renvoyer_vecteur_init(),renvoyer_vecteur_sortie(matrice_poids))
         return cible
 
     def matrice_poids_probabilite(self, mat, bat_restants):
@@ -229,3 +225,7 @@ class ChassePecheProbaCroixDecroissanceExpo(ChassePecheCroixProba):  # A ajouter
     def poids_croix(self, n):
         lambdaa = 0.05
         return lambdaa * np.exp(-lambdaa * n)
+
+
+def renvoyer_vecteur_sortie(mat):
+    return [mat[i,j] for i in range(10) for j in range(10)]

@@ -20,43 +20,47 @@ def main():
     att_def = True
     # att_def = choisir_mode()
 
-    perf = performances()
-    superperf = superperformances()
-    if not perf or not superperf:
+    jeu, perf, superperf, donnees = demander_mode()
+
+    if jeu:
         interface = demander_interface()
     else:
         interface = False
 
-    if not interface:
+    if perf or superperf:
         liste_defenseur = liste_defenseur[1:]
         liste_attaquant = liste_attaquant[1:]
 
-    if not superperf:
+    if donnees:
+        liste_defenseur = liste_defenseur[1:]
+        liste_attaquant = liste_attaquant[4:8]
+
+    if jeu:
         classe_participants = choisir_participants(att_def, liste_defenseur, liste_attaquant)
+        lancer_partie(classe_participants, att_def, interface, perf)
 
-        if perf:
-            nb_essais = int(input("Nombre d'essais : "))
-            l, Y = [], [0 for x in range(100)]
-            p, val = 0, 0
-            for i in range(nb_essais):
-                val = lancer_partie(classe_participants, att_def, interface, perf)
-                l.append(val)
-                Y[val] += 1
-                v = int(p * nb_essais / 100)
-                if i == v:
-                    print("{}%".format(p))
-                    p += 1
+    elif perf:
+        classe_participants = choisir_participants(att_def, liste_defenseur, liste_attaquant)
+        nb_essais = int(input("Nombre d'essais : "))
+        l, Y = [], [0 for x in range(100)]
+        p, val = 0, 0
+        for i in range(nb_essais):
+            val = lancer_partie(classe_participants, att_def, interface, perf)
+            l.append(val)
+            Y[val] += 1
+            v = int(p * nb_essais / 100)
+            if i == v:
+                print("{}%".format(p))
+                p += 1
 
-            moy = stats.mean(l)
-            print(nom_classe(classe_participants[1]), " :")
-            print("moyenne : {}, médiane : {}, écart-type : {} ({} essais)".format(moy, stats.median(l),
-                                                                                   stats.pstdev(l, moy), nb_essais))
-            plt.hist(l, range=(1, 100), bins=99)
-            plt.show()
-        else:
-            lancer_partie(classe_participants, att_def, interface, perf)
+        moy = stats.mean(l)
+        print(nom_classe(classe_participants[1]), " :")
+        print("moyenne : {}, médiane : {}, écart-type : {} ({} essais)".format(moy, stats.median(l),
+                                                                               stats.pstdev(l, moy), nb_essais))
+        plt.hist(l, range=(1, 100), bins=99)
+        plt.show()
 
-    else:
+    elif superperf:
         super_defenseur, super_attaquants = superchoisir_participants(liste_defenseur, liste_attaquant)
         nb_classes = len(super_attaquants)
         nb_essais = int(input("Nombre d'essais : "))
@@ -97,10 +101,14 @@ def main():
             l = superl[i]
             moy = stats.mean(l)
             print(nom_classe(super_attaquants[i]), " :")
-            print("moyenne : {}, médiane : {}, écart-type : {}".format(round(moy,2), round(stats.median(l),2),
-                                                                                   round(stats.pstdev(l, moy),2)))
+            print("moyenne : {}, médiane : {}, écart-type : {}".format(round(moy,2), round(stats.median(l),2), round(stats.pstdev(l, moy),2)))
         plt.show()
 
+    elif donnees:
+        defenseur, attaquant = choisir_participants(att_def, liste_defenseur, liste_attaquant)
+        print("Combien de partie ?\n")
+        nb_parties = int(input())
+        enregistrer_pleins_de_tuples(defenseur, attaquant, nb_parties)
 
 def lancer_partie(classe_participants, att_def, interface, perf):
     plateau1 = Plateau()
@@ -168,34 +176,30 @@ def choisir_mode():
     return not (bool(mode))
 
 
-def performances():
-    """Fonction qui permet de choisir si on test les performances des algorithmes"""
+def demander_mode():
+    """Fonction qui permet de choisir quel mode de traitement on choisit"""
+    perf, superperf, donnees, jeu = False, False, False, False
     mode = -1
-    while not (mode in [0, 1]):
+    while not (mode in [1, 2, 3, 4]):
         print("Modes :")
-        print("0 : Performances")
         print("1 : Jeu")
+        print("2 : Performances")
+        print("3 : Superperformances")
+        print("4 : Enregistrer un cornichon")
         try:
             mode = int(input())
         except ValueError:
             pass
         print("")
-    return not (bool(mode))
-
-
-def superperformances():
-    """Fonction qui permet de choisir si on teste les perf sur un ou plusieurs algorithmes"""
-    mode = -1
-    while not (mode in [0, 1]):
-        print("Modes :")
-        print("0 : Performances")
-        print("1 : Superperformances")
-        try:
-            mode = int(input())
-        except ValueError:
-            pass
-        print("")
-    return bool(mode)
+    if mode == 1:
+        jeu = True
+    if mode == 2:
+        perf = True
+    if mode == 3:
+        superperf = True
+    if mode == 4:
+        donnees = True
+    return (jeu, perf, superperf, donnees)
 
 
 def choisir_participants(att_def, liste_d, liste_a):
@@ -305,6 +309,22 @@ def enregistrer_defense_alea(iterations):
     file.write(str(fin))
 
 
+def enregistrer_tuple(entree, sortie):
+    file = open("donnees/meta_cornichon.txt", "r")
+    indice = int(file.read())
+    file.write(str(indice + 1))
+    file.close()
+    file = open("donnees/tuple-" + str(indice), 'wb')
+    cornichon.dump((entree,sortie), file)
+    file.close()
+
+
+def enregistrer_pleins_de_tuples(defenseur, attaquant, nb_parties) :
+    attaquant.enregistrer_vecteur = True
+    for i in range(nb_parties) :
+        lancer_partie((defenseur,attaquant), False, False, False)
+
+
 def superchoisir_positions_bateaux(super_defenseur, nb_essais):
     plateau1, plateau2 = Plateau(), Plateau()
     defenseur = super_defenseur(plateau1, plateau2)
@@ -313,4 +333,4 @@ def superchoisir_positions_bateaux(super_defenseur, nb_essais):
 
 if __name__ == "__main__":
     main()
-    # enregistrer_defense_alea(10000)
+    # enregistrer_defense_alea(1000000)

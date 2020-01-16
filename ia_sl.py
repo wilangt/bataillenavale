@@ -59,31 +59,20 @@ class Resal:
         return 0
 
     def backprop(self, x, y):
-        """Return a tuple ``(nabla_b, nabla_w)`` representing the
-        gradient for the cost function C_x.  ``nabla_b`` and
-        ``nabla_w`` are layer-by-layer lists of numpy arrays, similar
-        to ``self.biases`` and ``self.weights``."""
         nabla_b = [np.zeros(b.shape) for b in self.biais]
         nabla_w = [np.zeros(w.shape) for w in self.poids]
         # feedforward
         activation = x
-        activations = [x]  # list to store all the activations, layer by layer
-        zs = []  # list to store all the z vectors, layer by layer
+        activations = [x]
+        zs = []
         for b, w in zip(self.biais, self.poids):
             z = np.dot(w, activation) + b
             zs.append(z)
             activation = sigmoid(z)
             activations.append(activation)
-        # backward pass
         delta = derivee_couteuse(activations[-1], y) * sigmoid_prime(zs[-1])
         nabla_b[-1] = delta
         nabla_w[-1] = np.dot(delta, activations[-2].transpose())
-        # Note that the variable c in the loop below is used a little
-        # differently to the notation in Chapter 2 of the book.  Here,
-        # c = 1 means the last layer of neurons, c = 2 is the
-        # second-last layer, and so on.  It's a renumbering of the
-        # scheme in the book, used here to take advantage of the fact
-        # that Python can use negative indices in lists.
         for c in range(2, self.nombre_couche):
             z = zs[-c]
             sp = sigmoid_prime(z)
