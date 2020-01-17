@@ -19,13 +19,7 @@ def main():
 
     att_def = True
     # att_def = choisir_mode()
-
-    jeu, perf, superperf, donnees = demander_mode()
-
-    if jeu:
-        interface = demander_interface()
-    else:
-        interface = False
+    jeu, perf, superperf, donnees, interface, cornichon = demander_mode()
 
     if perf or superperf:
         liste_defenseur = liste_defenseur[1:]
@@ -33,7 +27,8 @@ def main():
 
     if donnees:
         liste_defenseur = liste_defenseur[1:]
-        liste_attaquant = liste_attaquant[4:8]
+        if cornichon == 1:
+            liste_attaquant = liste_attaquant[5:9]
 
     if jeu:
         classe_participants = choisir_participants(att_def, liste_defenseur, liste_attaquant)
@@ -105,18 +100,24 @@ def main():
         plt.show()
 
     elif donnees:
-        defenseur, attaquant = choisir_participants(att_def, liste_defenseur, liste_attaquant)
-        print("Combien de partie ?\n")
-        nb_parties = int(input())
-        enregistrer_pleins_de_tuples(defenseur, attaquant, nb_parties)
+        if cornichon == 0 :
+            print("Combien de grilles ?\r")
+            iterations = int(input())
+            enregistrer_defense_alea(iterations)
+        elif cornichon == 1:
+            defenseur, attaquant = choisir_participants(att_def, liste_defenseur, liste_attaquant)
+            print("Combien de parties ? (20 grilles environ par partie)\r")
+            nb_parties = int(input())
+            enregistrer_pleins_de_tuples(defenseur, attaquant, nb_parties)
 
-def lancer_partie(classe_participants, att_def, interface, perf):
+def lancer_partie(classe_participants, att_def, interface, perf, enregistrer_vecteur=False):
     plateau1 = Plateau()
     plateau2 = Plateau()
 
     if att_def:
         classe_def, classe_att = classe_participants
         defenseur, attaquant = classe_def(plateau1, plateau2), classe_att(plateau2, plateau1)
+        attaquant.enregistrer_vecteur = enregistrer_vecteur
 
         defenseur.placer_bateaux()
 
@@ -137,7 +138,7 @@ def lancer_partie(classe_participants, att_def, interface, perf):
             pygame.display.quit()
             pygame.quit()
 
-        if not perf:
+        if not perf and not enregistrer_vecteur:
             print("Partie terminée en {} coups".format(compteur))
         return compteur
     """
@@ -178,28 +179,31 @@ def choisir_mode():
 
 def demander_mode():
     """Fonction qui permet de choisir quel mode de traitement on choisit"""
-    perf, superperf, donnees, jeu = False, False, False, False
+    perf, superperf, donnees, jeu, interface, cornich = False, False, False, False, False, 0
     mode = -1
-    while not (mode in [1, 2, 3, 4]):
+    while not (mode in [0, 1, 2, 3]):
         print("Modes :")
-        print("1 : Jeu")
-        print("2 : Performances")
-        print("3 : Superperformances")
-        print("4 : Enregistrer un cornichon")
+        print("0 : Jeu")
+        print("1 : Performances")
+        print("2 : Superperformances")
+        print("3 : Enregistrer un cornichon")
         try:
             mode = int(input())
         except ValueError:
             pass
         print("")
-    if mode == 1:
+    if mode == 0:
         jeu = True
-    if mode == 2:
+        interface = demander_interface()
+    if mode == 1:
         perf = True
-    if mode == 3:
+    if mode == 2:
         superperf = True
-    if mode == 4:
+    if mode == 3:
         donnees = True
-    return (jeu, perf, superperf, donnees)
+        cornich = demander_cornichon()
+
+    return (jeu, perf, superperf, donnees, interface, cornich)
 
 
 def choisir_participants(att_def, liste_d, liste_a):
@@ -273,11 +277,26 @@ def demander_interface():
     return bool(interface)
 
 
+def demander_cornichon():
+    """Fonction qui demande quel cornichon enregistrer"""
+    cornichon = -1
+    while not (cornichon in [0, 1]):
+        print("Type de cornichon :")
+        print("0 : Grilles")
+        print("1 : Tuples (entrée, sortie, cibles)")
+        try:
+            cornichon = int(input())
+        except ValueError:
+            pass
+        print("")
+    return cornichon
+
+
 def tester_liste_joueurs(liste_def, liste_att):
     p = Plateau()
     for i in liste_def:
         if not i(p, p).est_defenseur():
-            raise NameError("Erreur, le defenseur {} n'est pas defenseur".format(nom_classe(i)))
+            raise NameError("Erreur, le défenseur {} n'est pas défenseur".format(nom_classe(i)))
     for i in liste_att:
         if not i(p, p).est_attaquant():
             raise NameError("Erreur, l'attaquant {} n'est pas attaquant".format(nom_classe(i)))
@@ -309,20 +328,11 @@ def enregistrer_defense_alea(iterations):
     file.write(str(fin))
 
 
-def enregistrer_tuple(entree, sortie):
-    file = open("donnees/meta_cornichon.txt", "r")
-    indice = int(file.read())
-    file.write(str(indice + 1))
-    file.close()
-    file = open("donnees/tuple-" + str(indice), 'wb')
-    cornichon.dump((entree,sortie), file)
-    file.close()
-
-
 def enregistrer_pleins_de_tuples(defenseur, attaquant, nb_parties) :
-    attaquant.enregistrer_vecteur = True
+    barre = BarreDeProgression()
     for i in range(nb_parties) :
-        lancer_partie((defenseur,attaquant), False, False, False)
+        barre.maj(100*(i+1)/nb_parties)
+        lancer_partie((defenseur,attaquant), True, False, False, True)
 
 
 def superchoisir_positions_bateaux(super_defenseur, nb_essais):
@@ -333,4 +343,3 @@ def superchoisir_positions_bateaux(super_defenseur, nb_essais):
 
 if __name__ == "__main__":
     main()
-    # enregistrer_defense_alea(1000000)

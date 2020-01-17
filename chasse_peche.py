@@ -2,6 +2,7 @@ from joueur import *
 from random import randint
 from random import choice
 import numpy as np
+import pickle as cornichon
 
 
 class ChasseEtPeche(Joueur):
@@ -102,7 +103,7 @@ class ChassePecheCroix(ChasseEtPeche):
         cibles = [(i, j) for j in range(10) for i in range(10) if matrice_poids[i, j] > matrice_poids.max() - 0.0001]
         cible = choice(cibles)
         if self.enregistrer_vecteur :
-            enregistrer_tuple(self.plateau_adverse.renvoyer_vecteur_init(),renvoyer_vecteur_sortie(matrice_poids))
+            enregistrer_tuple(self.plateau_adverse.renvoyer_vecteur_init(), renvoyer_vecteur_sortie(matrice_poids), cibles)
         return cible
 
     def matrice_poids_probabilite(self, mat, bat_restants):
@@ -229,3 +230,15 @@ class ChassePecheProbaCroixDecroissanceExpo(ChassePecheCroixProba):  # A ajouter
 
 def renvoyer_vecteur_sortie(mat):
     return [mat[i,j] for i in range(10) for j in range(10)]
+
+
+def enregistrer_tuple(entree, sortie, cibles):
+    file = open("donnees/tuple_cornichon.txt", "r")
+    indice = int(file.read())
+    file.close()
+    file = open("donnees/tuple-" + str(indice), 'wb')
+    cornichon.dump((entree, sortie, cibles), file)
+    file.close()
+    file = open("donnees/tuple_cornichon.txt", "w")
+    file.write(str(indice + 1))
+    file.close()

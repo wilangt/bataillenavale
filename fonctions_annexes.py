@@ -111,10 +111,10 @@ def format_temps(temps) :
         h = temps//3600
         m = (temps//60)%60
         s = temps%60
-        return (str(h) + ' h. ' + str(m) + ' m. ' + str(s) + ' s.      ')
+        return (str(h) + ' h. ' + str(m) + ' m. ' + str(s) + ' s.   ')
     elif temps > 60:
         m = temps//60
         s = temps%60
-        return (str(m) + ' m. ' + str(s) + ' s.            ')
+        return (str(m) + ' m. ' + str(s) + ' s.          ')
     else:
-        return (str(temps) + ' s.                 ')
+        return (str(temps) + ' s.                ')

@@ -9,6 +9,7 @@ class Joueur:
         self.plateau_adverse = plateau_adverse
         self.defenseur = False
         self.attaquant = False
+        self.enregistrer_vecteur = False
 
     def position_bateaux(self):
         """Fonction qui renvoie la position des bateaux sous forme d'une liste. A completer ou a supprimer"""
@@ -54,7 +55,7 @@ class Joueur(Joueur):
         self.defenseur = False
 
     def position_bateaux(self):
-        pass 
+        pass
         # ICI remplir ou supprimer
 
     def choisir_cible(self):
