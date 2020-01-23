@@ -355,17 +355,17 @@ def lancer_entrainement():
     file = open("donnees/tuple_cornichon.txt", "r")
     dernier_plus_1 = int(file.read())
     file.close()
-    for i in range(500):
+    for i in range(5000):
         n = randint(0, dernier_plus_1 - 1)
         file = open("donnees/tuple-"+str(n), "rb")
         donnees_entrainement.append(cornichon.load(file))
         file.close()
-    for i in range(50):
+    for i in range(100):
         n = randint(0, dernier_plus_1 - 1)
         file = open("donnees/tuple-"+str(n), "rb")
         donnees_test.append(cornichon.load(file))
         file.close()
-    resal.DGS(donnees_entrainement, 12, 3, 1., donnees_entrainement)
+    resal.DGS(donnees_entrainement, 100, 10, 1., donnees_test)
 
 if __name__ == "__main__":
     main()
