@@ -11,8 +11,12 @@ def sigmoid_prime(z):
 
 
 def derivee_couteuse(sortie, y):
+    print(sortie)
+    print(y)
     return sortie - y
 
+def transformer_y(y):
+    return np.array([[x] for x in y])
 
 class Resal:
     def __init__(self, couches):
@@ -21,7 +25,7 @@ class Resal:
         self.biais = [np.random.randn(y, 1) for y in couches[1:]]
         self.poids = [np.random.randn(y, x) for (x, y) in zip(couches[:-1], couches[1:])]
         print(self.biais)
-        print(self.poids)
+        # print(self.poids)
 
     def evaluation(self, a):
         for b, p in zip(self.biais, self.poids):
@@ -48,7 +52,9 @@ class Resal:
     def maj_mini_nacho(self, mini_nacho, eta):
         nabla_b = [np.zeros(b.shape) for b in self.biais]
         nabla_p = [np.zeros(p.shape) for p in self.poids]
-        for (x, y) in mini_nacho:
+        for (x, y, z) in mini_nacho:
+            x = np.array(x)
+            y = transformer_y(y)
             delta_nabla_b, delta_nabla_p = self.backprop(x, y)
             nabla_b = [nb + dnb for nb, dnb in zip(nabla_b, delta_nabla_b)]
             nabla_p = [nw + dnw for nw, dnw in zip(nabla_p, delta_nabla_p)]
@@ -56,7 +62,17 @@ class Resal:
         self.biais = [b - (eta / len(mini_nacho)) * nb for b, nb in zip(self.biais, nabla_b)]
 
     def tester_IA(self, donnees_test):
-        return 0
+        s = 0
+        for x,y,z in donnees_test:
+            reponse = evaluation(x)
+            cibles = [(i//10 , i%10) for i in range(100) if reponse[i] > max(reponse) - 0.0001]
+            boo = False
+            for cible in cibles:
+                if cible in z:
+                    boo = True
+            if boo:
+                s += 1
+        return s
 
     def backprop(self, x, y):
         nabla_b = [np.zeros(b.shape) for b in self.biais]

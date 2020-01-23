@@ -2,6 +2,8 @@ from humain import *
 from hasard import *
 from plateau import *
 from chasse_peche import *
+from ia_sl import *
+from random import randint
 from time import sleep
 import statistics as stats
 import pickle as cornichon
@@ -19,7 +21,7 @@ def main():
 
     att_def = True
     # att_def = choisir_mode()
-    jeu, perf, superperf, donnees, interface, cornichon = demander_mode()
+    jeu, perf, superperf, donnees, interface, cornichon, entrainement = demander_mode()
 
     if perf or superperf:
         liste_defenseur = liste_defenseur[1:]
@@ -110,6 +112,9 @@ def main():
             nb_parties = int(input())
             enregistrer_pleins_de_tuples(defenseur, attaquant, nb_parties)
 
+    elif entrainement:
+        lancer_entrainement()
+
 def lancer_partie(classe_participants, att_def, interface, perf, enregistrer_vecteur=False):
     plateau1 = Plateau()
     plateau2 = Plateau()
@@ -179,14 +184,15 @@ def choisir_mode():
 
 def demander_mode():
     """Fonction qui permet de choisir quel mode de traitement on choisit"""
-    perf, superperf, donnees, jeu, interface, cornich = False, False, False, False, False, 0
+    perf, superperf, donnees, jeu, interface, cornich, entrainement = False, False, False, False, False, 0, False
     mode = -1
-    while not (mode in [0, 1, 2, 3]):
+    while not (mode in [0, 1, 2, 3, 4]):
         print("Modes :")
         print("0 : Jeu")
         print("1 : Performances")
         print("2 : Superperformances")
         print("3 : Enregistrer un cornichon")
+        print("4 : Entraîner une IA")
         try:
             mode = int(input())
         except ValueError:
@@ -202,8 +208,10 @@ def demander_mode():
     if mode == 3:
         donnees = True
         cornich = demander_cornichon()
+    if mode == 4:
+        entrainement = True
 
-    return (jeu, perf, superperf, donnees, interface, cornich)
+    return (jeu, perf, superperf, donnees, interface, cornich, entrainement)
 
 
 def choisir_participants(att_def, liste_d, liste_a):
@@ -340,6 +348,24 @@ def superchoisir_positions_bateaux(super_defenseur, nb_essais):
     defenseur = super_defenseur(plateau1, plateau2)
     return [defenseur.position_bateaux() for _ in range(nb_essais)]
 
+def lancer_entrainement():
+    resal = Resal([205,110, 100])
+    donnees_entrainement = []
+    donnees_test = []
+    file = open("donnees/tuple_cornichon.txt", "r")
+    dernier_plus_1 = int(file.read())
+    file.close()
+    for i in range(500):
+        n = randint(0, dernier_plus_1 - 1)
+        file = open("donnees/tuple-"+str(n), "rb")
+        donnees_entrainement.append(cornichon.load(file))
+        file.close()
+    for i in range(50):
+        n = randint(0, dernier_plus_1 - 1)
+        file = open("donnees/tuple-"+str(n), "rb")
+        donnees_test.append(cornichon.load(file))
+        file.close()
+    resal.DGS(donnees_entrainement, 12, 3, 1., donnees_entrainement)
 
 if __name__ == "__main__":
     main()
