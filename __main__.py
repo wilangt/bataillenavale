@@ -13,6 +13,12 @@ print()
 
 
 def main():
+
+    jeu, perf, superperf, donnees, interface, cornichon, entrainement = demander_mode()
+    if (jeu, perf, superperf, donnees, interface, cornichon, entrainement) == (True, True, True, True, True, 0, True):
+        # Cas pathologique
+        return None
+    
     liste_defenseur = [Humain, HasardDefense, HasardDefenseCornichon, ConfigInit]
     liste_attaquant = [Humain, HasardDebile, HasardMalin, ChasseEtPeche, ChassePecheCroix, ChassePecheCroixProba,
                        ChassePecheProba, ChassePecheProbaCroixDecroissanceLineaire,
@@ -21,7 +27,7 @@ def main():
 
     att_def = True
     # att_def = choisir_mode()
-    jeu, perf, superperf, donnees, interface, cornichon, entrainement = demander_mode()
+
 
     if perf or superperf:
         liste_defenseur = liste_defenseur[1:]
@@ -114,7 +120,8 @@ def main():
             enregistrer_pleins_de_tuples(defenseur, attaquant, nb_parties)
 
     elif entrainement:
-        lancer_entrainement()
+        # lancer_entrainement() TODO : c'est quoi lancer_entrainement ?
+
 
 
 def lancer_partie(classe_participants, att_def, interface, perf, enregistrer_vecteur=False):
@@ -195,6 +202,7 @@ def demander_mode():
         print("2 : Superperformances")
         print("3 : Enregistrer un cornichon")
         print("4 : Entraîner une IA")
+        print("9 : Mode manuel")
         try:
             mode = int(input())
         except ValueError:
@@ -212,8 +220,11 @@ def demander_mode():
         cornich = demander_cornichon()
     if mode == 4:
         entrainement = True
+    if mode == 9:
+        perf, superperf, donnees, jeu, interface, cornich, entrainement = True, True, True, True, True, 0, True
+        # Pour ne pas rajouter de variable, cas pathologique
 
-    return (jeu, perf, superperf, donnees, interface, cornich, entrainement)
+    return jeu, perf, superperf, donnees, interface, cornich, entrainement
 
 
 def choisir_participants(att_def, liste_d, liste_a):
