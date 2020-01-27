@@ -18,7 +18,7 @@ def main():
     if (jeu, perf, superperf, donnees, interface, cornichon, entrainement) == (True, True, True, True, True, 0, True):
         # Cas pathologique
         return None
-    
+
     liste_defenseur = [Humain, HasardDefense, HasardDefenseCornichon, ConfigInit]
     liste_attaquant = [Humain, HasardDebile, HasardMalin, ChasseEtPeche, ChassePecheCroix, ChassePecheCroixProba,
                        ChassePecheProba, ChassePecheProbaCroixDecroissanceLineaire,
@@ -121,7 +121,7 @@ def main():
 
     elif entrainement:
         # lancer_entrainement() TODO : c'est quoi lancer_entrainement ?
-
+        pass
 
 
 def lancer_partie(classe_participants, att_def, interface, perf, enregistrer_vecteur=False):
@@ -195,7 +195,7 @@ def demander_mode():
     """Fonction qui permet de choisir quel mode de traitement on choisit"""
     perf, superperf, donnees, jeu, interface, cornich, entrainement = False, False, False, False, False, 0, False
     mode = -1
-    while not (mode in [0, 1, 2, 3, 4]):
+    while not (mode in [0, 1, 2, 3, 4, 9]):
         print("Modes :")
         print("0 : Jeu")
         print("1 : Performances")
