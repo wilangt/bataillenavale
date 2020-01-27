@@ -118,6 +118,7 @@ def demander_ia():
     n = len(liste_ia)
     liste_choix = list(range(n))
     choix = -1
+    print("Quel IA ?")
     while choix not in liste_choix:
         for num_ia in range(n):
             print("{} : {}".format(num_ia, liste_ia[num_ia]))

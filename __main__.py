@@ -22,12 +22,11 @@ def main():
     liste_defenseur = [Humain, HasardDefense, HasardDefenseCornichon, ConfigInit]
     liste_attaquant = [Humain, HasardDebile, HasardMalin, ChasseEtPeche, ChassePecheCroix, ChassePecheCroixProba,
                        ChassePecheProba, ChassePecheProbaCroixDecroissanceLineaire,
-                       ChassePecheProbaCroixDecroissanceExpo]
+                       ChassePecheProbaCroixDecroissanceExpo, IaSl]
     tester_liste_joueurs(liste_defenseur, liste_attaquant)
 
     att_def = True
     # att_def = choisir_mode()
-
 
     if perf or superperf:
         liste_defenseur = liste_defenseur[1:]
@@ -362,7 +361,7 @@ def superchoisir_positions_bateaux(super_defenseur, nb_essais):
     return [defenseur.position_bateaux() for _ in range(nb_essais)]
 
 
-def entrainement(resal, n, m):
+def lancer_entrainement(resal, n, m, epoque, taille_mini_nacho, eta):
     """
     entraine un résal
     :param resal: résal en question
@@ -385,22 +384,26 @@ def entrainement(resal, n, m):
         file = open("donnees/tuple-" + str(n), "rb")
         donnees_test.append(cornichon.load(file))
         file.close()
-    resal.DGS(donnees_entrainement, 100, 10, 1., donnees_test)
+    resal.DGS(donnees_entrainement, epoque, taille_mini_nacho, eta, donnees_test)
 
 
-def prototype(couches_intermediaires=None, nb_entrainement=500, nb_test=50):
+def prototype(couches_intermediaires=None, nb_entrainement=5000, nb_test=50, epoque=50, taille_mini_nacho=100, eta=1.):
     """
     permet de tester une configuration d'IA
+
     :param couches_intermediaires: couches intermédiaires du RN
     :param nb_entrainement: Ok
     :param nb_test: Ok
+    :param eta: Ok
+    :param taille_mini_nacho: Ok
+    :param epoque: Ok
     :return: None
     """
     if couches_intermediaires is None:
         couches_intermediaires = [105]
 
     resal = Resal([205]+couches_intermediaires+[100])
-    entrainement(resal, nb_entrainement, nb_test)
+    lancer_entrainement(resal, nb_entrainement, nb_test, epoque, taille_mini_nacho, eta)
 
 
 def creerIA(nom, couches_intermediaires):
@@ -410,11 +413,11 @@ def creerIA(nom, couches_intermediaires):
     file.close()
 
 
-def entrainerIA(nom, nb_entrainement, nb_test):
+def entrainerIA(nom, nb_entrainement, nb_test, epoque=50, taille_mini_nacho=10, eta=1.):
     file = open("ia_enregistrees/{}".format(nom), "rb")
     resal = cornichon.load(file)
     file.close()
-    entrainement(resal, nb_entrainement, nb_test)
+    lancer_entrainement(resal, nb_entrainement, nb_test, epoque, taille_mini_nacho, eta)
 
 
 if __name__ == "__main__":
