@@ -98,11 +98,12 @@ def main():
             l = superl[i]
             moy = stats.mean(l)
             print(nom_classe(super_attaquants[i]), " :")
-            print("moyenne : {}, médiane : {}, écart-type : {}".format(round(moy,2), round(stats.median(l),2), round(stats.pstdev(l, moy),2)))
+            print("moyenne : {}, médiane : {}, écart-type : {}".format(round(moy, 2), round(stats.median(l), 2),
+                                                                       round(stats.pstdev(l, moy), 2)))
         plt.show()
 
     elif donnees:
-        if cornichon == 0 :
+        if cornichon == 0:
             print("Combien de grilles ?\r")
             iterations = int(input())
             enregistrer_defense_alea(iterations)
@@ -114,6 +115,7 @@ def main():
 
     elif entrainement:
         lancer_entrainement()
+
 
 def lancer_partie(classe_participants, att_def, interface, perf, enregistrer_vecteur=False):
     plateau1 = Plateau()
@@ -327,7 +329,7 @@ def enregistrer_defense_alea(iterations):
     fin = debut + iterations
     barre = BarreDeProgression()
     for i in range(debut, fin):
-        barre.maj(100*(i-debut+1)/iterations)
+        barre.maj(100 * (i - debut + 1) / iterations)
         file = open('donnees/defense-' + str(i), 'wb')
         bateaux = position_bateaux_global()
         cornichon.dump(bateaux, file)
@@ -336,11 +338,11 @@ def enregistrer_defense_alea(iterations):
     file.write(str(fin))
 
 
-def enregistrer_pleins_de_tuples(defenseur, attaquant, nb_parties) :
+def enregistrer_pleins_de_tuples(defenseur, attaquant, nb_parties):
     barre = BarreDeProgression()
-    for i in range(nb_parties) :
-        barre.maj(100*(i+1)/nb_parties)
-        lancer_partie((defenseur,attaquant), True, False, False, True)
+    for i in range(nb_parties):
+        barre.maj(100 * (i + 1) / nb_parties)
+        lancer_partie((defenseur, attaquant), True, False, False, True)
 
 
 def superchoisir_positions_bateaux(super_defenseur, nb_essais):
@@ -348,24 +350,61 @@ def superchoisir_positions_bateaux(super_defenseur, nb_essais):
     defenseur = super_defenseur(plateau1, plateau2)
     return [defenseur.position_bateaux() for _ in range(nb_essais)]
 
-def lancer_entrainement():
-    resal = Resal([205,110, 100])
+
+def entrainement(resal, n, m):
+    """
+    entraine un résal
+    :param resal: résal en question
+    :param n: nb entrainement
+    :param m: nb test
+    :return: None
+    """
     donnees_entrainement = []
     donnees_test = []
     file = open("donnees/tuple_cornichon.txt", "r")
     dernier_plus_1 = int(file.read())
     file.close()
-    for i in range(5000):
+    for i in range(n):
         n = randint(0, dernier_plus_1 - 1)
-        file = open("donnees/tuple-"+str(n), "rb")
+        file = open("donnees/tuple-" + str(n), "rb")
         donnees_entrainement.append(cornichon.load(file))
         file.close()
-    for i in range(100):
+    for i in range(m):
         n = randint(0, dernier_plus_1 - 1)
-        file = open("donnees/tuple-"+str(n), "rb")
+        file = open("donnees/tuple-" + str(n), "rb")
         donnees_test.append(cornichon.load(file))
         file.close()
     resal.DGS(donnees_entrainement, 100, 10, 1., donnees_test)
+
+
+def prototype(couches_intermediaires=None, nb_entrainement=500, nb_test=50):
+    """
+    permet de tester une configuration d'IA
+    :param couches_intermediaires: couches intermédiaires du RN
+    :param nb_entrainement: Ok
+    :param nb_test: Ok
+    :return: None
+    """
+    if couches_intermediaires is None:
+        couches_intermediaires = [105]
+
+    resal = Resal([205]+couches_intermediaires+[100])
+    entrainement(resal, nb_entrainement, nb_test)
+
+
+def creerIA(nom, couches_intermediaires):
+    resal = Resal([205] + couches_intermediaires + [100])
+    file = open("ia_enregistrees/{}".format(nom), "wb")
+    cornichon.dump(resal, file)
+    file.close()
+
+
+def entrainerIA(nom, nb_entrainement, nb_test):
+    file = open("ia_enregistrees/{}".format(nom), "rb")
+    resal = cornichon.load(file)
+    file.close()
+    entrainement(resal, nb_entrainement, nb_test)
+
 
 if __name__ == "__main__":
     main()
