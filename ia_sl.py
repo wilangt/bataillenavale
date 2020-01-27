@@ -111,3 +111,28 @@ class Resal:
             nabla_b[-c] = delta
             nabla_w[-c] = np.dot(delta, activations[-c - 1].transpose())
         return nabla_b, nabla_w
+
+
+def demander_ia():
+    liste_ia = os.listdir("ia_enregistrees/")
+    n = len(liste_ia)
+    liste_choix = list(range(n))
+    choix = -1
+    while choix not in liste_choix:
+        for num_ia in range(n):
+            print("{} : {}".format(num_ia, liste_ia[num_ia]))
+        choix = int(input())
+    return liste_ia[choix]
+
+
+class IaSl(chasse_peche.ChassePecheCroixProba):
+    def __init__(self, plateau_allie, plateau_adverse):
+        chasse_peche.ChassePecheCroixProba.__init__(self, plateau_allie, plateau_adverse)
+        self.nom_ia = demander_ia()
+        file = open("ia_enregistrees/{}".format(self.nom_ia), "rb")
+        self.resal = cornichon.load(file)
+        file.close()
+
+    def choisir_cible_chasse(self):
+        cibles = self.resal.trouver_cibles(self.plateau_adverse.renvoyer_vecteur_init())
+        return random.choice(cibles)
