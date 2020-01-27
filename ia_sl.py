@@ -1,5 +1,8 @@
 import numpy as np
 import random
+import chasse_peche
+import pickle as cornichon
+import os
 
 
 def sigmoid(z):
@@ -14,6 +17,7 @@ def derivee_couteuse(sortie, y):
     # print(sortie)
     # print(y)
     return sortie - y
+
 
 def transformer_y(y):
     return np.array([[x] for x in y])
@@ -62,17 +66,21 @@ class Resal:
         self.poids = [w - (eta / len(mini_nacho)) * nw for w, nw in zip(self.poids, nabla_p)]
         self.biais = [b - (eta / len(mini_nacho)) * nb for b, nb in zip(self.biais, nabla_b)]
 
+    def trouver_cibles(self, x):
+        x = transformer_y(x)
+        # print(x.shape)
+        reponse = self.evaluation(x)
+        # print(reponse.shape)
+        # print(len(reponse))
+        # print(len(reponse[0]))
+        # print(reponse)
+        cibles = [(i // 10, i % 10) for i in range(100) if reponse[i][0] > np.max(reponse) - 0.0001]
+        return cibles
+
     def tester_IA(self, donnees_test):
         s = 0
-        for x,y,z in donnees_test:
-            x = transformer_y(x)
-            # print(x.shape)
-            reponse = self.evaluation(x)
-            # print(reponse.shape)
-            # print(len(reponse))
-            # print(len(reponse[0]))
-            # print(reponse)
-            cibles = [(i//10 , i%10) for i in range(100) if reponse[i][0] > np.max(reponse) - 0.0001]
+        for x, y, z in donnees_test:
+            cibles = self.trouver_cibles(x)
             boo = False
             for cible in cibles:
                 if cible in z:
