@@ -22,7 +22,7 @@ def main():
     liste_defenseur = [Humain, HasardDefense, HasardDefenseCornichon, ConfigInit]
     liste_attaquant = [Humain, HasardDebile, HasardMalin, ChasseEtPeche, ChassePecheCroix, ChassePecheCroixProba,
                        ChassePecheProba, ChassePecheProbaCroixDecroissanceLineaire,
-                       ChassePecheProbaCroixDecroissanceExpo, IaSl]
+                       ChassePecheProbaCroixDecroissanceExpo]
     tester_liste_joueurs(liste_defenseur, liste_attaquant)
 
     att_def = True
