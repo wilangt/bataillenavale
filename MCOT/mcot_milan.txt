@@ -72,3 +72,6 @@ TR : DL + intro DL
 - RL
 CC : certaines des méthodes déjà fait, d'autres non, mais ce qui est sur : jamais comparé --> c'est le but
 
+Bibliographie commentée :
+La Bataille navale est un jeu de société dans lequelle deux joueurs s'affontent sur un océan virtuelle, chacun tentant de couler la flotte adverse, dont les positions sont tenus secrète [1]. À première vue, gagner à la bataille navale peut sembler ne relever que du hasard. Il n'en est rien : il existe des méthodes et des stratégies capable d'augmenter drastiquement les chances de victoire, notemment en diminuant le nombre moyen de coups nécéssaires pour couler une configuration donnée, que l'on choisira aléatoirement grâce à une distribution uniforme sur l'ensemble des grilles possible.
+La première stratégie possible est probabiliste et a été introduite par Nick Berry en [2]. L'idée est d'utiliser astucieusement les règles du jeu pour ne faire feu que sur des positions avantageuse, et ainsi réduire le nombre de coups avant la victoire. Poussée à l'extreme, cette stratégie permet de connaitre à tout instant, la probabilité exacte qu'un bateau se trouve sur une case donnée. 
