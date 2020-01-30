@@ -1,11 +1,11 @@
 Titre
 (prof encadrant + coéquipiers)
 motivations
-ancrage au thème 
+ancrage au thème
 MCOT -> Positionnement thèmatique (info et tout)
      -> Mots clefs
      -> Bibliographie commentée
-     -> Problématique 
+     -> Problématique
      -> Objectifs
      -> Bibliographie
 
@@ -47,21 +47,20 @@ Objectifs :
 - Concevoir et Implémenter une IA utilisant une stratégie probabiliste
 - Concevoir, implémenter et entraîner une IA utilisant l'apprentissage supervisé grâce à un réseau de neuronne
 - Concevoir, implémenter et entraîner une IA utilisant l'apprentissage par renforcement
-- Comparer les performances des différentes IA et en tirer une conclusion
+- Comparer les performances (en terme de temps et de résultats) des différentes IA et en tirer une conclusion
 
 
 Références bibliographiques
 
-Bataille navale (jeu), Wikipédia, https://fr.wikipedia.org/wiki/Bataille_navale_%28jeu%29
-Battleship, Nick Berry, 2011, http://www.datagenetics.com/blog/december32011/index.html
-The Linear Theory of Battleship, Alex Alemi, 2011, https://thephysicsvirtuosi.com/posts/old/the-linear-theory-of-battleship
-Introduction au Machine Learning, Chloé-Agathe Azencott, 2019, Dunod
-(Deep learning en action : la référence du praticien, Adam Gibson, 2018, O'Reilly) --> pas sur
-Neural Network and Deep Learning, Michael Nielsen, http://neuralnetworksanddeeplearning.com
-A Beginner's Guide to Deep Reinforcement Learning, Chris Nicholson, https://pathmind.com/wiki/deep-reinforcement-learning
-Deep reinforcement learning, battleship, Jonathan Landy, 2016, http://efavdb.com/battleship
-TensorFlow for Deep Learning, Bharath Ramsundar & Reza Bosagh Zadeh, 2018, O'Reilly
-(http://incompleteideas.net/sutton/book/RLbook2018.pdf) --> pas sur
+[1] : Bataille navale (jeu), Wikipédia, https://fr.wikipedia.org/wiki/Bataille_navale_%28jeu%29
+[2] : Battleship, Nick Berry, 2011, http://www.datagenetics.com/blog/december32011/index.html
+[3] : The Linear Theory of Battleship, Alex Alemi, 2011, https://thephysicsvirtuosi.com/posts/old/the-linear-theory-of-battleship
+[4] : Introduction au Machine Learning, Chloé-Agathe Azencott, 2019, Dunod
+[5] : (Deep learning en action : la référence du praticien, Adam Gibson, 2018, O'Reilly) --> pas sur
+[6] : Neural Network and Deep Learning, Michael Nielsen, http://neuralnetworksanddeeplearning.com
+[7] : A Beginner's Guide to Deep Reinforcement Learning, Chris Nicholson, https://pathmind.com/wiki/deep-reinforcement-learning
+[8] : Deep reinforcement learning, battleship, Jonathan Landy, 2016, http://efavdb.com/battleship
+[9] : TensorFlow for Deep Learning, Bharath Ramsundar & Reza Bosagh Zadeh, 2018, O'Reilly
 
 Bibliographie commentée (plan détaillé) :
 - Bataille Navale (règles et culture) --> wiki
@@ -69,9 +68,11 @@ Bibliographie commentée (plan détaillé) :
 TR : DL + intro DL
 - différentes méthodes
 - supervisé
-- RL
+- RL --> plus d'information avec des coups moins probables
 CC : certaines des méthodes déjà fait, d'autres non, mais ce qui est sur : jamais comparé --> c'est le but
 
 Bibliographie commentée :
 La Bataille navale est un jeu de société dans lequelle deux joueurs s'affontent sur un océan virtuelle, chacun tentant de couler la flotte adverse, dont les positions sont tenus secrète [1]. À première vue, gagner à la bataille navale peut sembler ne relever que du hasard. Il n'en est rien : il existe des méthodes et des stratégies capable d'augmenter drastiquement les chances de victoire, notemment en diminuant le nombre moyen de coups nécéssaires pour couler une configuration donnée, que l'on choisira aléatoirement grâce à une distribution uniforme sur l'ensemble des grilles possible.
-La première stratégie possible est probabiliste et a été introduite par Nick Berry en [2]. L'idée est d'utiliser astucieusement les règles du jeu pour ne faire feu que sur des positions avantageuse, et ainsi réduire le nombre de coups avant la victoire. Poussée à l'extreme, cette stratégie permet de connaitre à tout instant, la probabilité exacte qu'un bateau se trouve sur une case donnée. 
+La première stratégie possible est probabiliste et a été expérimentée par Nick Berry et Alex Alemi, respectivement en [2, 3]. L'idée est d'utiliser astucieusement les règles du jeu pour ne faire feu que sur des positions avantageuse, et ainsi réduire le nombre de coups avant la victoire. Poussée à l'extreme, cette stratégie permet de connaitre à tout instant, la probabilité exacte qu'un bateau se trouve sur une case donnée.
+Peut on faire mieux ? Il s'agit de la question fondamentale du TIPE, et les deux pistes envisagées utilisent l'apprentissage profond.
+La première se concentre sur les performances temporelles : il s'agit d'imiter le calcul de la densité de probabilité en utilisant un réseau de neuronne
