@@ -14,40 +14,35 @@ print()
 
 def main():
 
-    jeu, perf, superperf, donnees, interface, cornichon, entrainement = demander_mode()
-    if (jeu, perf, superperf, donnees, interface, cornichon, entrainement) == (True, True, True, True, True, 0, True):
+    mode = demander_mode()
+
+    if mode == -1:
         # Cas pathologique
         return None
 
     liste_defenseur = [Humain, HasardDefense, HasardDefenseCornichon, ConfigInit]
     liste_attaquant = [Humain, HasardDebile, HasardMalin, ChasseEtPeche, ChassePecheCroix, ChassePecheCroixProba,
                        ChassePecheProba, ChassePecheProbaCroixDecroissanceLineaire,
-                       ChassePecheProbaCroixDecroissanceExpo, IaSl]
+                       ChassePecheProbaCroixDecroissanceExpo]
     tester_liste_joueurs(liste_defenseur, liste_attaquant)
 
     att_def = True
     # att_def = choisir_mode()
 
-    if perf or superperf:
+    if mode == 'Jeu':
+        interface = demander_interface()
+        classe_participants = choisir_participants(att_def, liste_defenseur, liste_attaquant)
+        lancer_partie(classe_participants, att_def, interface, False)
+
+    elif mode == 'Performances':
         liste_defenseur = liste_defenseur[1:]
         liste_attaquant = liste_attaquant[1:]
-
-    if donnees:
-        liste_defenseur = liste_defenseur[1:]
-        if cornichon == 1:
-            liste_attaquant = liste_attaquant[5:9]
-
-    if jeu:
-        classe_participants = choisir_participants(att_def, liste_defenseur, liste_attaquant)
-        lancer_partie(classe_participants, att_def, interface, perf)
-
-    elif perf:
         classe_participants = choisir_participants(att_def, liste_defenseur, liste_attaquant)
         nb_essais = int(input("Nombre d'essais : "))
         l, Y = [], [0 for x in range(100)]
         p, val = 0, 0
         for i in range(nb_essais):
-            val = lancer_partie(classe_participants, att_def, interface, perf)
+            val = lancer_partie(classe_participants, att_def, False, True)
             l.append(val)
             Y[val] += 1
             v = int(p * nb_essais / 100)
@@ -57,12 +52,13 @@ def main():
 
         moy = stats.mean(l)
         print(nom_classe(classe_participants[1]), " :")
-        print("moyenne : {}, médiane : {}, écart-type : {} ({} essais)".format(moy, stats.median(l),
-                                                                               stats.pstdev(l, moy), nb_essais))
+        print("moyenne : {}, médiane : {}, écart-type : {} ({} essais)".format(moy, stats.median(l), stats.pstdev(l, moy), nb_essais))
         plt.hist(l, range=(1, 100), bins=99)
         plt.show()
 
-    elif superperf:
+    elif mode == 'Superperformances':
+        liste_defenseur = liste_defenseur[1:]
+        liste_attaquant = liste_attaquant[1:]
         super_defenseur, super_attaquants = superchoisir_participants(liste_defenseur, liste_attaquant)
         nb_classes = len(super_attaquants)
         nb_essais = int(input("Nombre d'essais : "))
@@ -103,22 +99,24 @@ def main():
             l = superl[i]
             moy = stats.mean(l)
             print(nom_classe(super_attaquants[i]), " :")
-            print("moyenne : {}, médiane : {}, écart-type : {}".format(round(moy, 2), round(stats.median(l), 2),
-                                                                       round(stats.pstdev(l, moy), 2)))
+            print("moyenne : {}, médiane : {}, écart-type : {}".format(round(moy, 2), round(stats.median(l), 2), round(stats.pstdev(l, moy), 2)))
         plt.show()
 
-    elif donnees:
+    elif mode == 'Enregistrer un cornichon':
+        cornichon = demander_cornichon()
+        liste_defenseur = liste_defenseur[1:]
         if cornichon == 0:
             print("Combien de grilles ?\r")
             iterations = int(input())
             enregistrer_defense_alea(iterations)
         elif cornichon == 1:
+            liste_attaquant = liste_attaquant[5:9]
             defenseur, attaquant = choisir_participants(att_def, liste_defenseur, liste_attaquant)
             print("Combien de parties ? (20 grilles environ par partie)\r")
             nb_parties = int(input())
             enregistrer_pleins_de_tuples(defenseur, attaquant, nb_parties)
 
-    elif entrainement:
+    elif mode == 'Entraîner une IA':
         # lancer_entrainement() TODO : c'est quoi lancer_entrainement ?
         pass
 
@@ -192,38 +190,19 @@ def choisir_mode():
 
 def demander_mode():
     """Fonction qui permet de choisir quel mode de traitement on choisit"""
-    perf, superperf, donnees, jeu, interface, cornich, entrainement = False, False, False, False, False, 0, False
+    liste_des_modes = ['Jeu', 'Performances', 'Superperformances', 'Enregistrer un cornichon', 'Entraîner une IA', 'Mode manuel']
     mode = -1
-    while not (mode in [0, 1, 2, 3, 4, 9]):
+    n = len(liste_des_modes)
+    while not (mode in [x for x in range(n)]):
         print("Modes :")
-        print("0 : Jeu")
-        print("1 : Performances")
-        print("2 : Superperformances")
-        print("3 : Enregistrer un cornichon")
-        print("4 : Entraîner une IA")
-        print("9 : Mode manuel")
+        for i in range(n) :
+            print("{} : ".format(i) + liste_des_modes[i])
         try:
             mode = int(input())
         except ValueError:
             pass
         print("")
-    if mode == 0:
-        jeu = True
-        interface = demander_interface()
-    if mode == 1:
-        perf = True
-    if mode == 2:
-        superperf = True
-    if mode == 3:
-        donnees = True
-        cornich = demander_cornichon()
-    if mode == 4:
-        entrainement = True
-    if mode == 9:
-        perf, superperf, donnees, jeu, interface, cornich, entrainement = True, True, True, True, True, 0, True
-        # Pour ne pas rajouter de variable, cas pathologique
-
-    return jeu, perf, superperf, donnees, interface, cornich, entrainement
+    return liste_des_modes[mode]
 
 
 def choisir_participants(att_def, liste_d, liste_a):
@@ -387,7 +366,7 @@ def lancer_entrainement(resal, n, m, epoque, taille_mini_nacho, eta):
     resal.DGS(donnees_entrainement, epoque, taille_mini_nacho, eta, donnees_test)
 
 
-def prototype(couches_intermediaires=None, nb_entrainement=5000, nb_test=50, epoque=50, taille_mini_nacho=100, eta=1.):
+def prototype(couches_intermediaires=None, nb_entrainement=5000, nb_test=50, epoque=50, taille_mini_nacho=10, eta=1.):
     """
     permet de tester une configuration d'IA
 
