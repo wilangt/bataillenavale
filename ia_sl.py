@@ -81,10 +81,10 @@ class Resal:
         s = 0
         for x, y, z in donnees_test:
             cibles = self.trouver_cibles(x)
-            boo = False
+            boo = True
             for cible in cibles:
-                if cible in z:
-                    boo = True
+                if cible not in z:
+                    boo = False
             if boo:
                 s += 1
         return s
