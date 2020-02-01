@@ -392,11 +392,14 @@ def creerIA(nom, couches_intermediaires):
     file.close()
 
 
-def entrainerIA(nom, nb_entrainement, nb_test, epoque=50, taille_mini_nacho=10, eta=1.):
+def entrainerIA(nom, nb_entrainement, nb_test=50, epoque=50, taille_mini_nacho=10, eta=1.):
     file = open("ia_enregistrees/{}".format(nom), "rb")
     resal = cornichon.load(file)
     file.close()
     lancer_entrainement(resal, nb_entrainement, nb_test, epoque, taille_mini_nacho, eta)
+    file = open("ia_enregistrees/{}".format(nom), "wb")
+    cornichon.dump(resal, file)
+    file.close()
 
 
 if __name__ == "__main__":
