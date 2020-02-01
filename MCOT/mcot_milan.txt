@@ -14,7 +14,7 @@ Abstract
 DOT
 ajustement de Positionnement et bibliographie
 
-Titre : Conception, Implémentation et optimisation de plusieurs intelligences artificielles capables de gagner à la bataille navale.
+Titre : Conception, Implémentation et optimisation de plusieurs intelligences artificielles capable de gagner à la bataille navale.
 
 motivation :
 Le theme c'est de la merde donc on a choisi le moins pire
@@ -45,7 +45,7 @@ Objectifs :
 - Comprendre les enjeux du jeu de la bataille navale
 - Implémenter un environnement et une interface permettant de jouer à la bataille navale
 - Concevoir et Implémenter une IA utilisant une stratégie probabiliste
-- Concevoir, implémenter et entraîner une IA utilisant l'apprentissage supervisé grâce à un réseau de neuronne
+- Concevoir, implémenter et entraîner une IA utilisant l'apprentissage supervisé grâce à un réseau de neurone
 - Concevoir, implémenter et entraîner une IA utilisant l'apprentissage par renforcement
 - Comparer les performances (en terme de temps et de résultats) des différentes IA et en tirer une conclusion
 
@@ -76,6 +76,6 @@ La Bataille navale est un jeu de société dans lequel deux joueurs s’affronte
 La première stratégie possible est probabiliste et a été expérimentée par Nick Berry et Alex Alemi, respectivement en [2, 3]. L'idée est d'utiliser astucieusement les règles du jeu pour ne faire feu que sur des positions avantageuse, et ainsi réduire le nombre de coups avant la victoire. Poussée à l’extrême, cette stratégie permet de connaître à tout instant, la probabilité exacte qu'un bateau se trouve sur une case donnée.
 Peut on faire mieux ? Il s'agit de la question fondamentale du TIPE, et les deux pistes envisagées utilisent l'apprentissage profond [4].
 La première se concentre sur les performances temporelles : il s'agit d'imiter le calcul de la densité de probabilité en utilisant l'apprentissage supervisé par un réseau de neurone [5]. Ainsi, une fois entraîné, le réseau pourrait obtenir des résultats similaires à ceux du meilleur algorithme probabiliste, mais en beaucoup moins de temps.
-La deuxième, beaucoup plus ambitieuse, consiste à utiliser l'apprentissage par renforcement [7, 8] pour former une IA complètement indépendante, qui apprendrait d'elle même et créerait de nouvelles stratégies. En effet, on pourrait penser intuitivement que la meilleure stratégie possible consiste à toujours viser la case la plus probable. Cependant, il existe des jeux de société (le Mastermind par exemple) où il peut s'avérer malin de faire un choix qui ne menera pas à la victoire mais qui apporte une grande quantité d'information, et qui servira à gagner plus vite. Qu'en est il de la bataille navale ?
+La deuxième, beaucoup plus ambitieuse, consiste à utiliser l'apprentissage par renforcement [7, 8] pour former une IA complètement indépendante, qui apprendrait d'elle même et créerait de nouvelles stratégies. En effet, on pourrait penser intuitivement que la meilleure stratégie possible consiste à toujours viser la case la plus probable. Cependant, il existe des jeux de société (le Mastermind par exemple) où il peut s'avérer malin de faire un choix qui ne mènera pas à la victoire mais qui apporte une grande quantité d'information, et qui servira à gagner plus vite. Qu'en est il de la bataille navale ?
 Pour mettre cela en place, nous implémenterons nos propres algorithmes d'apprentissage profond (notamment grâce à [6]), et utiliserons des librairies tel que TensorFlow [9]. Nous comparerons les résultats.
-Enfin, nous pouvons remarquer que si de nombreuses stratégies et intelligences artificielles capable de gagner à la bataille navale existent déjà, aucun travail ne compare explicitement leurs performances.
+Enfin, nous pouvons remarquer que si de nombreuses stratégies et intelligences artificielles capable de gagner à la bataille navale existent, aucun travail ne compare explicitement leurs performances.
