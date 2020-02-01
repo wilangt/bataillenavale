@@ -77,6 +77,13 @@ class Resal:
         cibles = [(i // 10, i % 10) for i in range(100) if reponse[i][0] > np.max(reponse) - 0.0001]
         return cibles
 
+    def lister_cibles(self, x):
+        x = transformer_y(x)
+        reponse = self.evaluation(x)
+        cibles = [(reponse[i][0], (i // 10, i % 10)) for i in range(100)]
+        return cibles
+
+
     def tester_IA(self, donnees_test):
         s = 0
         for x, y, z in donnees_test:
@@ -127,14 +134,25 @@ def demander_ia():
 
 
 class IaSl(chasse_peche.ChassePecheCroixProba):
-    def __init__(self, plateau_allie, plateau_adverse):
+    def __init__(self, plateau_allie, plateau_adverse, perfs=False):
         chasse_peche.ChassePecheCroixProba.__init__(self, plateau_allie, plateau_adverse)
         if plateau_adverse != plateau_allie:
-            self.nom_ia = demander_ia()
+            if perfs:
+                self.nom = "test1"
+            else:
+                self.nom_ia = demander_ia()
             file = open("ia_enregistrees/{}".format(self.nom_ia), "rb")
             self.resal = cornichon.load(file)
             file.close()
 
     def choisir_cible_chasse(self):
         cibles = self.resal.trouver_cibles(self.plateau_adverse.renvoyer_vecteur_init())
-        return random.choice(cibles)
+        cibles_valides = [(i, j) for (i, j) in cibles if self.plateau_adverse.jamais_vu((i, j))]
+        if cibles_valides:
+            return random.choice(cibles_valides)
+        else:
+            cibles = self.resal.lister_cibles(self.plateau_adverse.renvoyer_vecteur_init())
+            cibles.sort(reverse=True)
+            for (p, (i, j)) in cibles:
+                if self.plateau_adverse.jamais_vu((i, j)):
+                    return i, j

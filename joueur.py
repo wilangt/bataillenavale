@@ -4,7 +4,7 @@ from fonctions_annexes import *
 class Joueur:
     """Classe maitresse, dont découle toutes les autres classes de joueurs"""
 
-    def __init__(self, plateau_allie, plateau_adverse):
+    def __init__(self, plateau_allie, plateau_adverse, perfs=False):
         self.plateau_allie = plateau_allie
         self.plateau_adverse = plateau_adverse
         self.defenseur = False
