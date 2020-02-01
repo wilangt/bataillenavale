@@ -129,10 +129,11 @@ def demander_ia():
 class IaSl(chasse_peche.ChassePecheCroixProba):
     def __init__(self, plateau_allie, plateau_adverse):
         chasse_peche.ChassePecheCroixProba.__init__(self, plateau_allie, plateau_adverse)
-        self.nom_ia = demander_ia()
-        file = open("ia_enregistrees/{}".format(self.nom_ia), "rb")
-        self.resal = cornichon.load(file)
-        file.close()
+        if plateau_adverse != plateau_allie:
+            self.nom_ia = demander_ia()
+            file = open("ia_enregistrees/{}".format(self.nom_ia), "rb")
+            self.resal = cornichon.load(file)
+            file.close()
 
     def choisir_cible_chasse(self):
         cibles = self.resal.trouver_cibles(self.plateau_adverse.renvoyer_vecteur_init())
