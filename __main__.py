@@ -127,7 +127,7 @@ def lancer_partie(classe_participants, att_def, interface, perf, enregistrer_vec
 
     if att_def:
         classe_def, classe_att = classe_participants
-        defenseur, attaquant = classe_def(plateau1, plateau2), classe_att(plateau2, plateau1)
+        defenseur, attaquant = classe_def(plateau1, plateau2, perf), classe_att(plateau2, plateau1, perf)
         attaquant.enregistrer_vecteur = enregistrer_vecteur
 
         defenseur.placer_bateaux()
