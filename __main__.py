@@ -379,7 +379,7 @@ def prototype(couches_intermediaires=None, nb_entrainement=5000, nb_test=50, epo
     :return: None
     """
     if couches_intermediaires is None:
-        couches_intermediaires = [105]
+        couches_intermediaires = [125]
 
     resal = Resal([205]+couches_intermediaires+[100])
     lancer_entrainement(resal, nb_entrainement, nb_test, epoque, taille_mini_nacho, eta)

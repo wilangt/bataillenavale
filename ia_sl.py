@@ -50,7 +50,7 @@ class Resal:
             for mini_nacho in mini_nachos:
                 self.maj_mini_nacho(mini_nacho, eta)
             if donnees_test:
-                print("Époque {}: {}% ({} tests)".format(j, self.tester_IA(donnees_test), n_test))
+                print("Époque {}: {:.2f}% ({} tests)".format(j, self.tester_IA(donnees_test)*100, n_test))
             else:
                 print("Époque {} terminée".format(j))
 
