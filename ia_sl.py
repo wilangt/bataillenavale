@@ -139,7 +139,7 @@ class IaSl(chasse_peche.ChassePecheCroixProba):
         chasse_peche.ChassePecheCroixProba.__init__(self, plateau_allie, plateau_adverse)
         if plateau_adverse != plateau_allie:
             if perfs or True:
-                self.nom_ia = "test1"
+                self.nom_ia = "test2"
             else:
                 self.nom_ia = demander_ia()
             file = open("ia_enregistrees/{}".format(self.nom_ia), "rb")
