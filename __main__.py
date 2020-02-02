@@ -94,9 +94,84 @@ def main():
             nb_parties = int(input())
             enregistrer_pleins_de_tuples(defenseur, attaquant, nb_parties)
 
+    elif mode == 'Enregistrer une IA':
+        liste_ia = os.listdir("ia_sl/")
+        nom = liste_ia[0]
+        while nom in liste_ia:
+            try:
+                nom = input('Quel nom ?\n')
+            except ValueError:
+                pass
+            if nom in liste_ia:
+                print('Nom déjà pris !\n')
+        print("")
+        try:
+            nb_couches = int(input("Combien de couches intermédiaires ?\n"))
+        except ValueError:
+            pass
+        print("Rentrez une à une la taille des couches intermédiaires, en enclenchant à chaque fois la touche entrée")
+        couches_intermediaires = []
+        for i in range(nb_couches):
+            couches_intermediaires.append(int(input()))
+        print("")
+        creerIA(nom, couches_intermediaires)
+
     elif mode == 'Entraîner une IA':
-        # lancer_entrainement() TODO : c'est quoi lancer_entrainement ?
-        pass
+        liste_ia = os.listdir("ia_sl/")
+        nom = -1
+        while not (nom in list(range(len(liste_ia)))):
+            print("Quelle IA ?")
+            for i in range(len(liste_ia)):
+                print("{} : {}".format(i, liste_ia[i]))
+            try:
+                nom = int(input())
+            except ValueError:
+                pass
+            print("")
+        nom = liste_ia[nom]
+        try:
+            cas_de_base = str(input('Cas de base ? (o/n)\n'))
+        except ValueError:
+            pass
+        if cas_de_base == 'o':
+            entrainerIA(nom)
+        else:
+            file = open("donnees/tuple_cornichon.txt", "r")
+            max = int(file.read())
+            file.close()
+            nb_entrainement = max + 1
+            while nb_entrainement > max :
+                try:
+                    nb_entrainement = int(input("Combien de données d'entraînement ?\n"))
+                except ValueError:
+                    pass
+                if nb_entrainement > max:
+                    print('Pas assez de données !\n')
+            nb_test = max + 1
+            while nb_test > max :
+                try:
+                    nb_test = int(input('Combien de données de test ?\n'))
+                except ValueError:
+                    pass
+                if nb_entrainement > max:
+                    print('Pas assez de données !\n')
+            try:
+                epoque = int(input("Combien d'époques ?\n"))
+            except ValueError:
+                pass
+            taille_mini_nacho = nb_entrainement + 1
+            while taille_mini_nacho > nb_entrainement :
+                try:
+                    taille_mini_nacho = int(input('Combien de données de test ?\n'))
+                except ValueError:
+                    pass
+                if taille_mini_nacho > nb_entrainement:
+                    print('Pas assez de données !\n')
+            try:
+                eta = float(input("Quelle valeur pour eta ?\n"))
+            except ValueError:
+                pass
+            entrainerIA(nom, nb_entrainement, nb_test, epoque, taille_mini_nacho, eta)
 
 
 def lancer_partie(classe_participants, att_def, interface, enregistrer_vecteur=False):
@@ -110,11 +185,13 @@ def lancer_partie(classe_participants, att_def, interface, enregistrer_vecteur=F
 
         defenseur.placer_bateaux()
 
+        attaquant.attaquer()
+
         if interface:
             plateau1.init_interface(660)
             plateau1.afficher_interface()
 
-        compteur = 0
+        compteur = 1
         while not (plateau1.defaite()):
             attaquant.attaquer()
             compteur += 1
@@ -141,10 +218,12 @@ def lancer_partie(classe_participants, att_def, interface, enregistrer_vecteur=F
 def superlancer_partie(super_defenseur, super_attaquant, superposition_bateaux):
     plateau1 = Plateau()
     plateau2 = Plateau()
+    nom = None
     if type(super_attaquant) == tuple:
         super_attaquant, nom = super_attaquant
-        super_attaquant.nom_ia = nom
     defenseur, attaquant = super_defenseur(plateau1, plateau2), super_attaquant(plateau2, plateau1)
+    if nom is not None:
+        attaquant.attribuer_nom(nom)
     defenseur.plateau_allie.placer_bateaux(superposition_bateaux)
     compteur = 0
     while not (plateau1.defaite()):
@@ -170,7 +249,7 @@ def choisir_mode():
 
 def demander_mode():
     """Fonction qui permet de choisir quel mode de traitement on choisit"""
-    liste_des_modes = ['Jeu', 'Performances', 'Enregistrer un cornichon', 'Entraîner une IA', 'Mode manuel']
+    liste_des_modes = ['Jeu', 'Performances', 'Enregistrer un cornichon', 'Enregistrer une IA', 'Entraîner une IA', 'Mode manuel']
     mode = -1
     n = len(liste_des_modes)
     while not (mode in [x for x in range(n)]):
@@ -251,7 +330,6 @@ def superdemander_postes(nom_poste, liste):
             l.append(liste[p])
         else:
             l.append((liste[len(liste) - 1],liste_ia[p - len(liste) + 1]))
-    print(l)
     return l
 
 
