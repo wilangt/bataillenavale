@@ -50,7 +50,7 @@ class Resal:
             for mini_nacho in mini_nachos:
                 self.maj_mini_nacho(mini_nacho, eta)
             if donnees_test:
-                print("Époque {}: {} / {}".format(j, self.tester_IA(donnees_test), n_test))
+                print("Époque {}: {}% ({} tests)".format(j, self.tester_IA(donnees_test), n_test))
             else:
                 print("Époque {} terminée".format(j))
 
@@ -83,18 +83,19 @@ class Resal:
         cibles = [(reponse[i][0], (i // 10, i % 10)) for i in range(100)]
         return cibles
 
-
     def tester_IA(self, donnees_test):
         s = 0
+        nb_cibles = 0
+        nb_cibles_valide = 0
         for x, y, z in donnees_test:
-            cibles = self.trouver_cibles(x)
-            boo = True
+            cibles = self.trouver_cibles(x)  # cibles de l'IA
+            # print(cibles)
+            # print(z)
+            nb_cibles += len(cibles)
             for cible in cibles:
-                if cible not in z:
-                    boo = False
-            if boo:
-                s += 1
-        return s
+                if cible in z:  # z = cibles de CPP
+                    nb_cibles_valide += 1
+        return nb_cibles_valide/nb_cibles
 
     def backprop(self, x, y):
         nabla_b = [np.zeros(b.shape) for b in self.biais]
