@@ -110,7 +110,7 @@ def main():
             iterations = int(input())
             enregistrer_defense_alea(iterations)
         elif cornichon == 1:
-            liste_attaquant = liste_attaquant[5:9]
+            liste_attaquant = liste_attaquant[6:7]
             defenseur, attaquant = choisir_participants(att_def, liste_defenseur, liste_attaquant)
             print("Combien de parties ? (20 grilles environ par partie)\r")
             nb_parties = int(input())
