@@ -50,7 +50,7 @@ class Resal:
             for mini_nacho in mini_nachos:
                 self.maj_mini_nacho(mini_nacho, eta)
             if donnees_test:
-                print("Époque {}: {:.2f}% ({} tests)".format(j, self.tester_IA(donnees_test)*100, n_test))
+                print("Époque {}: {:.2f}% ({} tests)".format(j, self.tester_IA(donnees_test) * 100, n_test))
             else:
                 print("Époque {} terminée".format(j))
 
@@ -88,7 +88,7 @@ class Resal:
             for cible in cibles:
                 if cible in z:  # z = cibles de CPP
                     nb_cibles_valide += 1
-        return nb_cibles_valide/nb_cibles
+        return nb_cibles_valide / nb_cibles
 
     def backprop(self, x, y):
         nabla_b = [np.zeros(b.shape) for b in self.biais]
@@ -131,14 +131,22 @@ class IaSl(chasse_peche.ChassePecheCroixProba):
     def __init__(self, plateau_allie, plateau_adverse):
         chasse_peche.ChassePecheCroixProba.__init__(self, plateau_allie, plateau_adverse)
         self.nom_ia = None
-        if plateau_adverse != plateau_allie:
-            if self.nom_ia == None:
+        self.resal = None
+
+    def attribuer_nom(self, nom):
+        self.nom_ia = nom
+
+    def initialiser_ia(self):
+        if self.plateau_adverse != self.plateau_allie:
+            if self.nom_ia is None:
                 self.nom_ia = demander_ia()
             file = open("ia_sl/{}".format(self.nom_ia), "rb")
             self.resal = cornichon.load(file)
             file.close()
 
     def choisir_cible_chasse(self):
+        if self.nom_ia is None or self.resal is None:
+            self.initialiser_ia()
         cibles = self.resal.trouver_cibles(self.plateau_adverse.renvoyer_vecteur_init())
         cibles_valides = [(i, j) for (i, j) in cibles if self.plateau_adverse.jamais_vu((i, j))]
         if cibles_valides:
