@@ -16,7 +16,7 @@ def sigmoid_prime(z):
 def derivee_couteuse(sortie, y):
     # print(sortie)
     # print(y)
-    return np.abs(sortie - y)
+    return sortie - y
 
 
 def transformer_y(y):
