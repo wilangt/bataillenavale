@@ -6,7 +6,7 @@ import pickle as cornichon
 
 
 class ChasseEtPeche(Joueur):
-    def __init__(self, plateau_allie, plateau_adverse, perfs=False):
+    def __init__(self, plateau_allie, plateau_adverse):
         Joueur.__init__(self, plateau_allie, plateau_adverse)
         self.attaquant = True
         self.defenseur = False
@@ -90,7 +90,7 @@ class ChasseEtPeche(Joueur):
 
 
 class ChassePecheCroix(ChasseEtPeche):
-    def __init__(self, plateau_allie, plateau_adverse, enregistrer_vecteur=False, perfs=False):
+    def __init__(self, plateau_allie, plateau_adverse, enregistrer_vecteur=False):
         ChasseEtPeche.__init__(self, plateau_allie, plateau_adverse)
         self.croix_pair = randint(0, 1)  # positions de coordonnées pair ou impair
         self.bateaux = self.plateau_adverse.bateaux[1:]

@@ -37,28 +37,6 @@ def main():
     elif mode == 'Performances':
         liste_defenseur = liste_defenseur[1:]
         liste_attaquant = liste_attaquant[1:]
-        classe_participants = choisir_participants(att_def, liste_defenseur, liste_attaquant)
-        nb_essais = int(input("Nombre d'essais : "))
-        l, Y = [], [0 for x in range(100)]
-        p, val = 0, 0
-        for i in range(nb_essais):
-            val = lancer_partie(classe_participants, att_def, False, True)
-            l.append(val)
-            Y[val] += 1
-            v = int(p * nb_essais / 100)
-            if i == v:
-                print("{}%".format(p))
-                p += 1
-
-        moy = stats.mean(l)
-        print(nom_classe(classe_participants[1]), " :")
-        print("moyenne : {}, médiane : {}, écart-type : {} ({} essais)".format(moy, stats.median(l), stats.pstdev(l, moy), nb_essais))
-        plt.hist(l, range=(1, 100), bins=99)
-        plt.show()
-
-    elif mode == 'Superperformances':
-        liste_defenseur = liste_defenseur[1:]
-        liste_attaquant = liste_attaquant[1:]
         super_defenseur, super_attaquants = superchoisir_participants(liste_defenseur, liste_attaquant)
         nb_classes = len(super_attaquants)
         nb_essais = int(input("Nombre d'essais : "))
@@ -112,7 +90,7 @@ def main():
         elif cornichon == 1:
             liste_attaquant = liste_attaquant[6:7]
             defenseur, attaquant = choisir_participants(att_def, liste_defenseur, liste_attaquant)
-            print("Combien de parties ? (20 grilles environ par partie)\r")
+            print("Combien de parties ? (22 grilles environ par partie)\r")
             nb_parties = int(input())
             enregistrer_pleins_de_tuples(defenseur, attaquant, nb_parties)
 
@@ -121,13 +99,13 @@ def main():
         pass
 
 
-def lancer_partie(classe_participants, att_def, interface, perf, enregistrer_vecteur=False):
+def lancer_partie(classe_participants, att_def, interface, enregistrer_vecteur=False):
     plateau1 = Plateau()
     plateau2 = Plateau()
 
     if att_def:
         classe_def, classe_att = classe_participants
-        defenseur, attaquant = classe_def(plateau1, plateau2, perf), classe_att(plateau2, plateau1, perf)
+        defenseur, attaquant = classe_def(plateau1, plateau2), classe_att(plateau2, plateau1)
         attaquant.enregistrer_vecteur = enregistrer_vecteur
 
         defenseur.placer_bateaux()
@@ -141,15 +119,14 @@ def lancer_partie(classe_participants, att_def, interface, perf, enregistrer_vec
             attaquant.attaquer()
             compteur += 1
             if interface:
-                if not perf:
-                    sleep(0.1)
+                sleep(0.5)
 
         if interface:
             plateau1.cacher_interface()
             pygame.display.quit()
             pygame.quit()
 
-        if not perf and not enregistrer_vecteur:
+        if not enregistrer_vecteur:
             print("Partie terminée en {} coups".format(compteur))
         return compteur
     """
@@ -164,6 +141,9 @@ def lancer_partie(classe_participants, att_def, interface, perf, enregistrer_vec
 def superlancer_partie(super_defenseur, super_attaquant, superposition_bateaux):
     plateau1 = Plateau()
     plateau2 = Plateau()
+    if type(super_attaquant) == tuple:
+        super_attaquant, nom = super_attaquant
+        super_attaquant.nom_ia = nom
     defenseur, attaquant = super_defenseur(plateau1, plateau2), super_attaquant(plateau2, plateau1)
     defenseur.plateau_allie.placer_bateaux(superposition_bateaux)
     compteur = 0
@@ -190,7 +170,7 @@ def choisir_mode():
 
 def demander_mode():
     """Fonction qui permet de choisir quel mode de traitement on choisit"""
-    liste_des_modes = ['Jeu', 'Performances', 'Superperformances', 'Enregistrer un cornichon', 'Entraîner une IA', 'Mode manuel']
+    liste_des_modes = ['Jeu', 'Performances', 'Enregistrer un cornichon', 'Entraîner une IA', 'Mode manuel']
     mode = -1
     n = len(liste_des_modes)
     while not (mode in [x for x in range(n)]):
@@ -238,9 +218,16 @@ def superdemander_postes(nom_poste, liste):
     """Fonction qui demande une liste de types de joueur"""
     postes = []
     compt = 0
+    ia = []
+    liste_ia = os.listdir("ia_sl/")
     print("{} :".format(nom_poste))
     for i in range(len(liste)):
-        print("{} : {}".format(i, nom_classe(liste[i])))
+        if nom_classe(liste[i]) == 'IaSl':
+            ia.append(i)
+            for j in range(len(liste_ia)) :
+                print("{} : {} - {}".format(i+j, nom_classe(liste[i]), liste_ia[j]))
+        else:
+            print("{} : {}".format(i, nom_classe(liste[i])))
     print("")
     print("Combien de classes souhaitez-vous comparer ?")
     nb = int(input())
@@ -248,7 +235,7 @@ def superdemander_postes(nom_poste, liste):
     print("Tapez une classe, faites entrez, et réitérez jusqu'à avoir choisi toutes les classes à comparer.")
     while compt != nb:
         p = -1
-        while not (p in list(range(len(liste)))):
+        while not (p in list(range(len(liste) + len(liste_ia)))):
             try:
                 p = int(input())
             except ValueError:
@@ -258,7 +245,14 @@ def superdemander_postes(nom_poste, liste):
             compt += 1
     print("")
     postes.sort()
-    return [liste[p] for p in postes]
+    l = []
+    for p in postes:
+        if p < len(liste) - 1:
+            l.append(liste[p])
+        else:
+            l.append((liste[len(liste) - 1],liste_ia[p - len(liste) + 1]))
+    print(l)
+    return l
 
 
 def demander_interface():
@@ -303,12 +297,16 @@ def tester_liste_joueurs(liste_def, liste_att):
 
 def nom_classe(classe):
     """Fonction qui retourne le nom de la classe passée en argument"""
+    num = ''
+    if type(classe) == tuple:
+        classe, num = classe
+        num = ' : ' + num
     nom = str(classe)
     if '.' in nom:
         point = nom.index('.')
     else:
         point = 7
-    return nom[point + 1:-2]
+    return nom[point + 1:-2] + num
 
 
 def enregistrer_defense_alea(iterations):
@@ -387,17 +385,17 @@ def prototype(couches_intermediaires=None, nb_entrainement=5000, nb_test=50, epo
 
 def creerIA(nom, couches_intermediaires):
     resal = Resal([205] + couches_intermediaires + [100])
-    file = open("ia_enregistrees/{}".format(nom), "wb")
+    file = open("ia_sl/{}".format(nom), "wb")
     cornichon.dump(resal, file)
     file.close()
 
 
 def entrainerIA(nom, nb_entrainement=5000, nb_test=100, epoque=20, taille_mini_nacho=10, eta=.1):
-    file = open("ia_enregistrees/{}".format(nom), "rb")
+    file = open("ia_sl/{}".format(nom), "rb")
     resal = cornichon.load(file)
     file.close()
     lancer_entrainement(resal, nb_entrainement, nb_test, epoque, taille_mini_nacho, eta)
-    file = open("ia_enregistrees/{}".format(nom), "wb")
+    file = open("ia_sl/{}".format(nom), "wb")
     cornichon.dump(resal, file)
     file.close()
 

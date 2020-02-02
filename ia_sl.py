@@ -68,12 +68,7 @@ class Resal:
 
     def trouver_cibles(self, x):
         x = transformer_y(x)
-        # print(x.shape)
         reponse = self.evaluation(x)
-        # print(reponse.shape)
-        # print(len(reponse))
-        # print(len(reponse[0]))
-        # print(reponse)
         cibles = [(i // 10, i % 10) for i in range(100) if reponse[i][0] > np.max(reponse) - 0.0001]
         return cibles
 
@@ -89,8 +84,6 @@ class Resal:
         nb_cibles_valide = 0
         for x, y, z in donnees_test:
             cibles = self.trouver_cibles(x)  # cibles de l'IA
-            # print(cibles)
-            # print(z)
             nb_cibles += len(cibles)
             for cible in cibles:
                 if cible in z:  # z = cibles de CPP
@@ -122,11 +115,11 @@ class Resal:
 
 
 def demander_ia():
-    liste_ia = os.listdir("ia_enregistrees/")
+    liste_ia = os.listdir("ia_sl/")
     n = len(liste_ia)
     liste_choix = list(range(n))
     choix = -1
-    print("Quel IA ?")
+    print("Quelle IA ?")
     while choix not in liste_choix:
         for num_ia in range(n):
             print("{} : {}".format(num_ia, liste_ia[num_ia]))
@@ -135,14 +128,13 @@ def demander_ia():
 
 
 class IaSl(chasse_peche.ChassePecheCroixProba):
-    def __init__(self, plateau_allie, plateau_adverse, perfs=False):
+    def __init__(self, plateau_allie, plateau_adverse):
         chasse_peche.ChassePecheCroixProba.__init__(self, plateau_allie, plateau_adverse)
+        self.nom_ia = None
         if plateau_adverse != plateau_allie:
-            if perfs or True:
-                self.nom_ia = "test2"
-            else:
+            if self.nom_ia == None:
                 self.nom_ia = demander_ia()
-            file = open("ia_enregistrees/{}".format(self.nom_ia), "rb")
+            file = open("ia_sl/{}".format(self.nom_ia), "rb")
             self.resal = cornichon.load(file)
             file.close()
 

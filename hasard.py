@@ -6,7 +6,7 @@ import pickle as cornichon
 
 
 class HasardDebile(Joueur):
-    def __init__(self, plateau_allie, plateau_adverse, perfs=False):
+    def __init__(self, plateau_allie, plateau_adverse):
         Joueur.__init__(self, plateau_allie, plateau_adverse)
         self.attaquant = True
 
@@ -15,7 +15,7 @@ class HasardDebile(Joueur):
 
 
 class HasardMalin(Joueur):
-    def __init__(self, plateau_allie, plateau_adverse, perfs=False):
+    def __init__(self, plateau_allie, plateau_adverse):
         Joueur.__init__(self, plateau_allie, plateau_adverse)
         self.attaquant = True
 
@@ -25,7 +25,7 @@ class HasardMalin(Joueur):
 
 
 class HasardDefense(Joueur):
-    def __init__(self, plateau_allie, plateau_adverse, perfs=False):
+    def __init__(self, plateau_allie, plateau_adverse):
         Joueur.__init__(self, plateau_allie, plateau_adverse)
         self.attaquant = False
         self.defenseur = True
