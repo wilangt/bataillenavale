@@ -36,7 +36,7 @@ class HasardDefense(Joueur):
 
 class HasardDefenseCornichon(HasardDefense):
     def position_bateaux(self):
-        file = open("donnees/meta_cornichon.txt", "r")
+        file = open("donnees/cornichon_defense.txt", "r")
         dernier_plus_1 = int(file.read())
         file.close()
         n = randint(0, dernier_plus_1 - 1)

@@ -12,7 +12,8 @@ import matplotlib.pyplot as plt
 print()
 
 types_ia = ["ia_sl_chasse", "ia_sl_peche", "is_sl_tf_chasse", "ia_sl_tf_peche"]
-nb_ia = 1 """Nombre de classe d'IA différentes. A modifier à chaque nouvelle classe créée."""
+nb_ia = 1
+"""Nombre de classe d'IA différentes. A modifier à chaque nouvelle classe créée."""
 
 
 def main():
@@ -106,7 +107,7 @@ def main():
     elif mode == 'Enregistrer une IA':
         dossier = -1
         while not (dossier in list(range(len(types_ia)))):
-            print("Quelle type d'IA ?")
+            print("Quel dossier ?")
             for i in range(len(types_ia)):
                 print("{} : {}".format(i, types_ia[i]))
             try:
@@ -136,7 +137,7 @@ def main():
     elif mode == 'Entraîner une IA':
         dossier = -1
         while not (dossier in list(range(len(types_ia)))):
-            print("Quelle type d'IA ?")
+            print("Quel dossier ?")
             for i in range(len(types_ia)):
                 print("{} : {}".format(i, types_ia[i]))
             try:
@@ -317,10 +318,10 @@ def demander_poste(nom_poste, liste):
         except ValueError:
             pass
         print("")
-    if poste < len(liste) - nb_ia:
-        return liste[poste]
-    else:
+    if "ia" in nom_classe(liste[poste]):
         return superdemander_ia(poste, liste)
+    else:
+        return liste[poste]
 
 
 def superdemander_postes(nom_poste, liste):
@@ -361,38 +362,38 @@ def superdemander_ia(poste, liste):
     else:
         pass
     liste_ia_chasse = os.listdir("ia_enregistrees/{}/".format(types_ia[c]))
-    chasse = -1
-    while not (nom in list((-1, range(len(liste_ia_chasse))))):
+    chasse = -2
+    while not (chasse in ([-1] + list(range(len(liste_ia_chasse))))):
         print("Quelle IA de chasse ?")
         for i in range(len(liste_ia_chasse)):
             print("{} : {}".format(i, liste_ia_chasse[i]))
-            print("-1 : Chasse de ChasseEtPeche")
+        print("-1 : Chasse de ChasseEtPeche")
         try:
             chasse = int(input())
         except ValueError:
             pass
         print("")
     liste_ia_peche = os.listdir("ia_enregistrees/{}/".format(types_ia[p]))
-    peche = -1
-    while not (nom in list((-1, range(len(liste_ia_peche))))):
+    peche = -2
+    while not (peche in ([-1] + list(range(len(liste_ia_peche))))):
         print("Quelle IA de pêche ?")
         for i in range(len(liste_ia_peche)):
             print("{} : {}".format(i, liste_ia_peche[i]))
-            print("-1 : Pêche de ChasseEtPeche")
+        print("-1 : Pêche de ChasseEtPeche")
         try:
             peche = int(input())
         except ValueError:
             pass
         print("")
-    if chasse = -1:
+    if chasse == -1:
         chasse = None
     else:
         chasse = liste_ia_chasse[chasse]
-    if peche = -1:
+    if peche == -1:
         peche = None
     else:
         liste_ia_peche[peche]
-    return (liste[p], (chasse, peche))
+    return (liste[poste], (chasse, peche))
 
 
 def demander_interface():
@@ -498,12 +499,12 @@ def lancer_entrainement_chasse(resal, n, m, epoque, taille_mini_nacho, eta):
     file.close()
     for i in range(n):
         n = randint(0, dernier_plus_1 - 1)
-        file = open("donnees/tuple-" + str(n), "rb")
+        file = open("donnees/chasse-" + str(n), "rb")
         donnees_entrainement.append(cornichon.load(file))
         file.close()
     for i in range(m):
         n = randint(0, dernier_plus_1 - 1)
-        file = open("donnees/tuple-" + str(n), "rb")
+        file = open("donnees/chasse-" + str(n), "rb")
         donnees_test.append(cornichon.load(file))
         file.close()
     resal.DGS(donnees_entrainement, epoque, taille_mini_nacho, eta, donnees_test)
@@ -539,7 +540,7 @@ def entrainerIA(nom, dossier, nb_entrainement=5000, nb_test=100, epoque=20, tail
     file = open("ia_enregistrees/{}/{}".format(dossier, nom), "rb")
     resal = cornichon.load(file)
     file.close()
-    lancer_entrainement(resal, nb_entrainement, nb_test, epoque, taille_mini_nacho, eta)
+    lancer_entrainement_chasse(resal, nb_entrainement, nb_test, epoque, taille_mini_nacho, eta)
     file = open("ia_enregistrees/{}/{}".format(dossier, nom), "wb")
     cornichon.dump(resal, file)
     file.close()
