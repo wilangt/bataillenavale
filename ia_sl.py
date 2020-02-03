@@ -114,46 +114,71 @@ class Resal:
         return nabla_b, nabla_w
 
 
-def demander_ia():
-    liste_ia = os.listdir("ia_sl/")
+def demander_ia(dossier):
+    liste_ia = os.listdir("ia_enregistrees/" + dossier + "/")
     n = len(liste_ia)
     liste_choix = list(range(n))
     choix = -1
     print("Quelle IA ?")
-    while choix not in liste_choix:
+    while choix not in (liste_choix + [-1]):
         for num_ia in range(n):
             print("{} : {}".format(num_ia, liste_ia[num_ia]))
+            if 'chasse' in dossier:
+                print("-1 : Chasse de ChasseEtPeche")
+            elif 'peche' in dossier:
+                print("-1 : Pêche de ChasseEtPeche")
         choix = int(input())
-    return liste_ia[choix]
+    if choix = -1 :
+        return None
+    else:
+        return liste_ia[choix]
 
 
 class IaSl(chasse_peche.ChassePecheCroixProba):
     def __init__(self, plateau_allie, plateau_adverse):
         chasse_peche.ChassePecheCroixProba.__init__(self, plateau_allie, plateau_adverse)
-        self.nom_ia = None
-        self.resal = None
+        self.nom_ia_chasse = None
+        self.resal_chasse = None
+        self.nom_ia_peche = None
+        self.resal_peche = None
 
     def attribuer_nom(self, nom):
-        self.nom_ia = nom
+        self.nom_ia_chasse, self.nom_ia_peche = nom
 
     def initialiser_ia(self):
         if self.plateau_adverse != self.plateau_allie:
-            if self.nom_ia is None:
-                self.nom_ia = demander_ia()
-            file = open("ia_sl/{}".format(self.nom_ia), "rb")
-            self.resal = cornichon.load(file)
-            file.close()
+            if self.nom_ia_chasse is None:
+                self.nom_ia_chasse = demander_ia("ia_sl_chasse")
+                file = open("ia_enregistrees/ia_sl_chasse/{}".format(self.nom_ia_chasse), "rb")
+                self.resal_chasse = cornichon.load(file)
+                file.close()
+            if self.nom_ia_peche is None:
+                self.nom_ia_peche = demander_ia("ia_sl_peche")
+                file = open("ia_enregistrees/ia_sl_peche/{}".format(self.nom_ia_peche), "rb")
+                self.resal_peche = cornichon.load(file)
+                file.close()
+
+    def test_initialisation(self):
+        if self.nom_ia_chasse is None or self.resal_chasse is None or self.nom_ia_peche is None or self.resal_peche is None:
+            self.initialiser_ia()
 
     def choisir_cible_chasse(self):
-        if self.nom_ia is None or self.resal is None:
-            self.initialiser_ia()
-        cibles = self.resal.trouver_cibles(self.plateau_adverse.renvoyer_vecteur_init())
-        cibles_valides = [(i, j) for (i, j) in cibles if self.plateau_adverse.jamais_vu((i, j))]
-        if cibles_valides:
-            return random.choice(cibles_valides)
+        if self.nom_ia_chasse is not None:
+            cibles = self.resal.trouver_cibles(self.plateau_adverse.renvoyer_vecteur_init())
+            cibles_valides = [(i, j) for (i, j) in cibles if self.plateau_adverse.jamais_vu((i, j))]
+            if cibles_valides:
+                return random.choice(cibles_valides)
+            else:
+                cibles = self.resal.lister_cibles(self.plateau_adverse.renvoyer_vecteur_init())
+                cibles.sort(reverse=True)
+                for (p, (i, j)) in cibles:
+                    if self.plateau_adverse.jamais_vu((i, j)):
+                        return i, j
         else:
-            cibles = self.resal.lister_cibles(self.plateau_adverse.renvoyer_vecteur_init())
-            cibles.sort(reverse=True)
-            for (p, (i, j)) in cibles:
-                if self.plateau_adverse.jamais_vu((i, j)):
-                    return i, j
+            choisir_cible_chasse(chasse_peche.ChasseEtPeche)
+
+    def choisir_cible_peche(self):
+        if self.nom_ia_peche is not None:
+            pass """ICI à coder Julie"""
+        else:
+            choisir_cible_peche(chasse_peche.ChasseEtPeche)
