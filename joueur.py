@@ -45,6 +45,10 @@ class Joueur:
         """Fonction qui permet de savoir si le joueur peut attaquer"""
         return self.attaquant
 
+    def test_initialisation(self):
+        """Fonction qui sert pour les IA"""
+        pass
+
 
 """
 Template pour sous-classes de joueur :

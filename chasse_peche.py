@@ -6,11 +6,11 @@ import pickle as cornichon
 
 
 class ChasseEtPeche(Joueur):
-    def __init__(self, plateau_allie, plateau_adverse):
+    def __init__(self, plateau_allie, plateau_adverse, enregistrer_vecteur=0):
         Joueur.__init__(self, plateau_allie, plateau_adverse)
         self.attaquant = True
         self.defenseur = False
-        self.mode_chasse = True  # True = on tir au hasard; False = on pêche tant que le bateau visé nest pas coulé
+        self.mode_chasse = True  # True = on tire au hasard; False = on pêche tant que le bateau visé nest pas coulé
         self.chasse = np.mat([[1 for _ in range(10)] for _ in range(10)])  # liste des cibles possibles lorsqu'on
         # est dans le mode chasse
         self.poisson = []  # bateau en cours de destruction
@@ -44,6 +44,8 @@ class ChasseEtPeche(Joueur):
                 if (not (coor(a, b))) or (not self.chasse[a, b]):
                     v.pop(k)
                 k -= 1
+        if self.enregistrer_vecteur == 2 :
+            enregistrer_triplet_peche()
         return choice(v)
 
     def choisir_cible(self):
@@ -90,7 +92,7 @@ class ChasseEtPeche(Joueur):
 
 
 class ChassePecheCroix(ChasseEtPeche):
-    def __init__(self, plateau_allie, plateau_adverse, enregistrer_vecteur=False):
+    def __init__(self, plateau_allie, plateau_adverse, enregistrer_vecteur=0):
         ChasseEtPeche.__init__(self, plateau_allie, plateau_adverse)
         self.croix_pair = randint(0, 1)  # positions de coordonnées pair ou impair
         self.bateaux = self.plateau_adverse.bateaux[1:]
@@ -102,8 +104,8 @@ class ChassePecheCroix(ChasseEtPeche):
         matrice_poids = np.multiply(matrice_probabilite, matrice_croix)
         cibles = [(i, j) for j in range(10) for i in range(10) if matrice_poids[i, j] > matrice_poids.max() - 0.0001]
         cible = choice(cibles)
-        if self.enregistrer_vecteur :
-            enregistrer_tuple(self.plateau_adverse.renvoyer_vecteur_init(), renvoyer_vecteur_sortie(matrice_poids), cibles)
+        if self.enregistrer_vecteur == 1 :
+            enregistrer_triplet_chasse(self.plateau_adverse.renvoyer_vecteur_init(), renvoyer_vecteur_sortie(matrice_poids), cibles)
         return cible
 
     def matrice_poids_probabilite(self, mat, bat_restants):
@@ -232,14 +234,25 @@ def renvoyer_vecteur_sortie(mat):
     return [mat[i,j] for i in range(10) for j in range(10)]
 
 
-def enregistrer_tuple(entree, sortie, cibles):
-    print('coucou')
-    file = open("donnees/tuple_cornichon.txt", "r")
+def enregistrer_triplet_chasse(entree, sortie, cibles):
+    file = open("donnees/cornichon_chasse.txt", "r")
     indice = int(file.read())
     file.close()
-    file = open("donnees/tuple-" + str(indice), 'wb')
+    file = open("donnees/chasse-" + str(indice), 'wb')
     cornichon.dump((entree, sortie, cibles), file)
     file.close()
-    file = open("donnees/tuple_cornichon.txt", "w")
+    file = open("donnees/cornichon_chasse.txt", "w")
+    file.write(str(indice + 1))
+    file.close()
+
+def enregistrer_triplet_peche():
+    """ICI à coder Julie"""
+    file = open("donnees/cornichon_peche.txt", "r")
+    indice = int(file.read())
+    file.close()
+    file = open("donnees/peche-" + str(indice), 'wb')
+    cornichon.dump((), file)
+    file.close()
+    file = open("donnees/cornichon_peche.txt", "w")
     file.write(str(indice + 1))
     file.close()

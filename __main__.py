@@ -11,6 +11,10 @@ import matplotlib.pyplot as plt
 
 print()
 
+types_ia = ["ia_sl_chasse", "ia_sl_peche", "is_sl_tf_chasse", "ia_sl_tf_peche"]
+nb_ia = 1
+"""Nombre de classe d'IA différentes. A modifier à chaque nouvelle classe créée."""
+
 
 def main():
 
@@ -92,10 +96,27 @@ def main():
             defenseur, attaquant = choisir_participants(att_def, liste_defenseur, liste_attaquant)
             print("Combien de parties ? (22 grilles environ par partie)\r")
             nb_parties = int(input())
-            enregistrer_pleins_de_tuples(defenseur, attaquant, nb_parties)
+            enregistrer_triplet(defenseur, attaquant, nb_parties, 1)
+        elif cornichon == 2:
+            liste_attaquant = liste_attaquant[3:4]
+            defenseur, attaquant = choisir_participants(att_def, liste_defenseur, liste_attaquant)
+            print("Combien de parties ? (18 grilles environ par partie)\r")
+            nb_parties = int(input())
+            enregistrer_triplet(defenseur, attaquant, nb_parties, 2)
 
     elif mode == 'Enregistrer une IA':
-        liste_ia = os.listdir("ia_sl/")
+        dossier = -1
+        while not (dossier in list(range(len(types_ia)))):
+            print("Quel dossier ?")
+            for i in range(len(types_ia)):
+                print("{} : {}".format(i, types_ia[i]))
+            try:
+                dossier = int(input())
+            except ValueError:
+                pass
+            print("")
+        dossier = types_ia[dossier]
+        liste_ia = os.listdir("ia_enregistrees/{}/".format(dossier))
         nom = liste_ia[0]
         while nom in liste_ia:
             try:
@@ -111,10 +132,21 @@ def main():
         for i in range(nb_couches):
             couches_intermediaires.append(int(input()))
         print("")
-        creerIA(nom, couches_intermediaires)
+        creerIA(nom, dossier, couches_intermediaires)
 
     elif mode == 'Entraîner une IA':
-        liste_ia = os.listdir("ia_sl/")
+        dossier = -1
+        while not (dossier in list(range(len(types_ia)))):
+            print("Quel dossier ?")
+            for i in range(len(types_ia)):
+                print("{} : {}".format(i, types_ia[i]))
+            try:
+                dossier = int(input())
+            except ValueError:
+                pass
+            print("")
+        dossier = types_ia[dossier]
+        liste_ia = os.listdir("ia_enregistrees/{}/".format(dossier))
         nom = -1
         while not (nom in list(range(len(liste_ia)))):
             print("Quelle IA ?")
@@ -128,9 +160,12 @@ def main():
         nom = liste_ia[nom]
         cas_de_base = str(input('Cas de base ? (o/n)\n'))
         if cas_de_base == 'o':
-            entrainerIA(nom)
+            entrainerIA(nom, dossier)
         else:
-            file = open("donnees/tuple_cornichon.txt", "r")
+            if "chasse" in dossier:
+                file = open("donnees/cornichon_chasse.txt", "r")
+            elif "peche" in dossier:
+                file = open("donnees/cornichon_peche.txt", "r")
             max = int(file.read())
             file.close()
             nb_entrainement = max + 1
@@ -159,27 +194,32 @@ def main():
                 if taille_mini_nacho > nb_entrainement:
                     print('Pas assez de données !\n')
             eta = float(input("Quelle valeur pour eta ?\n"))
-            entrainerIA(nom, nb_entrainement, nb_test, epoque, taille_mini_nacho, eta)
+            entrainerIA(nom, dossier, nb_entrainement, nb_test, epoque, taille_mini_nacho, eta)
 
 
-def lancer_partie(classe_participants, att_def, interface, enregistrer_vecteur=False):
+def lancer_partie(classe_participants, att_def, interface, enregistrer_vecteur=0):
     plateau1 = Plateau()
     plateau2 = Plateau()
 
     if att_def:
         classe_def, classe_att = classe_participants
+        c_p = None
+        if type(classe_att) == tuple:
+            classe_att, c_p = classe_att
         defenseur, attaquant = classe_def(plateau1, plateau2), classe_att(plateau2, plateau1)
+        if c_p is not None:
+            attaquant.attribuer_nom(c_p)
         attaquant.enregistrer_vecteur = enregistrer_vecteur
 
         defenseur.placer_bateaux()
 
-        attaquant.attaquer()
+        attaquant.test_initialisation()
 
         if interface:
             plateau1.init_interface(660)
             plateau1.afficher_interface()
 
-        compteur = 1
+        compteur = 0
         while not (plateau1.defaite()):
             attaquant.attaquer()
             compteur += 1
@@ -206,12 +246,12 @@ def lancer_partie(classe_participants, att_def, interface, enregistrer_vecteur=F
 def superlancer_partie(super_defenseur, super_attaquant, superposition_bateaux):
     plateau1 = Plateau()
     plateau2 = Plateau()
-    nom = None
+    c_p = None
     if type(super_attaquant) == tuple:
-        super_attaquant, nom = super_attaquant
+        super_attaquant, c_p = super_attaquant
     defenseur, attaquant = super_defenseur(plateau1, plateau2), super_attaquant(plateau2, plateau1)
-    if nom is not None:
-        attaquant.attribuer_nom(nom)
+    if c_p is not None:
+        attaquant.attribuer_nom(c_p)
     defenseur.plateau_allie.placer_bateaux(superposition_bateaux)
     compteur = 0
     while not (plateau1.defaite()):
@@ -267,7 +307,7 @@ def superchoisir_participants(liste_d, liste_a):
 
 
 def demander_poste(nom_poste, liste):
-    """Fonction qui demande le type de joueur à partir de son poste et de la liste des classes disponible"""
+    """Fonction qui demande le type de joueur à partir de son poste et de la liste des classes disponibles"""
     poste = -1
     while not (poste in list(range(len(liste)))):
         print("{} :".format(nom_poste))
@@ -278,47 +318,82 @@ def demander_poste(nom_poste, liste):
         except ValueError:
             pass
         print("")
-    return liste[poste]
+    if "ia" in nom_classe(liste[poste]):
+        return superdemander_ia(poste, liste)
+    else:
+        return liste[poste]
 
 
 def superdemander_postes(nom_poste, liste):
     """Fonction qui demande une liste de types de joueur"""
     postes = []
     compt = 0
-    ia = []
-    liste_ia = os.listdir("ia_sl/")
     print("{} :".format(nom_poste))
     for i in range(len(liste)):
-        if nom_classe(liste[i]) == 'IaSl':
-            ia.append(i)
-            for j in range(len(liste_ia)) :
-                print("{} : {} - {}".format(i+j, nom_classe(liste[i]), liste_ia[j]))
-        else:
-            print("{} : {}".format(i, nom_classe(liste[i])))
+        print("{} : {}".format(i, nom_classe(liste[i])))
     print("")
     print("Combien de classes souhaitez-vous comparer ?")
     nb = int(input())
     print("")
-    print("Tapez une classe, faites entrez, et réitérez jusqu'à avoir choisi toutes les classes à comparer.")
+    print("Tapez une classe, faites entrez, et réitérez jusqu'à avoir choisi toutes les classes à comparer. Plusieurs IA du même type peuvent être comparées")
     while compt != nb:
         p = -1
-        while not (p in list(range(len(liste) + len(liste_ia)))):
+        while not (p in list(range(len(liste)))):
             try:
                 p = int(input())
             except ValueError:
                 pass
-        if p not in postes:
-            postes.append(p)
-            compt += 1
+        postes.append(p)
+        compt += 1
     print("")
     postes.sort()
     l = []
     for p in postes:
-        if p < len(liste) - 1:
+        if p < len(liste) - nb_ia:
             l.append(liste[p])
         else:
-            l.append((liste[len(liste) - 1],liste_ia[p - len(liste) + 1]))
+            l.append(superdemander_ia(p, liste))
     return l
+
+
+def superdemander_ia(poste, liste):
+    if poste == len(liste) - nb_ia:
+        c, p = 0, 1
+    else:
+        pass
+    liste_ia_chasse = os.listdir("ia_enregistrees/{}/".format(types_ia[c]))
+    chasse = -2
+    while not (chasse in ([-1] + list(range(len(liste_ia_chasse))))):
+        print("Quelle IA de chasse ?")
+        for i in range(len(liste_ia_chasse)):
+            print("{} : {}".format(i, liste_ia_chasse[i]))
+        print("-1 : Chasse de ChasseEtPeche")
+        try:
+            chasse = int(input())
+        except ValueError:
+            pass
+        print("")
+    liste_ia_peche = os.listdir("ia_enregistrees/{}/".format(types_ia[p]))
+    peche = -2
+    while not (peche in ([-1] + list(range(len(liste_ia_peche))))):
+        print("Quelle IA de pêche ?")
+        for i in range(len(liste_ia_peche)):
+            print("{} : {}".format(i, liste_ia_peche[i]))
+        print("-1 : Pêche de ChasseEtPeche")
+        try:
+            peche = int(input())
+        except ValueError:
+            pass
+        print("")
+    if chasse == -1:
+        chasse = None
+    else:
+        chasse = liste_ia_chasse[chasse]
+    if peche == -1:
+        peche = None
+    else:
+        liste_ia_peche[peche]
+    return (liste[poste], (chasse, peche))
 
 
 def demander_interface():
@@ -342,7 +417,8 @@ def demander_cornichon():
     while not (cornichon in [0, 1]):
         print("Type de cornichon :")
         print("0 : Grilles")
-        print("1 : Tuples (entrée, sortie, cibles)")
+        print("1 : Triplet chasse (entrée, sortie, cibles)")
+        print("2 : Triplet pêche (entrée, sortie, cibles)")
         try:
             cornichon = int(input())
         except ValueError:
@@ -363,20 +439,24 @@ def tester_liste_joueurs(liste_def, liste_att):
 
 def nom_classe(classe):
     """Fonction qui retourne le nom de la classe passée en argument"""
-    num = ''
+    chasse = ''
+    peche = ''
     if type(classe) == tuple:
-        classe, num = classe
-        num = ' : ' + num
+        classe, (chasse, peche) = classe
+        if chasse is not None:
+            chasse = ' / Chasse : ' + chasse
+        if peche is not None:
+            peche = ' / Pêche : ' + peche
     nom = str(classe)
     if '.' in nom:
         point = nom.index('.')
     else:
         point = 7
-    return nom[point + 1:-2] + num
+    return nom[point + 1:-2] + chasse + peche
 
 
 def enregistrer_defense_alea(iterations):
-    file = open("donnees/meta_cornichon.txt", "r")
+    file = open("donnees/cornichon_defense.txt", "r")
     debut = int(file.read())
     file.close()
     fin = debut + iterations
@@ -387,15 +467,15 @@ def enregistrer_defense_alea(iterations):
         bateaux = position_bateaux_global()
         cornichon.dump(bateaux, file)
         file.close()
-    file = open("donnees/meta_cornichon.txt", "w")
+    file = open("donnees/cornichon_defense.txt", "w")
     file.write(str(fin))
 
 
-def enregistrer_pleins_de_tuples(defenseur, attaquant, nb_parties):
+def enregistrer_triplet(defenseur, attaquant, nb_parties, indice):
     barre = BarreDeProgression()
     for i in range(nb_parties):
         barre.maj(100 * (i + 1) / nb_parties)
-        lancer_partie((defenseur, attaquant), True, False, True)
+        lancer_partie((defenseur, attaquant), True, False, indice)
 
 
 def superchoisir_positions_bateaux(super_defenseur, nb_essais):
@@ -404,7 +484,7 @@ def superchoisir_positions_bateaux(super_defenseur, nb_essais):
     return [defenseur.position_bateaux() for _ in range(nb_essais)]
 
 
-def lancer_entrainement(resal, n, m, epoque, taille_mini_nacho, eta):
+def lancer_entrainement_chasse(resal, n, m, epoque, taille_mini_nacho, eta):
     """
     entraine un résal
     :param resal: résal en question
@@ -414,17 +494,17 @@ def lancer_entrainement(resal, n, m, epoque, taille_mini_nacho, eta):
     """
     donnees_entrainement = []
     donnees_test = []
-    file = open("donnees/tuple_cornichon.txt", "r")
+    file = open("donnees/cornichon_chasse.txt", "r")
     dernier_plus_1 = int(file.read())
     file.close()
     for i in range(n):
         n = randint(0, dernier_plus_1 - 1)
-        file = open("donnees/tuple-" + str(n), "rb")
+        file = open("donnees/chasse-" + str(n), "rb")
         donnees_entrainement.append(cornichon.load(file))
         file.close()
     for i in range(m):
         n = randint(0, dernier_plus_1 - 1)
-        file = open("donnees/tuple-" + str(n), "rb")
+        file = open("donnees/chasse-" + str(n), "rb")
         donnees_test.append(cornichon.load(file))
         file.close()
     resal.DGS(donnees_entrainement, epoque, taille_mini_nacho, eta, donnees_test)
@@ -449,19 +529,19 @@ def prototype(couches_intermediaires=None, nb_entrainement=5000, nb_test=50, epo
     lancer_entrainement(resal, nb_entrainement, nb_test, epoque, taille_mini_nacho, eta)
 
 
-def creerIA(nom, couches_intermediaires):
+def creerIA(nom, dossier, couches_intermediaires):
     resal = Resal([205] + couches_intermediaires + [100])
-    file = open("ia_sl/{}".format(nom), "wb")
+    file = open("ia_enregistrees/{}/{}".format(dossier, nom), "wb")
     cornichon.dump(resal, file)
     file.close()
 
 
-def entrainerIA(nom, nb_entrainement=5000, nb_test=100, epoque=20, taille_mini_nacho=10, eta=.1):
-    file = open("ia_sl/{}".format(nom), "rb")
+def entrainerIA(nom, dossier, nb_entrainement=5000, nb_test=100, epoque=20, taille_mini_nacho=10, eta=.1):
+    file = open("ia_enregistrees/{}/{}".format(dossier, nom), "rb")
     resal = cornichon.load(file)
     file.close()
-    lancer_entrainement(resal, nb_entrainement, nb_test, epoque, taille_mini_nacho, eta)
-    file = open("ia_sl/{}".format(nom), "wb")
+    lancer_entrainement_chasse(resal, nb_entrainement, nb_test, epoque, taille_mini_nacho, eta)
+    file = open("ia_enregistrees/{}/{}".format(dossier, nom), "wb")
     cornichon.dump(resal, file)
     file.close()
 
