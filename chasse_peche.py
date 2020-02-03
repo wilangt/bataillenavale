@@ -233,6 +233,7 @@ def renvoyer_vecteur_sortie(mat):
 
 
 def enregistrer_tuple(entree, sortie, cibles):
+    print('coucou')
     file = open("donnees/tuple_cornichon.txt", "r")
     indice = int(file.read())
     file.close()

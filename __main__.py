@@ -32,7 +32,7 @@ def main():
     if mode == 'Jeu':
         interface = demander_interface()
         classe_participants = choisir_participants(att_def, liste_defenseur, liste_attaquant)
-        lancer_partie(classe_participants, att_def, interface, False)
+        lancer_partie(classe_participants, att_def, interface)
 
     elif mode == 'Performances':
         liste_defenseur = liste_defenseur[1:]
@@ -105,10 +105,7 @@ def main():
             if nom in liste_ia:
                 print('Nom déjà pris !\n')
         print("")
-        try:
-            nb_couches = int(input("Combien de couches intermédiaires ?\n"))
-        except ValueError:
-            pass
+        nb_couches = int(input("Combien de couches intermédiaires ?\n"))
         print("Rentrez une à une la taille des couches intermédiaires, en enclenchant à chaque fois la touche entrée")
         couches_intermediaires = []
         for i in range(nb_couches):
@@ -129,10 +126,7 @@ def main():
                 pass
             print("")
         nom = liste_ia[nom]
-        try:
-            cas_de_base = str(input('Cas de base ? (o/n)\n'))
-        except ValueError:
-            pass
+        cas_de_base = str(input('Cas de base ? (o/n)\n'))
         if cas_de_base == 'o':
             entrainerIA(nom)
         else:
@@ -155,22 +149,16 @@ def main():
                     pass
                 if nb_entrainement > max:
                     print('Pas assez de données !\n')
-            try:
-                epoque = int(input("Combien d'époques ?\n"))
-            except ValueError:
-                pass
+            epoque = int(input("Combien d'époques ?\n"))
             taille_mini_nacho = nb_entrainement + 1
             while taille_mini_nacho > nb_entrainement :
                 try:
-                    taille_mini_nacho = int(input('Combien de données de test ?\n'))
+                    taille_mini_nacho = int(input('Quelle taille de mini-batch ?\n'))
                 except ValueError:
                     pass
                 if taille_mini_nacho > nb_entrainement:
                     print('Pas assez de données !\n')
-            try:
-                eta = float(input("Quelle valeur pour eta ?\n"))
-            except ValueError:
-                pass
+            eta = float(input("Quelle valeur pour eta ?\n"))
             entrainerIA(nom, nb_entrainement, nb_test, epoque, taille_mini_nacho, eta)
 
 
@@ -407,7 +395,7 @@ def enregistrer_pleins_de_tuples(defenseur, attaquant, nb_parties):
     barre = BarreDeProgression()
     for i in range(nb_parties):
         barre.maj(100 * (i + 1) / nb_parties)
-        lancer_partie((defenseur, attaquant), True, False, False, True)
+        lancer_partie((defenseur, attaquant), True, False, True)
 
 
 def superchoisir_positions_bateaux(super_defenseur, nb_essais):
