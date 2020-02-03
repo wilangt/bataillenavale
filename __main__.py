@@ -148,6 +148,8 @@ def main():
         dossier = types_ia[dossier]
         liste_ia = os.listdir("ia_enregistrees/{}/".format(dossier))
         nom = -1
+        if len(liste_ia) == 0:
+            raise NameError("Dossier vide !")
         while not (nom in list(range(len(liste_ia)))):
             print("Quelle IA ?")
             for i in range(len(liste_ia)):
