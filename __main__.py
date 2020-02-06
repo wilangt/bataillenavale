@@ -528,7 +528,7 @@ def prototype(couches_intermediaires=None, nb_entrainement=5000, nb_test=50, epo
         couches_intermediaires = [125]
 
     resal = Resal([205]+couches_intermediaires+[100])
-    lancer_entrainement(resal, nb_entrainement, nb_test, epoque, taille_mini_nacho, eta)
+    lancer_entrainement_chasse(resal, nb_entrainement, nb_test, epoque, taille_mini_nacho, eta)
 
 
 def creerIA(nom, dossier, couches_intermediaires):
