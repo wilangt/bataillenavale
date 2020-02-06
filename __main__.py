@@ -132,7 +132,7 @@ def main():
         for i in range(nb_couches):
             couches_intermediaires.append(int(input()))
         print("")
-        creerIA(nom, dossier, couches_intermediaires)
+        creerIA_chasse(nom, dossier, couches_intermediaires)
 
     elif mode == 'Entraîner une IA':
         dossier = -1
@@ -320,7 +320,7 @@ def demander_poste(nom_poste, liste):
         except ValueError:
             pass
         print("")
-    if "ia" in nom_classe(liste[poste]):
+    if "Ia" in nom_classe(liste[poste]):
         return superdemander_ia(poste, liste)
     else:
         return liste[poste]
@@ -528,11 +528,15 @@ def prototype(couches_intermediaires=None, nb_entrainement=5000, nb_test=50, epo
         couches_intermediaires = [125]
 
     resal = Resal([205]+couches_intermediaires+[100])
-    lancer_entrainement(resal, nb_entrainement, nb_test, epoque, taille_mini_nacho, eta)
+    lancer_entrainement_chasse(resal, nb_entrainement, nb_test, epoque, taille_mini_nacho, eta)
 
 
 def creerIA(nom, dossier, couches_intermediaires):
-    resal = Resal([205] + couches_intermediaires + [100])
+    if "chasse" in dossier:
+        n, m = 205, 100
+    else:
+        n, m = 305, 100
+    resal = Resal([n] + couches_intermediaires + [m])
     file = open("ia_enregistrees/{}/{}".format(dossier, nom), "wb")
     cornichon.dump(resal, file)
     file.close()
