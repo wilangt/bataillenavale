@@ -122,4 +122,3 @@ def format_temps(temps):
         return str(m) + ' m. ' + str(s) + ' s.          '
     else:
         return str(temps) + ' s.                '
-
