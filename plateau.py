@@ -138,33 +138,23 @@ class Plateau:
     def get_nb_tours(self):
         return self.nb_tours
 
-    def renvoyer_vecteur_init(self,mode):
+    def renvoyer_vecteur_init(self):
         init = []
         for i in range(100):
             case = self.plateauVisible[i // 10, i % 10]
-            if mode == 1:
-                if case == -1:  # plouf
-                    init += [0, 1]
-                elif case == 0:  # On sait pas
-                    init += [0, 0]
-                elif case == 1:  # touché
-                    init += [1, 0]
-                elif case == 2:  # touché coulé
-                    init += [1, 1]
-                for i in self.bateaux[1:]:
-                    if i > 0:
-                        init.append(1)
-                    else:
-                        init.append(0)
+            if case == -1:  # plouf
+                init += [0, 1]
+            elif case == 0:  # On sait pas
+                init += [0, 0]
+            elif case == 1:  # touché
+                init += [1, 0]
+            elif case == 2:  # touché coulé
+                init += [1, 1]
+        for i in self.bateaux[1:]:
+            if i > 0:
+                init.append(1)
             else:
-                if case == -1:  # plouf
-                    init += [0, 0, 1]
-                elif case == 0:  # On sait pas
-                    init += [0, 0, 0]
-                elif case == 1:  # touché
-                    init += [1, 0]
-                elif case == 2:  # touché coulé
-                    init += [1, 1]
+                init.append(0)
         return init
 
 
