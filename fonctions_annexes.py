@@ -123,3 +123,41 @@ def format_temps(temps):
     else:
         return str(temps) + ' s.                '
 
+
+def mise_a_zero(a,b,t):
+    i=0
+    if coor(a+1,b) and t[a+1,b] == 1:
+        while coor(a+i,b) and t[a+i,b] == 1:
+            t[a+i,b] = 0
+            i+=1
+    elif coor(a-1,b) and t[a-1,b] == 1:
+        while coor(a-i,b) and t[a-i,b] == 1:
+            t[a-i,b] = 0
+            i+=1
+    elif coor(a,b+1) and t[a,b+1] == 1:
+        while coor(a,b+i) and t[a,b+i] == 1:
+            t[a,b+i] = 0
+            i+=1
+    elif coor(a,b-1) and t[a,b-1] == 1:
+        while coor(a,b-i) and t[a,b-i] == 1:
+            t[a,b-i] = 0
+            i+=1
+
+
+def test_poisson(table):
+    P = []
+    C = []
+    t = np.deepcopy(table)
+    for i in range(10):
+        for j in range(10):
+            if t[i,j] == -1:
+                t[i,j] = 0
+            if t[i,j] == 2:
+                C.append((i,j))
+    for (a,b) in C:
+        mise_a_zero(a,b,t)
+    for i in range(10):
+        for j in range(10):
+            if t[i,j] == 1:
+                P.append((i,j))
+    return P

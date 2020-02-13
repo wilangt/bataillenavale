@@ -245,13 +245,13 @@ def enregistrer_triplet_chasse(entree, sortie, cibles):
     file.write(str(indice + 1))
     file.close()
 
-def enregistrer_triplet_peche():
+def enregistrer_triplet_peche(entree, sortie, cibles):
     """ICI à coder Julie"""
     file = open("donnees/cornichon_peche.txt", "r")
     indice = int(file.read())
     file.close()
     file = open("donnees/peche-" + str(indice), 'wb')
-    cornichon.dump((), file)
+    cornichon.dump((entree, sortie, cibles), file)
     file.close()
     file = open("donnees/cornichon_peche.txt", "w")
     file.write(str(indice + 1))

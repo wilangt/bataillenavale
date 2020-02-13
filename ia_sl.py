@@ -162,12 +162,12 @@ class IaSl(chasse_peche.ChassePecheCroixProba):
 
     def choisir_cible_chasse(self):
         if self.nom_ia_chasse is not None:
-            cibles = self.resal_chasse.trouver_cibles(self.plateau_adverse.renvoyer_vecteur_init())
+            cibles = self.resal_chasse.trouver_cibles(self.plateau_adverse.renvoyer_vecteur_init(self.enregistrer_vecteur))
             cibles_valides = [(i, j) for (i, j) in cibles if self.plateau_adverse.jamais_vu((i, j))]
             if cibles_valides:
                 return random.choice(cibles_valides)
             else:
-                cibles = self.resal_chasse.lister_cibles(self.plateau_adverse.renvoyer_vecteur_init())
+                cibles = self.resal_chasse.lister_cibles(self.plateau_adverse.renvoyer_vecteur_init(self.enregistrer_vecteur))
                 cibles.sort(reverse=True)
                 for (p, (i, j)) in cibles:
                     if self.plateau_adverse.jamais_vu((i, j)):
@@ -177,8 +177,16 @@ class IaSl(chasse_peche.ChassePecheCroixProba):
 
     def choisir_cible_peche(self):
         if self.nom_ia_peche is not None:
-            pass
-            """ICI à coder Julie"""
+            cibles = self.resal_peche.trouver_cible(self.plateau_adverse.renvoyer_vecteur_init(self.enregistrer_vecteur))
+            cibles_valides = [(i, j) for (i, j) in cibles if self.plateau_adverse.jamais_vu((i, j))]
+            if cibles_valides:
+                return random.choice(cibles_valides)
+            else:
+                cibles = self.resal_chasse.lister_cibles(self.plateau_adverse.renvoyer_vecteur_init(self.enregistrer_vecteur))
+                cibles.sort(reverse=True)
+                for (p, (i, j)) in cibles:
+                    if self.plateau_adverse.jamais_vu((i, j)):
+                        return i, j
         else:
             n = len(self.poisson)
             cibles = []

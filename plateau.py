@@ -140,6 +140,7 @@ class Plateau:
 
     def renvoyer_vecteur_init(self,mode):
         init = []
+        poisson = test_poisson(self.plateauVisible)
         for i in range(100):
             case = self.plateauVisible[i // 10, i % 10]
             if mode == 1:
@@ -156,15 +157,23 @@ class Plateau:
                         init.append(1)
                     else:
                         init.append(0)
-            else:
+            elif mode == 2:
                 if case == -1:  # plouf
                     init += [0, 0, 1]
                 elif case == 0:  # On sait pas
                     init += [0, 0, 0]
-                elif case == 1:  # touché
-                    init += [1, 0]
+                elif case == 1:
+                    if case in poisson: # touché dans le poisson
+                        init += [1, 1, 0]
+                    else:
+                        init += [0, 1, 1]
                 elif case == 2:  # touché coulé
-                    init += [1, 1]
+                    init += [1, 1, 1]
+                for i in self.bateaux[1:]:
+                    if i > 0:
+                        init.append(1)
+                    else:
+                        init.append(0)
         return init
 
 
