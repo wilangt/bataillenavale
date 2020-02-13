@@ -143,7 +143,7 @@ class IaSl(chasse_peche.ChassePecheCroixProba):
         self.resal_peche = None
 
     def attribuer_nom(self, nom):
-        self.nom_ia_chasse, self.nom_ia_peche = nom
+        self.nom_ia_chasse, self.nom_ia_peche = nomplateau_adverse
 
     def initialiser_ia(self):
         if self.plateau_adverse != self.plateau_allie:
@@ -205,3 +205,5 @@ class IaSl(chasse_peche.ChassePecheCroixProba):
                 if chasse_peche.coor(i, j) and matrice_poids[i, j] >= cible[0]:
                     cible = (matrice_poids[i, j], (i, j))
             return cible[1]
+            # chasse_peche.ChassePecheCroixProba.choisir_cible_peche(self)  # Incapable de dire pourquoi ça ne fonctionne pas
+            # chasse_peche.ChassePecheCroixProba.__init__(self, plateau_allie, plateau_adverse)

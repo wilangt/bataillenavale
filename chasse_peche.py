@@ -44,8 +44,6 @@ class ChasseEtPeche(Joueur):
                 if (not (coor(a, b))) or (not self.chasse[a, b]):
                     v.pop(k)
                 k -= 1
-        if self.enregistrer_vecteur == 2 :
-            enregistrer_triplet_peche()
         return choice(v)
 
     def choisir_cible(self):
@@ -104,8 +102,8 @@ class ChassePecheCroix(ChasseEtPeche):
         matrice_poids = np.multiply(matrice_probabilite, matrice_croix)
         cibles = [(i, j) for j in range(10) for i in range(10) if matrice_poids[i, j] > matrice_poids.max() - 0.0001]
         cible = choice(cibles)
-        if self.enregistrer_vecteur == 1 :
-            enregistrer_triplet_chasse(self.plateau_adverse.renvoyer_vecteur_init(), renvoyer_vecteur_sortie(matrice_poids), cibles)
+        if self.enregistrer_vecteur == 1:
+            enregistrer_triplet_chasse(self.plateau_adverse.renvoyer_vecteur_init(self.enregistrer_vecteur), renvoyer_vecteur_sortie(matrice_poids), cibles)
         return cible
 
     def matrice_poids_probabilite(self, mat, bat_restants):
@@ -182,6 +180,8 @@ class ChassePecheCroixProba(ChassePecheCroix):  # A ajouter à main / marche pas
         for (i, j) in cibles:
             if coor(i, j) and matrice_poids[i, j] >= cible[0]:
                 cible = (matrice_poids[i, j], (i, j))
+        if self.enregistrer_vecteur == 2:
+            enregistrer_triplet_peche(self.plateau_adverse.renvoyer_vecteur_init(self.enregistrer_vecteur), renvoyer_vecteur_sortie(matrice_poids), cibles)
         return cible[1]
 
     def analyser(self, res, cible):
