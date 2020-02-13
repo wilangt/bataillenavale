@@ -180,4 +180,28 @@ class IaSl(chasse_peche.ChassePecheCroixProba):
             pass
             """ICI à coder Julie"""
         else:
-            chasse_peche.ChasseEtPeche.choisir_cible_peche(self) #Incapable de dire pourquoi ça ne fonctionne pas
+            n = len(self.poisson)
+            cibles = []
+            matrice_poids = np.zeros((10, 10), dtype=int)
+            (a, b) = self.poisson[-1]
+            for (i, j) in [(a - 1, b - 1), (a - 1, b + 1), (a + 1, b - 1), (a + 1, b + 1)]:
+                if chasse_peche.coor(i, j):
+                    self.chasse[i, j] = 0
+            if n == 1:
+                matrice_poids = self.matrice_poids_probabilite(self.chasse, self.bateaux)
+                cibles = [(a, b - 1), (a, b + 1), (a - 1, b), (a + 1, b)]
+            if n >= 2:
+                self.poisson.sort()
+                (a, b) = self.poisson[0]
+                (c, d) = self.poisson[-1]
+                bat = [i for i in self.bateaux if i > n]
+                matrice_poids = self.matrice_poids_probabilite(self.chasse, bat)
+                if a == c:
+                    cibles = [(a, b - 1), (a, d + 1)]
+                else:
+                    cibles = [(a - 1, b), (c + 1, b)]
+            cible = (0, (-1, -1))
+            for (i, j) in cibles:
+                if chasse_peche.coor(i, j) and matrice_poids[i, j] >= cible[0]:
+                    cible = (matrice_poids[i, j], (i, j))
+            return cible[1]
