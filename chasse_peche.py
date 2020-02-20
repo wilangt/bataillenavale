@@ -44,6 +44,8 @@ class ChasseEtPeche(Joueur):
                 if (not (coor(a, b))) or (not self.chasse[a, b]):
                     v.pop(k)
                 k -= 1
+        if self.enregistrer_vecteur == 2:
+            enregistrer_triplet_peche(self.plateau_adverse.renvoyer_vecteur_init(self.enregistrer_vecteur), renvoyer_vecteur_sortie_peche(v) , v)
         return choice(v)
 
     def choisir_cible(self):
@@ -103,7 +105,7 @@ class ChassePecheCroix(ChasseEtPeche):
         cibles = [(i, j) for j in range(10) for i in range(10) if matrice_poids[i, j] > matrice_poids.max() - 0.0001]
         cible = choice(cibles)
         if self.enregistrer_vecteur == 1:
-            enregistrer_triplet_chasse(self.plateau_adverse.renvoyer_vecteur_init(self.enregistrer_vecteur), renvoyer_vecteur_sortie(matrice_poids), cibles)
+            enregistrer_triplet_chasse(self.plateau_adverse.renvoyer_vecteur_init(self.enregistrer_vecteur), renvoyer_vecteur_sortie_chasse(matrice_poids), cibles)
         return cible
 
     def matrice_poids_probabilite(self, mat, bat_restants):
@@ -180,8 +182,6 @@ class ChassePecheCroixProba(ChassePecheCroix):  # A ajouter à main / marche pas
         for (i, j) in cibles:
             if coor(i, j) and matrice_poids[i, j] >= cible[0]:
                 cible = (matrice_poids[i, j], (i, j))
-        if self.enregistrer_vecteur == 2:
-            enregistrer_triplet_peche(self.plateau_adverse.renvoyer_vecteur_init(self.enregistrer_vecteur), renvoyer_vecteur_sortie(matrice_poids), cibles)
         return cible[1]
 
     def analyser(self, res, cible):
@@ -230,10 +230,16 @@ class ChassePecheProbaCroixDecroissanceExpo(ChassePecheCroixProba):  # A ajouter
         return lambdaa * np.exp(-lambdaa * n)
 
 
-def renvoyer_vecteur_sortie(mat):
+def renvoyer_vecteur_sortie_chasse(mat):
     return [mat[i,j] for i in range(10) for j in range(10)]
 
-
+def renvoyer_vecteur_sortie_peche(l):
+    L = [0 for i in range(100)]
+    for k in l:
+        (i,j) = k
+        L[10*i+j] = 1
+    return L
+    
 def enregistrer_triplet_chasse(entree, sortie, cibles):
     file = open("donnees/cornichon_chasse.txt", "r")
     indice = int(file.read())

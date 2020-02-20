@@ -1,6 +1,6 @@
 import sys
 import time
-
+import numpy as np
 
 def test_bateaux(bateaux):
     """Voici un algorithme qui teste si les bateaux que rentrent le joueur correspondent à une disposition valide.
@@ -147,7 +147,7 @@ def mise_a_zero(a,b,t):
 def test_poisson(table):
     P = []
     C = []
-    t = np.deepcopy(table)
+    t = np.copy(table)
     for i in range(10):
         for j in range(10):
             if t[i,j] == -1:

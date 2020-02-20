@@ -103,8 +103,38 @@ def main():
             print("Combien de parties ? (18 grilles environ par partie)\r")
             nb_parties = int(input())
             enregistrer_triplet(defenseur, attaquant, nb_parties, 2)
-
-    elif mode == 'Enregistrer une IA':
+            
+    elif mode == 'Enregistrer une IA de chasse':
+        dossier = -1
+        while not (dossier in list(range(len(types_ia)))):
+            print("Quel dossier ?")
+            for i in range(len(types_ia)):
+                print("{} : {}".format(i, types_ia[i]))
+            try:
+                dossier = int(input())
+            except ValueError:
+                pass
+            print("")
+        dossier = types_ia[dossier]
+        liste_ia = os.listdir("ia_enregistrees/{}/".format(dossier))
+        nom = liste_ia[0]
+        while nom in liste_ia:
+            try:
+                nom = input('Quel nom ?\n')
+            except ValueError:
+                pass
+            if nom in liste_ia:
+                print('Nom déjà pris !\n')
+        print("")
+        nb_couches = int(input("Combien de couches intermédiaires ?\n"))
+        print("Rentrez une à une la taille des couches intermédiaires, en enclenchant à chaque fois la touche entrée")
+        couches_intermediaires = []
+        for i in range(nb_couches):
+            couches_intermediaires.append(int(input()))
+        print("")
+        creerIA_chasse(nom, dossier, couches_intermediaires)
+    
+    elif mode == 'Enregistrer une IA de peche': # copie de ce qui précède, pas encore adapté à peche
         dossier = -1
         while not (dossier in list(range(len(types_ia)))):
             print("Quel dossier ?")
@@ -134,7 +164,71 @@ def main():
         print("")
         creerIA_chasse(nom, dossier, couches_intermediaires)
 
-    elif mode == 'Entraîner une IA':
+    elif mode == 'Entraîner une IA de chasse':
+        dossier = -1
+        while not (dossier in list(range(len(types_ia)))):
+            print("Quel dossier ?")
+            for i in range(len(types_ia)):
+                print("{} : {}".format(i, types_ia[i]))
+            try:
+                dossier = int(input())
+            except ValueError:
+                pass
+            print("")
+        dossier = types_ia[dossier]
+        liste_ia = os.listdir("ia_enregistrees/{}/".format(dossier))
+        nom = -1
+        if len(liste_ia) == 0:
+            raise NameError("Dossier vide !")
+        while not (nom in list(range(len(liste_ia)))):
+            print("Quelle IA ?")
+            for i in range(len(liste_ia)):
+                print("{} : {}".format(i, liste_ia[i]))
+            try:
+                nom = int(input())
+            except ValueError:
+                pass
+            print("")
+        nom = liste_ia[nom]
+        cas_de_base = str(input('Cas de base ? (o/n)\n'))
+        if cas_de_base == 'o':
+            entrainerIA(nom, dossier)
+        else:
+            if "chasse" in dossier:
+                file = open("donnees/cornichon_chasse.txt", "r")
+            elif "peche" in dossier:
+                file = open("donnees/cornichon_peche.txt", "r")
+            max = int(file.read())
+            file.close()
+            nb_entrainement = max + 1
+            while nb_entrainement > max :
+                try:
+                    nb_entrainement = int(input("Combien de données d'entraînement ?\n"))
+                except ValueError:
+                    pass
+                if nb_entrainement > max:
+                    print('Pas assez de données !\n')
+            nb_test = max + 1
+            while nb_test > max :
+                try:
+                    nb_test = int(input('Combien de données de test ?\n'))
+                except ValueError:
+                    pass
+                if nb_entrainement > max:
+                    print('Pas assez de données !\n')
+            epoque = int(input("Combien d'époques ?\n"))
+            taille_mini_nacho = nb_entrainement + 1
+            while taille_mini_nacho > nb_entrainement :
+                try:
+                    taille_mini_nacho = int(input('Quelle taille de mini-batch ?\n'))
+                except ValueError:
+                    pass
+                if taille_mini_nacho > nb_entrainement:
+                    print('Pas assez de données !\n')
+            eta = float(input("Quelle valeur pour eta ?\n"))
+            entrainerIA(nom, dossier, nb_entrainement, nb_test, epoque, taille_mini_nacho, eta)
+    
+    elif mode == 'Entraîner une IA de peche':   # copie de ce qui précède, pas encore adapté à peche
         dossier = -1
         while not (dossier in list(range(len(types_ia)))):
             print("Quel dossier ?")
@@ -279,7 +373,7 @@ def choisir_mode():
 
 def demander_mode():
     """Fonction qui permet de choisir quel mode de traitement on choisit"""
-    liste_des_modes = ['Jeu', 'Performances', 'Enregistrer un cornichon', 'Enregistrer une IA', 'Entraîner une IA', 'Mode manuel']
+    liste_des_modes = ['Jeu', 'Performances', 'Enregistrer un cornichon', 'Enregistrer une IA de chasse', 'Enregistrer une IA de peche', 'Entraîner une IA de chasse','Entraîner une IA de peche', 'Mode manuel']
     mode = -1
     n = len(liste_des_modes)
     while not (mode in [x for x in range(n)]):
@@ -416,7 +510,7 @@ def demander_interface():
 def demander_cornichon():
     """Fonction qui demande quel cornichon enregistrer"""
     cornichon = -1
-    while not (cornichon in [0, 1]):
+    while not (cornichon in [0, 1, 2]):
         print("Type de cornichon :")
         print("0 : Grilles")
         print("1 : Triplet chasse (entrée, sortie, cibles)")
@@ -500,7 +594,7 @@ def lancer_entrainement_chasse(resal, n, m, epoque, taille_mini_nacho, eta):
     dernier_plus_1 = int(file.read())
     file.close()
     for i in range(n):
-        n = randint(0, dernier_plus_1 - 1)
+        n = randint(0, dernier_plus_1 - 1) #c'est bof de mettre le même nom de variable n
         file = open("donnees/chasse-" + str(n), "rb")
         donnees_entrainement.append(cornichon.load(file))
         file.close()
@@ -511,6 +605,23 @@ def lancer_entrainement_chasse(resal, n, m, epoque, taille_mini_nacho, eta):
         file.close()
     resal.DGS(donnees_entrainement, epoque, taille_mini_nacho, eta, donnees_test)
 
+def lancer_entrainement_peche(resal, n, m, epoque, taille_mini_nacho, eta):
+    donnees_entrainement = []
+    donnes_test = []
+    file = open("donnees/cornichon_peche.txt", "r")
+    dernier_plus_1 = int(file.read())
+    file.close()
+    for i in range(n):
+        p = randint(0, dernier_plus_1 - 1)
+        file = open("donnees/peche-" + str(p), "rb")
+        donnees_entrainement.apend(cornichon.load(file))
+        file.close()
+    for i in range(m):
+        p = randint(0, dernier_plus_1 - 1)
+        file = open("donnees/peche-" + str(p), "rb")
+        donnees_test.append(cornichon.load(file))
+        file.close()
+    resal.DGS(donnees_entrainement, epoque, taille_mini_nacho, eta, donnes_test)
 
 def prototype(couches_intermediaires=None, nb_entrainement=5000, nb_test=50, epoque=50, taille_mini_nacho=10, eta=1.):
     """

@@ -1,5 +1,7 @@
 import numpy as np
 import pygame
+from fonctions_annexes import *
+
 
 pygame.init()
 
@@ -163,7 +165,7 @@ class Plateau:
                 elif case == 0:  # On sait pas
                     init += [0, 0, 0]
                 elif case == 1:
-                    if case in poisson: # touché dans le poisson
+                    if (i//10, i%10) in poisson: # touché dans le poisson
                         init += [1, 1, 0]
                     else:
                         init += [0, 1, 1]
