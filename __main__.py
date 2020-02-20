@@ -205,6 +205,10 @@ def lancer_partie(classe_participants, att_def, interface, enregistrer_vecteur=0
 
     if att_def:
         classe_def, classe_att = classe_participants
+        enregistrer_stats_humain = 0
+        if classe_att == Humain:
+            print("enregistrer stats humain ? 0 : Non ; 1 : Oui")
+            enregistrer_stats_humain = int(input())
         c_p = None
         if type(classe_att) == tuple:
             classe_att, c_p = classe_att
@@ -235,6 +239,10 @@ def lancer_partie(classe_participants, att_def, interface, enregistrer_vecteur=0
 
         if not enregistrer_vecteur:
             print("Partie terminée en {} coups".format(compteur))
+            if enregistrer_stats_humain:
+                file = open("stats_humain.txt", "a+")
+                file.write("{}\n".format(compteur))
+                file.close()
         return compteur
     """
     # A completer : flemme, et utile seulement dans longtemps
