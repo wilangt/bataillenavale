@@ -233,7 +233,7 @@ class ChassePecheProbaCroixDecroissanceExpo(ChassePecheCroixProba):  # A ajouter
 def renvoyer_vecteur_sortie_chasse(mat):
     return [mat[i,j] for i in range(10) for j in range(10)]
 
-def renvoyer_vecteur_sortie_peche(l):
+def renvoyer_vecteur_sortie_peche(l):       # matrice de taille 100 avec proba 1 dans les cases autour de celles qu'on vient de toucher et qui sont encore possibles, proba de 0 dans toutes les autres cases.
     L = [0 for i in range(100)]
     for k in l:
         (i,j) = k
