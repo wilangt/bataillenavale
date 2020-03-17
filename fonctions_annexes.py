@@ -161,3 +161,82 @@ def test_poisson(table):
             if t[i,j] == 1:
                 P.append((i,j))
     return P
+
+##Matrice couleur
+import numpy as np
+import matplotlib.image as mpim
+import matplotlib.pyplot as plt
+import random as rd
+
+# Matrice initiale de proba
+im = np.zeros((10,10))
+for i in range(10):
+    for j in range(10):
+        im[i,j] = 1.
+
+init = matrice_poids_probabilite(im,[2,3,3,4,5])
+
+plt.imshow(init,cmap=plt.gray())
+fig=plt.gcf()
+ax = fig.add_axes([0.85, 0.2, 0.03, 0.6])
+plt.colorbar( cax=ax )
+plt.show()
+##
+# matrice de proba en cours de partie 
+a = [[0.,0.,1.,1.,1.,1.,1.,1.,0.,1.],[0.,1.,0.,1.,1.,0.,1.,0.,1.,0.],[0.,1.,0.,1.,0.,1.,0.,1.,1.,1.],[1.,1.,1.,0.,0.,1.,1.,0.,1.,1.],[0.,1.,0.,0.,0.,0.,1.,1.,1.,1.],[0.,0.,1.,1.,0.,0.,1.,0.,1.,0.],[0.,1.,0.,1.,1.,1.,1.,1.,0.,1.],[0.,0.,1.,0.,1.,0.,1.,0.,1.,1.],[0.,1.,0.,1.,0.,1.,0.,1.,1.,1.],[1.,0.,1.,0.,1.,0.,1.,0.,1.,1.]]
+
+en_partie = matrice_poids_probabilite(a,[2,5])
+
+plt.imshow(en_partie,cmap=plt.gray())
+fig=plt.gcf()
+ax = fig.add_axes([0.85, 0.2, 0.03, 0.6])
+plt.colorbar( cax=ax )
+plt.show()
+
+##
+#matrice de proba après 1 tir en D4
+m = np.zeros((10,10))
+for i in range(10):
+    for j in range(10):
+        m[i,j] = 1.
+m[3,3] = 0.
+
+tir_d4 = matrice_poids_probabilite(m,[2,3,3,4,5])
+
+plt.imshow(tir_d4,cmap=plt.gray())
+fig=plt.gcf()
+ax = fig.add_axes([0.85, 0.2, 0.03, 0.6])
+plt.colorbar( cax=ax )
+plt.show()
+
+##
+    def matrice_poids_probabilite( mat, bat_restants):
+        matr = np.array(mat, dtype=int)
+
+        def prob_un_bateau(matrice, n):
+            prob = matrice.copy()
+            nb = bat_restants[n]
+            for i in range(10):
+                compteur = 1
+                for j in range(10):
+                    if prob[i, j] == 0:
+                        compteur = 0
+                    prob[i, j] = compteur
+                    compteur += 1
+            for i in range(10):
+                for j in range(10):
+                    if prob[i, j] < nb:
+                        prob[i, j] = 0
+                    else:
+                        prob[i, j] = 1
+                        for m in range(1, nb):
+                            prob[i, j - m] += 1
+            return prob
+
+        mat_tot = np.zeros((10, 10), dtype=int)
+        for k in range(len(bat_restants)):
+            mat_tot += prob_un_bateau(matr, k)
+            mat_tot += prob_un_bateau(matr.transpose(), k).transpose()
+        print(mat_tot)
+        mat_tot = mat_tot / np.max(mat_tot)
+        return mat_tot
