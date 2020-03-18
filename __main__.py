@@ -549,7 +549,7 @@ def entrainerIA(nom, dossier, nb_entrainement=5000, nb_test=100, epoque=20, tail
         mode = 'chasse'
     elif 'peche' in dossier:
         mode = 'peche'
-    lancer_entrainement_chasse(resal, nb_entrainement, nb_test, epoque, taille_mini_nacho, eta, mode)
+    lancer_entrainement(resal, nb_entrainement, nb_test, epoque, taille_mini_nacho, eta, mode)
     file = open("ia_enregistrees/{}/{}".format(dossier, nom), "wb")
     cornichon.dump(resal, file)
     file.close()
