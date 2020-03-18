@@ -210,28 +210,28 @@ plt.colorbar( cax=ax )
 plt.show()
 
 ##
-    def matrice_poids_probabilite( mat, bat_restants):
-        matr = np.array(mat, dtype=int)
+def matrice_poids_probabilite( mat, bat_restants):
+    matr = np.array(mat, dtype=int)
 
-        def prob_un_bateau(matrice, n):
-            prob = matrice.copy()
-            nb = bat_restants[n]
-            for i in range(10):
-                compteur = 1
-                for j in range(10):
-                    if prob[i, j] == 0:
-                        compteur = 0
-                    prob[i, j] = compteur
-                    compteur += 1
-            for i in range(10):
-                for j in range(10):
-                    if prob[i, j] < nb:
-                        prob[i, j] = 0
-                    else:
-                        prob[i, j] = 1
-                        for m in range(1, nb):
-                            prob[i, j - m] += 1
-            return prob
+    def prob_un_bateau(matrice, n):
+        prob = matrice.copy()
+        nb = bat_restants[n]
+        for i in range(10):
+            compteur = 1
+            for j in range(10):
+                if prob[i, j] == 0:
+                    compteur = 0
+                prob[i, j] = compteur
+                compteur += 1
+        for i in range(10):
+            for j in range(10):
+                if prob[i, j] < nb:
+                    prob[i, j] = 0
+                else:
+                    prob[i, j] = 1
+                    for m in range(1, nb):
+                        prob[i, j - m] += 1
+        return prob
 
         mat_tot = np.zeros((10, 10), dtype=int)
         for k in range(len(bat_restants)):
