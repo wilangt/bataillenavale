@@ -140,7 +140,7 @@ class Plateau:
     def get_nb_tours(self):
         return self.nb_tours
 
-    def renvoyer_vecteur_init(self,mode):
+    def renvoyer_vecteur_init(self, mode):
         init = []
         poisson = test_poisson(self.plateauVisible)
         for i in range(100):

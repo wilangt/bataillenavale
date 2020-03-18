@@ -162,12 +162,12 @@ class IaSl(chasse_peche.ChassePecheProba):
 
     def choisir_cible_chasse(self):
         if self.nom_ia_chasse is not None:
-            cibles = self.resal_chasse.trouver_cibles(self.plateau_adverse.renvoyer_vecteur_init(self.enregistrer_vecteur))
+            cibles = self.resal_chasse.trouver_cibles(self.plateau_adverse.renvoyer_vecteur_init(1))
             cibles_valides = [(i, j) for (i, j) in cibles if self.plateau_adverse.jamais_vu((i, j))]
             if cibles_valides:
                 return random.choice(cibles_valides)
             else:
-                cibles = self.resal_chasse.lister_cibles(self.plateau_adverse.renvoyer_vecteur_init(self.enregistrer_vecteur))
+                cibles = self.resal_chasse.lister_cibles(self.plateau_adverse.renvoyer_vecteur_init(1))
                 cibles.sort(reverse=True)
                 for (p, (i, j)) in cibles:
                     if self.plateau_adverse.jamais_vu((i, j)):
@@ -180,12 +180,12 @@ class IaSl(chasse_peche.ChassePecheProba):
 
     def choisir_cible_peche(self):
         if self.nom_ia_peche is not None:
-            cibles = self.resal_peche.trouver_cibles(self.plateau_adverse.renvoyer_vecteur_init(self.enregistrer_vecteur))
+            cibles = self.resal_peche.trouver_cibles(self.plateau_adverse.renvoyer_vecteur_init(2))
             cibles_valides = [(i, j) for (i, j) in cibles if self.plateau_adverse.jamais_vu((i, j))]
             if cibles_valides:
                 return random.choice(cibles_valides)
             else:
-                cibles = self.resal_chasse.lister_cibles(self.plateau_adverse.renvoyer_vecteur_init(self.enregistrer_vecteur))
+                cibles = self.resal_chasse.lister_cibles(self.plateau_adverse.renvoyer_vecteur_init(2))
                 cibles.sort(reverse=True)
                 for (p, (i, j)) in cibles:
                     if self.plateau_adverse.jamais_vu((i, j)):
