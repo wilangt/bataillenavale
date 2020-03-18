@@ -197,6 +197,8 @@ def main():
                     print('Pas assez de données !\n')
             eta = float(input("Quelle valeur pour eta ?\n"))
             entrainerIA(nom, dossier, nb_entrainement, nb_test, epoque, taille_mini_nacho, eta)
+    elif mode == 'Afficher proba diapo':
+        donnees_prob()
 
 
 def lancer_partie(classe_participants, att_def, interface, enregistrer_vecteur=0):
@@ -279,7 +281,7 @@ def choisir_mode():
 
 def demander_mode():
     """Fonction qui permet de choisir quel mode de traitement on choisit"""
-    liste_des_modes = ['Jeu', 'Performances', 'Enregistrer un cornichon', 'Enregistrer une IA', 'Entraîner une IA', 'Mode manuel']
+    liste_des_modes = ['Jeu', 'Performances', 'Enregistrer un cornichon', 'Enregistrer une IA', 'Entraîner une IA', 'Mode manuel', 'Afficher proba diapo']
     mode = -1
     n = len(liste_des_modes)
     while not (mode in [x for x in range(n)]):
