@@ -134,9 +134,9 @@ def demander_ia(dossier):
         return liste_ia[choix]
 
 
-class IaSl(chasse_peche.ChassePecheCroixProba):
+class IaSl(chasse_peche.ChassePecheProba):
     def __init__(self, plateau_allie, plateau_adverse):
-        chasse_peche.ChassePecheCroixProba.__init__(self, plateau_allie, plateau_adverse)
+        chasse_peche.ChassePecheProba.__init__(self, plateau_allie, plateau_adverse)
         self.nom_ia_chasse = None
         self.resal_chasse = None
         self.nom_ia_peche = None
@@ -173,7 +173,10 @@ class IaSl(chasse_peche.ChassePecheCroixProba):
                     if self.plateau_adverse.jamais_vu((i, j)):
                         return i, j
         else:
-            chasse_peche.ChasseEtPeche.choisir_cible_chasse(self)
+            matrice_poids = self.matrice_poids_probabilite(self.chasse, self.bateaux)
+            cibles = [(i, j) for j in range(10) for i in range(10) if matrice_poids[i, j] > matrice_poids.max() - 0.0001]
+            cible = choice(cibles)
+            return cible
 
     def choisir_cible_peche(self):
         if self.nom_ia_peche is not None:
@@ -213,5 +216,3 @@ class IaSl(chasse_peche.ChassePecheCroixProba):
                 if chasse_peche.coor(i, j) and matrice_poids[i, j] >= cible[0]:
                     cible = (matrice_poids[i, j], (i, j))
             return cible[1]
-            # chasse_peche.ChassePecheCroixProba.choisir_cible_peche(self)  # Incapable de dire pourquoi ça ne fonctionne pas
-            # chasse_peche.ChassePecheCroixProba.__init__(self, plateau_allie, plateau_adverse)

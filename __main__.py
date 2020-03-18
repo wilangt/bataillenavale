@@ -20,10 +20,6 @@ def main():
 
     mode = demander_mode()
 
-    if mode == -1:
-        # Cas pathologique
-        return None
-
     liste_defenseur = [Humain, HasardDefense, HasardDefenseCornichon, ConfigInit]
     liste_attaquant = [Humain, HasardDebile, HasardMalin, ChasseEtPeche, ChassePecheCroix, ChassePecheCroixProba,
                        ChassePecheProba, ChassePecheProbaCroixDecroissanceLineaire,
@@ -103,7 +99,7 @@ def main():
             print("Combien de parties ? (18 grilles environ par partie)\r")
             nb_parties = int(input())
             enregistrer_triplet(defenseur, attaquant, nb_parties, 2)
-            
+
     elif mode == 'Enregistrer une IA':
         dossier = -1
         while not (dossier in list(range(len(types_ia)))):
@@ -127,7 +123,7 @@ def main():
                 print('Nom déjà pris !\n')
         print("")
         nb_couches = int(input("Combien de couches intermédiaires ?\n"))
-        print("Rentrez une à une la taille des couches intermédiaires, en enclenchant à chaque fois la touche entrée")
+        print("Rentrez une à une la taille des couches intermédiaires, en appuyant à chaque fois sur la touche entrée")
         couches_intermediaires = []
         for i in range(nb_couches):
             couches_intermediaires.append(int(input()))
@@ -197,6 +193,7 @@ def main():
                     print('Pas assez de données !\n')
             eta = float(input("Quelle valeur pour eta ?\n"))
             entrainerIA(nom, dossier, nb_entrainement, nb_test, epoque, taille_mini_nacho, eta)
+
     elif mode == 'Afficher proba diapo':
         donnees_prob()
 
@@ -281,7 +278,7 @@ def choisir_mode():
 
 def demander_mode():
     """Fonction qui permet de choisir quel mode de traitement on choisit"""
-    liste_des_modes = ['Jeu', 'Performances', 'Enregistrer un cornichon', 'Enregistrer une IA', 'Entraîner une IA', 'Mode manuel', 'Afficher proba diapo']
+    liste_des_modes = ['Jeu', 'Performances', 'Enregistrer un cornichon', 'Enregistrer une IA', 'Entraîner une IA', 'Afficher proba diapo', 'Mode manuel']
     mode = -1
     n = len(liste_des_modes)
     while not (mode in [x for x in range(n)]):
@@ -488,7 +485,7 @@ def superchoisir_positions_bateaux(super_defenseur, nb_essais):
     return [defenseur.position_bateaux() for _ in range(nb_essais)]
 
 
-def lancer_entrainement_chasse(resal, n, m, epoque, taille_mini_nacho, eta):
+def lancer_entrainement(resal, n, m, epoque, taille_mini_nacho, eta, mode):
     """
     entraine un résal
     :param resal: résal en question
@@ -498,38 +495,21 @@ def lancer_entrainement_chasse(resal, n, m, epoque, taille_mini_nacho, eta):
     """
     donnees_entrainement = []
     donnees_test = []
-    file = open("donnees/cornichon_chasse.txt", "r")
+    file = open("donnees/cornichon_" + mode + ".txt", "r")
     dernier_plus_1 = int(file.read())
     file.close()
     for i in range(n):
-        n = randint(0, dernier_plus_1 - 1) #c'est bof de mettre le même nom de variable n
-        file = open("donnees/chasse-" + str(n), "rb")
+        k = randint(0, dernier_plus_1 - 1)
+        file = open("donnees/" + mode + "-" + str(k), "rb")
         donnees_entrainement.append(cornichon.load(file))
         file.close()
     for i in range(m):
-        n = randint(0, dernier_plus_1 - 1)
-        file = open("donnees/chasse-" + str(n), "rb")
+        k = randint(0, dernier_plus_1 - 1)
+        file = open("donnees/" + mode + "-" + str(k), "rb")
         donnees_test.append(cornichon.load(file))
         file.close()
     resal.DGS(donnees_entrainement, epoque, taille_mini_nacho, eta, donnees_test)
 
-def lancer_entrainement_peche(resal, n, m, epoque, taille_mini_nacho, eta):
-    donnees_entrainement = []
-    donnees_test = []
-    file = open("donnees/cornichon_peche.txt", "r")
-    dernier_plus_1 = int(file.read())
-    file.close()
-    for i in range(n):
-        p = randint(0, dernier_plus_1 - 1)
-        file = open("donnees/peche-" + str(p), "rb")
-        donnees_entrainement.append(cornichon.load(file))
-        file.close()
-    for i in range(m):
-        p = randint(0, dernier_plus_1 - 1)
-        file = open("donnees/peche-" + str(p), "rb")
-        donnees_test.append(cornichon.load(file))
-        file.close()
-    resal.DGS(donnees_entrainement, epoque, taille_mini_nacho, eta, donnees_test)
 
 def prototype(couches_intermediaires=None, nb_entrainement=5000, nb_test=50, epoque=50, taille_mini_nacho=10, eta=1.):
     """
@@ -547,14 +527,16 @@ def prototype(couches_intermediaires=None, nb_entrainement=5000, nb_test=50, epo
         couches_intermediaires = [125]
 
     resal = Resal([205]+couches_intermediaires+[100])
-    lancer_entrainement_chasse(resal, nb_entrainement, nb_test, epoque, taille_mini_nacho, eta)
+    lancer_entrainement(resal, nb_entrainement, nb_test, epoque, taille_mini_nacho, eta, 'chasse')
 
 
 def creerIA(nom, dossier, couches_intermediaires):
     if "chasse" in dossier:
         n, m = 205, 100
-    else:
+    elif "peche" in dossier:
         n, m = 305, 100
+    else:
+        break
     resal = Resal([n] + couches_intermediaires + [m])
     file = open("ia_enregistrees/{}/{}".format(dossier, nom), "wb")
     cornichon.dump(resal, file)
@@ -566,15 +548,14 @@ def entrainerIA(nom, dossier, nb_entrainement=5000, nb_test=100, epoque=20, tail
     resal = cornichon.load(file)
     file.close()
     if 'chasse' in dossier:
-        lancer_entrainement_chasse(resal, nb_entrainement, nb_test, epoque, taille_mini_nacho, eta)
-        file = open("ia_enregistrees/{}/{}".format(dossier, nom), "wb")
-        cornichon.dump(resal, file)
-        file.close()
-    else:
-        lancer_entrainement_peche(resal, nb_entrainement, nb_test, epoque, taille_mini_nacho, eta)
-        file = open("ia_enregitrees/{}/{}".format(dossier, nom), "wb")
-        cornichon.dump(resal, file)
-        file.close()
+        mode = 'chasse'
+    elif 'peche' in dossier:
+        mode = 'peche'
+    lancer_entrainement_chasse(resal, nb_entrainement, nb_test, epoque, taille_mini_nacho, eta, mode)
+    file = open("ia_enregistrees/{}/{}".format(dossier, nom), "wb")
+    cornichon.dump(resal, file)
+    file.close()
+
 
 if __name__ == "__main__":
     main()
