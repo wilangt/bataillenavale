@@ -254,6 +254,7 @@ def superlancer_partie(super_defenseur, super_attaquant, superposition_bateaux):
     if c_p is not None:
         attaquant.attribuer_nom(c_p)
     defenseur.plateau_allie.placer_bateaux(superposition_bateaux)
+    attaquant.test_initialisation()
     compteur = 0
     while not (plateau1.defaite()):
         attaquant.attaquer()
@@ -380,7 +381,7 @@ def superdemander_ia(poste, liste):
         print("Quelle IA de pêche ?")
         for i in range(len(liste_ia_peche)):
             print("{} : {}".format(i, liste_ia_peche[i]))
-        print("-1 : Pêche de ChassePecheProba")
+        print("-1 : Pêche de ChasseEtPeche")
         try:
             peche = int(input())
         except ValueError:
@@ -393,7 +394,7 @@ def superdemander_ia(poste, liste):
     if peche == -1:
         peche = None
     else:
-        liste_ia_peche[peche]
+        peche = liste_ia_peche[peche]
     return (liste[poste], (chasse, peche))
 
 

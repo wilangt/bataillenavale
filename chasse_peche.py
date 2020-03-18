@@ -45,7 +45,7 @@ class ChasseEtPeche(Joueur):
                     v.pop(k)
                 k -= 1
         if self.enregistrer_vecteur == 2:
-            enregistrer_cornichon(self.plateau_adverse.renvoyer_vecteur_init(self.enregistrer_vecteur), renvoyer_vecteur_sortie_peche(v) , v, 'peche')
+            enregistrer_cornichon(self.plateau_adverse.renvoyer_vecteur_init(self.enregistrer_vecteur), renvoyer_vecteur_sortie_peche(v), v, 'peche')
         return choice(v)
 
     def choisir_cible(self):
