@@ -162,6 +162,7 @@ def test_poisson(table):
                 P.append((i,j))
     return P
 
+
 ##Matrice couleur
 import numpy as np
 import matplotlib.image as mpim
@@ -197,7 +198,7 @@ def matrice_poids_probabilite( mat, bat_restants):
         mat_tot += prob_un_bateau(matr.transpose(), k).transpose()
     mat_tot = mat_tot / np.max(mat_tot)
     return mat_tot
-    
+
 def donnees_prob():
     # Matrice initiale de proba
     print("Etat initial")
@@ -207,17 +208,28 @@ def donnees_prob():
             im[i,j] = 1.
 
     init = matrice_poids_probabilite(im,[2,3,3,4,5])
-    
+
     plt.imshow(init,cmap=plt.gray())
     fig=plt.gcf()
     ax = fig.add_axes([0.85, 0.2, 0.03, 0.6])
     plt.colorbar( cax=ax )
     plt.show()
-    # matrice de proba en cours de partie 
-    a = [[0.,0.,1.,1.,1.,1.,1.,1.,0.,1.],[0.,1.,0.,1.,1.,0.,1.,0.,1.,0.],[0.,1.,0.,1.,0.,1.,0.,1.,1.,1.],[1.,1.,1.,0.,0.,1.,1.,0.,1.,1.],[0.,1.,0.,0.,0.,0.,1.,1.,1.,1.],[0.,0.,1.,1.,0.,0.,1.,0.,1.,0.],[0.,1.,0.,1.,1.,1.,1.,1.,0.,1.],[0.,0.,1.,0.,1.,0.,1.,0.,1.,1.],[0.,1.,0.,1.,0.,1.,0.,1.,1.,1.],[1.,0.,1.,0.,1.,0.,1.,0.,1.,1.]]
-    
+    # matrice de proba en cours de partie
+    a = [
+         [0.,0.,1.,1.,1.,1.,1.,1.,0.,1.],
+         [0.,1.,0.,1.,1.,0.,1.,0.,1.,0.],
+         [0.,1.,0.,1.,0.,1.,0.,1.,1.,1.],
+         [1.,1.,1.,0.,0.,1.,1.,0.,1.,1.],
+         [0.,1.,0.,0.,0.,0.,1.,1.,1.,1.],
+         [0.,0.,1.,1.,0.,0.,1.,0.,1.,0.],
+         [0.,1.,0.,1.,1.,1.,1.,1.,0.,1.],
+         [0.,0.,1.,0.,1.,0.,1.,0.,1.,1.],
+         [0.,1.,0.,1.,0.,1.,0.,1.,1.,1.],
+         [1.,0.,1.,0.,1.,0.,1.,0.,1.,1.]
+        ]
+
     en_partie = matrice_poids_probabilite(a,[2,5])
-    
+
     plt.imshow(en_partie,cmap=plt.gray())
     fig=plt.gcf()
     ax = fig.add_axes([0.85, 0.2, 0.03, 0.6])
@@ -231,9 +243,9 @@ def donnees_prob():
         for j in range(10):
             m[i,j] = 1.
     m[3,3] = 0.
-    
+
     tir_d4 = matrice_poids_probabilite(m,[2,3,3,4,5])
-    
+
     plt.imshow(tir_d4,cmap=plt.gray())
     fig=plt.gcf()
     ax = fig.add_axes([0.85, 0.2, 0.03, 0.6])

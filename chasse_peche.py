@@ -45,7 +45,7 @@ class ChasseEtPeche(Joueur):
                     v.pop(k)
                 k -= 1
         if self.enregistrer_vecteur == 2:
-            enregistrer_triplet_peche(self.plateau_adverse.renvoyer_vecteur_init(self.enregistrer_vecteur), renvoyer_vecteur_sortie_peche(v) , v)
+            enregistrer_cornichon(self.plateau_adverse.renvoyer_vecteur_init(self.enregistrer_vecteur), renvoyer_vecteur_sortie_peche(v) , v, 'peche')
         return choice(v)
 
     def choisir_cible(self):
@@ -105,7 +105,7 @@ class ChassePecheCroix(ChasseEtPeche):
         cibles = [(i, j) for j in range(10) for i in range(10) if matrice_poids[i, j] > matrice_poids.max() - 0.0001]
         cible = choice(cibles)
         if self.enregistrer_vecteur == 1:
-            enregistrer_triplet_chasse(self.plateau_adverse.renvoyer_vecteur_init(self.enregistrer_vecteur), renvoyer_vecteur_sortie_chasse(matrice_poids), cibles)
+            enregistrer_cornichon(self.plateau_adverse.renvoyer_vecteur_init(self.enregistrer_vecteur), renvoyer_vecteur_sortie_chasse(matrice_poids), cibles, 'chasse')
         return cible
 
     def matrice_poids_probabilite(self, mat, bat_restants):
@@ -233,32 +233,22 @@ class ChassePecheProbaCroixDecroissanceExpo(ChassePecheCroixProba):  # A ajouter
 def renvoyer_vecteur_sortie_chasse(mat):
     return [mat[i,j] for i in range(10) for j in range(10)]
 
+
 def renvoyer_vecteur_sortie_peche(l):       # matrice de taille 100 avec proba 1 dans les cases autour de celles qu'on vient de toucher et qui sont encore possibles, proba de 0 dans toutes les autres cases.
     L = [0 for i in range(100)]
     for k in l:
         (i,j) = k
         L[10*i+j] = 1
     return L
-    
-def enregistrer_triplet_chasse(entree, sortie, cibles):
-    file = open("donnees/cornichon_chasse.txt", "r")
-    indice = int(file.read())
-    file.close()
-    file = open("donnees/chasse-" + str(indice), 'wb')
-    cornichon.dump((entree, sortie, cibles), file)
-    file.close()
-    file = open("donnees/cornichon_chasse.txt", "w")
-    file.write(str(indice + 1))
-    file.close()
 
-def enregistrer_triplet_peche(entree, sortie, cibles):
-    """ICI à coder Julie"""
-    file = open("donnees/cornichon_peche.txt", "r")
+
+def enregistrer_cornichon(entree, sortie, cibles, mode):
+    file = open("donnees/cornichon_" + mode + ".txt", "r")
     indice = int(file.read())
     file.close()
-    file = open("donnees/peche-" + str(indice), 'wb')
+    file = open("donnees/" + mode + "-" + str(indice), 'wb')
     cornichon.dump((entree, sortie, cibles), file)
     file.close()
-    file = open("donnees/cornichon_peche.txt", "w")
+    file = open("donnees/cornichon_" + mode + ".txt", "w")
     file.write(str(indice + 1))
     file.close()
