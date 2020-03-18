@@ -336,7 +336,7 @@ def superdemander_postes(nom_poste, liste):
     print("Combien de classes souhaitez-vous comparer ?")
     nb = int(input())
     print("")
-    print("Tapez une classe, faites entrez, et réitérez jusqu'à avoir choisi toutes les classes à comparer. Plusieurs IA du même type peuvent être comparées")
+    print("Tapez une classe, faites entrez, et réitérez jusqu'à avoir choisi toutes les classes à comparer. Plusieurs IA du même type peuvent être comparées.")
     while compt != nb:
         p = -1
         while not (p in list(range(len(liste)))):
@@ -368,7 +368,7 @@ def superdemander_ia(poste, liste):
         print("Quelle IA de chasse ?")
         for i in range(len(liste_ia_chasse)):
             print("{} : {}".format(i, liste_ia_chasse[i]))
-        print("-1 : Chasse de ChasseEtPeche")
+        print("-1 : Chasse de ChassePecheProba")
         try:
             chasse = int(input())
         except ValueError:
@@ -380,7 +380,7 @@ def superdemander_ia(poste, liste):
         print("Quelle IA de pêche ?")
         for i in range(len(liste_ia_peche)):
             print("{} : {}".format(i, liste_ia_peche[i]))
-        print("-1 : Pêche de ChasseEtPeche")
+        print("-1 : Pêche de ChassePecheProba")
         try:
             peche = int(input())
         except ValueError:
@@ -535,8 +535,6 @@ def creerIA(nom, dossier, couches_intermediaires):
         n, m = 205, 100
     elif "peche" in dossier:
         n, m = 305, 100
-    else:
-        break
     resal = Resal([n] + couches_intermediaires + [m])
     file = open("ia_enregistrees/{}/{}".format(dossier, nom), "wb")
     cornichon.dump(resal, file)

@@ -143,7 +143,7 @@ class IaSl(chasse_peche.ChassePecheProba):
         self.resal_peche = None
 
     def attribuer_nom(self, nom):
-        self.nom_ia_chasse, self.nom_ia_peche = nomplateau_adverse
+        self.nom_ia_chasse, self.nom_ia_peche = nom
 
     def initialiser_ia(self):
         if self.plateau_adverse != self.plateau_allie:
