@@ -186,7 +186,7 @@ class IaSl(chasse_peche.ChassePecheProba):
             if cibles_valides:
                 return random.choice(cibles_valides)
             else:
-                cibles = self.resal_chasse.lister_cibles(self.plateau_adverse.renvoyer_vecteur_init(2))
+                cibles = self.resal_peche.lister_cibles(self.plateau_adverse.renvoyer_vecteur_init(2))
                 cibles.sort(reverse=True)
                 for (p, (i, j)) in cibles:
                     if self.plateau_adverse.jamais_vu((i, j)):
