@@ -154,11 +154,6 @@ class Plateau:
                     init += [1, 0]
                 elif case == 2:  # touché coulé
                     init += [1, 1]
-                for i in self.bateaux[1:]:
-                    if i > 0:
-                        init.append(1)
-                    else:
-                        init.append(0)
             elif mode == 2:
                 if case == -1:  # plouf
                     init += [0, 0, 1]
@@ -171,11 +166,11 @@ class Plateau:
                         init += [0, 1, 1]
                 elif case == 2:  # touché coulé
                     init += [1, 1, 1]
-                for i in self.bateaux[1:]:
-                    if i > 0:
-                        init.append(1)
-                    else:
-                        init.append(0)
+        for i in self.bateaux[1:]:
+            if i > 0:
+                init.append(1)
+            else:
+                init.append(0)
         return init
 
 

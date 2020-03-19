@@ -447,8 +447,12 @@ def nom_classe(classe):
         classe, (chasse, peche) = classe
         if chasse is not None:
             chasse = ' / Chasse : ' + chasse
+        else:
+            chasse = ''
         if peche is not None:
             peche = ' / Pêche : ' + peche
+        else:
+            peche = ''
     nom = str(classe)
     if '.' in nom:
         point = nom.index('.')
