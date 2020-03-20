@@ -1,6 +1,11 @@
 import sys
 import time
 import numpy as np
+import matplotlib.image as mpim
+import matplotlib.pyplot as plt
+import matplotlib
+import random as rd
+
 
 def test_bateaux(bateaux):
     """Voici un algorithme qui teste si les bateaux que rentrent le joueur correspondent à une disposition valide.
@@ -164,10 +169,6 @@ def test_poisson(table):
 
 
 ##Matrice couleur
-import numpy as np
-import matplotlib.image as mpim
-import matplotlib.pyplot as plt
-import random as rd
 
 def matrice_poids_probabilite( mat, bat_restants):
     matr = np.array(mat, dtype=int)
