@@ -227,7 +227,7 @@ class IaSl(chasse_peche.ChassePecheProba):
                 self.chasse[cible] = 0
                 self.mode_chasse = False
             if res == 2:
-                p = self.plateau_adverse.plateauVisible 
+                p = self.plateau_adverse.plateauVisible
                 print(p)
                 (a,b) = cible
                 v = [(a , b - 1), (a, b + 1), (a + 1, b), (a - 1, b)]
@@ -254,6 +254,7 @@ class IaSl(chasse_peche.ChassePecheProba):
                                 i+=1
                 print(i)
                 self.bateaux.remove(i)
+                self.mode_chasse = True
         else:
             if res == 1:
                 self.poisson.append(cible)
@@ -273,4 +274,4 @@ class IaSl(chasse_peche.ChassePecheProba):
                                 self.chasse[i, j] = 0
                 self.bateaux.remove(len(self.poisson) + 1)
                 self.poisson = []
-        self.mode_chasse = True
+                self.mode_chasse = True
