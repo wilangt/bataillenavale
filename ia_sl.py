@@ -221,33 +221,56 @@ class IaSl(chasse_peche.ChassePecheProba):
 
     def analyser(self,res,cible):
         if res == 0:
-            self.chasse[cible] = 0
-        if res == 1:
-            self.chasse[cible] = 0
-            self.mode_chasse = False
-        if res == 2:
-            p = self.plateau_adverse.plateauVisible # ça ne marche pas, il faut accéder à plateau visble
-            (a,b) = cible
-            v = [(a - 1, b - 1), (a - 1, b + 1), (a + 1, b - 1), (a + 1, b + 1)]
-            for (i,j) in v:
-                if p[i,j] == 1:
-                    v.pop((i,j))
-            for (k,l) in v:
-                i = 1
-                if k == a:
-                    if l == b+1:
-                        while coor(k,b+i) and p[k,b+i] == 1 :
-                            i+=1
-                    else:
-                        while coor(k,b-i) and p[k,b-i] == 1 :
-                            i+=1
-                else :
-                    if k == a+1:
-                        while coor(a+i,l) and p[a+i,l] == 1 :
-                            i+=1
-                    else:
-                        while coor(a-i,l) and p[a-i,l] == 1 :
-                            i+=1
-
-            self.bateaux.remove(i)
-            self.mode_chasse = True
+                self.chasse[cible] = 0
+        if self.nom_ia_peche is not None:
+            if res == 1:
+                self.chasse[cible] = 0
+                self.mode_chasse = False
+            if res == 2:
+                p = self.plateau_adverse.plateauVisible 
+                print(p)
+                (a,b) = cible
+                v = [(a , b - 1), (a, b + 1), (a + 1, b), (a - 1, b)]
+                vp = []
+                for (i,j) in v:
+                    if coor(i,j) and (p[i,j] == 1):
+                        vp.append((i,j))
+                print(vp)
+                for (k,l) in vp:
+                    i = 1
+                    if k == a:
+                        if l == b+1:
+                            while coor(k,b+i) and p[k,b+i] == 1 :
+                                i+=1
+                        else:
+                            while coor(k,b-i) and p[k,b-i] == 1 :
+                                i+=1
+                    else :
+                        if k == a+1:
+                            while coor(a+i,l) and p[a+i,l] == 1 :
+                                i+=1
+                        else:
+                            while coor(a-i,l) and p[a-i,l] == 1 :
+                                i+=1
+                print(i)
+                self.bateaux.remove(i)
+        else:
+            if res == 1:
+                self.poisson.append(cible)
+                self.mode_chasse = False
+            if res == 2:
+                for couple in self.poisson:
+                    self.chasse[couple] = 0
+                (a, b) = cible
+                if (a, b) > self.poisson[0]:
+                    (c, d) = self.poisson[0]
+                else:
+                    (c, d) = self.poisson[-1]
+                for (k, l) in [(a, b), (c, d)]:
+                    for i in range(k - 1, k + 1):
+                        for j in range(l - 1, l + 1):
+                            if coor(i, j):
+                                self.chasse[i, j] = 0
+                self.bateaux.remove(len(self.poisson) + 1)
+                self.poisson = []
+        self.mode_chasse = True
