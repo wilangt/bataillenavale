@@ -218,15 +218,15 @@ class IaSl(chasse_peche.ChassePecheProba):
                 if coor(i, j) and matrice_poids[i, j] >= cible[0]:
                     cible = (matrice_poids[i, j], (i, j))
             return cible[1]
-    
+
     def analyser(self,res,cible):
-        if res == 0: 
+        if res == 0:
             self.chasse[cible] = 0
         if res == 1:
             self.chasse[cible] = 0
             self.mode_chasse = False
         if res == 2:
-            p = plateau.plateauVisible# ça ne marche pas, il faut accéder à plateau visble
+            p = self.plateau_adverse.plateauVisible # ça ne marche pas, il faut accéder à plateau visble
             (a,b) = cible
             v = [(a - 1, b - 1), (a - 1, b + 1), (a + 1, b - 1), (a + 1, b + 1)]
             for (i,j) in v:
@@ -248,6 +248,6 @@ class IaSl(chasse_peche.ChassePecheProba):
                     else:
                         while coor(a-i,l) and p[a-i,l] == 1 :
                             i+=1
-            
+
             self.bateaux.remove(i)
             self.mode_chasse = True
