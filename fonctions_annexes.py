@@ -152,7 +152,10 @@ def mise_a_zero(a,b,t):
 def test_poisson(table):
     P = []
     C = []
-    t = np.copy(table)
+    t = np.zeros((10, 10), dtype=int)
+    for i in range(10):
+        for j in range(10):
+            t[i, j] = table[i, j]
     for i in range(10):
         for j in range(10):
             if t[i,j] == -1:
