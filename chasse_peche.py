@@ -154,7 +154,10 @@ class ChassePecheCroixProba(ChassePecheCroix):  # A ajouter à main / marche pas
             mat_tot += prob_un_bateau(mat, k)
             mat_tot += prob_un_bateau(mat.transpose(), k).transpose()
         # print(mat_tot)
-        mat_tot = mat_tot / np.max(mat_tot)
+        if np.max(mat_tot) != 0:
+            mat_tot = mat_tot / np.max(mat_tot)
+        else:
+            mat_tot += 1
         return mat_tot
 
     def choisir_cible_peche(self):  # ici

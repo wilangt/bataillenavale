@@ -221,39 +221,22 @@ class IaSl(chasse_peche.ChassePecheProba):
 
     def analyser(self,res,cible):
         if res == 0:
-                self.chasse[cible] = 0
+            self.chasse[cible] = 0
         if self.nom_ia_peche is not None:
             if res == 1:
                 self.chasse[cible] = 0
                 self.mode_chasse = False
             if res == 2:
                 p = self.plateau_adverse.plateauVisible
-                print(p)
-                (a,b) = cible
-                v = [(a , b - 1), (a, b + 1), (a + 1, b), (a - 1, b)]
-                vp = []
-                for (i,j) in v:
-                    if coor(i,j) and (p[i,j] == 1):
-                        vp.append((i,j))
-                print(vp)
-                for (k,l) in vp:
-                    i = 1
-                    if k == a:
-                        if l == b+1:
-                            while coor(k,b+i) and p[k,b+i] == 1 :
-                                i+=1
-                        else:
-                            while coor(k,b-i) and p[k,b-i] == 1 :
-                                i+=1
-                    else :
-                        if k == a+1:
-                            while coor(a+i,l) and p[a+i,l] == 1 :
-                                i+=1
-                        else:
-                            while coor(a-i,l) and p[a-i,l] == 1 :
-                                i+=1
-                print(i)
-                self.bateaux.remove(i)
+                (a, b) = cible
+                vp = [(a, b)]
+                def annexe(a, b):
+                    for (i, j) in [(a , b - 1), (a, b + 1), (a + 1, b), (a - 1, b)]:
+                        if coor(i, j) and (p[i, j] == 1) and ((i, j) not in vp):
+                            vp.append((i,j))
+                            annexe(i, j)
+                annexe(a, b)
+                self.bateaux.remove(len(vp))
                 self.mode_chasse = True
         else:
             if res == 1:
