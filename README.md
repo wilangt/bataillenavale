@@ -111,7 +111,7 @@ Partie terminée en 28 coups
 
 ## Matrices de probabilité de quelques situations
 
-<img src="presentations/Pierre/Screenshots/defense.png" width="40%">
+<img src="presentations/Pierre/Screenshots/diapo600.jpg" width="40%">
 
 ## Comparaison des différents algorithmes
 
