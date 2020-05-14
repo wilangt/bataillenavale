@@ -105,7 +105,7 @@ Attaquant :
 Partie terminée en 28 coups
 ```
 
-## Interface codé avec Pygame
+## Interface codé avec PyGame
 
 <img src="presentations/Milan/images/defense.png" width="45%"> <img src="presentations/Milan/images/attaque.png" width="45%">
 
@@ -125,8 +125,9 @@ Partie terminée en 28 coups
 
 État des objectifs en mars 2020 :
 - [x] Comprendre les enjeux du jeu de la bataille navale
-- [x] Implémenter un environnement et une interface permettant de jouer à la bataille navale :
+- [x] Implémenter un environnement et une interface permettant de jouer à la bataille navale
 - [x] Concevoir et Implémenter une IA utilisant une stratégie probabiliste
-- [ ] Concevoir, implémenter et entraîner une IA utilisant l'apprentissage supervisé grâce à un réseau de neurone : **Stade avancé**
+- [x] Concevoir et implémenter **depuis zéro** une IA utilisant l'apprentissage supervisé grâce à un réseau de neurone
+- [ ] Idem mais en utilisant une librairie (en l'occurrence TensorFlow) : **Stade très avancé**
 - [ ] Concevoir, implémenter et entraîner une IA utilisant l'apprentissage par renforcement : **Théorie acquise**
 - [x] Comparer les performances (en terme de temps et de résultats) des différentes IA et en tirer une conclusion **(Pour les algorithmes déjà implémentés)**
