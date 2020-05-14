@@ -107,16 +107,17 @@ Partie terminée en 28 coups
 
 ## Interface codé avec Pygame
 
-<img src="presentations/Milan/images/defense.png" width="40%">
-<img src="presentations/Milan/images/attaque.png" width="40%">
+<img src="presentations/Milan/images/defense.png" width="45%"> <img src="presentations/Milan/images/attaque.png" width="45%">
 
 ## Matrices de probabilité de quelques situations
 
-<img src="presentations/Pierre/Screenshots/diapo600.jpg" width="40%">
+<img src="presentations/Pierre/Screenshots/image6.png" width="45%"> <img src="presentations/Pierre/Screenshots/diapo600.jpg" width="45%">
+<img src="presentations/Pierre/Screenshots/image8.png" width="45%"> <img src="presentations/Pierre/Screenshots/diapo602.jpg" width="45%">
+<img src="presentations/Pierre/Screenshots/image7.png" width="45%"> <img src="presentations/Pierre/Screenshots/diapo601.jpg" width="45%">
 
 ## Comparaison des différents algorithmes
 
-
+![Comparaison](presentations/Pierre/Screenshots/diapo104.png)
 
 # Progression
 
