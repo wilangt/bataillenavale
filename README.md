@@ -112,8 +112,10 @@ Partie terminée en 28 coups
 ## Matrices de probabilité de quelques situations
 
 <img src="presentations/Pierre/Screenshots/image6.png" width="45%"> <img src="presentations/Pierre/Screenshots/diapo600.jpg" width="45%">
+
 <img src="presentations/Pierre/Screenshots/image8.png" width="45%"> <img src="presentations/Pierre/Screenshots/diapo602.jpg" width="45%">
-<img src="presentations/Pierre/Screenshots/image7.png" width="45%"> <img src="presentations/Pierre/Screenshots/diapo601.jpg" width="45%">
+
+<img src="presentations/Pierre/Screenshots/image7.jpg" width="45%"> <img src="presentations/Pierre/Screenshots/diapo601.jpg" width="45%">
 
 ## Comparaison des différents algorithmes
 
