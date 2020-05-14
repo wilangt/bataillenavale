@@ -119,7 +119,7 @@ Partie terminée en 28 coups
 
 ## Comparaison des différents algorithmes
 
-![Comparaison](presentations/Pierre/Screenshots/diapo104.png)
+![Comparaison](presentations/Pierre/Screenshots/diapo104.jpg)
 
 # Progression
 
@@ -129,4 +129,4 @@ Partie terminée en 28 coups
 - [x] Concevoir et Implémenter une IA utilisant une stratégie probabiliste
 - [ ] Concevoir, implémenter et entraîner une IA utilisant l'apprentissage supervisé grâce à un réseau de neurone : **Stade avancé**
 - [ ] Concevoir, implémenter et entraîner une IA utilisant l'apprentissage par renforcement : **Théorie acquise**
-- [x] Comparer les performances (en terme de temps et de résultats) des différentes IA et en tirer une conclusion **Pour les algorithmes déjà implémentés**
+- [x] Comparer les performances (en terme de temps et de résultats) des différentes IA et en tirer une conclusion **(Pour les algorithmes déjà implémentés)**
