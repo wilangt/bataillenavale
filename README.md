@@ -2,8 +2,14 @@
 
 ### Julie Veschambre, Pierre Boistier, Milan Gonzalez-Thauvin
 
+TIPE réalisé pendant l'année scolaire 2019-2020 par Julie Veschambre, Pierre Boistier et Milan Gonzalez-Thauvin. Il n'a pas été achevé en raison de la crise sanitaire et de l'annulation de l'épreuve de TIPE en mars 2020.
+
+
+## Motivation
 Le jeu de la bataille navale est un jeu aussi divertissant qu'intéressant à étudier. C'est donc avant tout son coté ludique et l'optique d'implémenter un programme capable de battre un être humain qui m'a poussé à choisir ce sujet.
 
+
+## Ancrage au thème
 Le jeu de la bataille navale est le jeu de société de référence lorsqu'il s'agit d'affrontements en mer. C'est pour cette raison que son étude et en particulier l'implémentation d'un amiral artificiel performant rentre parfaitement dans le cadre du thème "Océan".
 
 ## Positionnements thématique
@@ -52,3 +58,57 @@ Quelles performances peut on attendre de ces IA ?
 \[7] : A Beginner's Guide to Deep Reinforcement Learning, Chris Nicholson, https://pathmind.com/wiki/deep-reinforcement-learning  
 \[8] : Deep reinforcement learning, battleship, Jonathan Landy, 2016, http://efavdb.com/battleship  
 \[9] : TensorFlow for Deep Learning, Bharath Ramsundar & Reza Bosagh Zadeh, 2018, O'Reilly
+
+
+# Implémentation
+
+Implémentation en Python3. Modules utilisés : numpy, matplotlib, pygame
+
+##Exemple d'utilisation
+
+  Modes :
+  0 : Jeu
+  1 : Performances
+  2 : Enregistrer un cornichon
+  3 : Enregistrer une IA
+  4 : Entraîner une IA
+  5 : Afficher proba diapo
+  6 : Mode manuel
+  > 0
+
+  Interface :
+  0 : Non
+  1 : Oui
+  > 0
+
+  Defenseur :
+  0 : Humain
+  1 : HasardDefense
+  2 : HasardDefenseCornichon
+  3 : ConfigInit
+  > 1
+
+  Attaquant :
+  0 : Humain
+  1 : HasardDebile
+  2 : HasardMalin
+  3 : ChasseEtPeche
+  4 : ChassePecheCroix
+  5 : ChassePecheCroixProba
+  6 : ChassePecheProba
+  7 : ChassePecheProbaCroixDecroissanceLineaire
+  8 : ChassePecheProbaCroixDecroissanceExpo
+  9 : IaSl
+  > 6
+
+  Partie terminée en 28 coups
+
+# Progression
+
+État des objectifs en mars 2020 :
+- [x] Comprendre les enjeux du jeu de la bataille navale : ****
+- [x] Implémenter un environnement et une interface permettant de jouer à la bataille navale :
+- [x] Concevoir et Implémenter une IA utilisant une stratégie probabiliste
+- [ ] Concevoir, implémenter et entraîner une IA utilisant l'apprentissage supervisé grâce à un réseau de neurone : **Stade avancé**
+- [ ] Concevoir, implémenter et entraîner une IA utilisant l'apprentissage par renforcement : **Théorie acquise**
+- [x] Comparer les performances (en terme de temps et de résultats) des différentes IA et en tirer une conclusion
