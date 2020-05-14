@@ -105,7 +105,7 @@ Attaquant :
 Partie terminée en 28 coups
 ```
 
-## Interface codé avec PyGame
+## Interface codée avec PyGame
 
 <img src="presentations/Milan/images/defense.png" width="45%"> <img src="presentations/Milan/images/attaque.png" width="45%">
 
