@@ -1,7 +1,5 @@
 # Conception, Implémentation et optimisation de plusieurs intelligences artificielles capable de gagner à la bataille navale
 
-### Julie Veschambre, Pierre Boistier, Milan Gonzalez-Thauvin
-
 TIPE réalisé pendant l'année scolaire 2019-2020 par Julie Veschambre, Pierre Boistier et Milan Gonzalez-Thauvin. Il n'a pas été achevé en raison de la crise sanitaire et de l'annulation de l'épreuve de TIPE en mars 2020.
 
 
