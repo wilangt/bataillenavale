@@ -107,13 +107,11 @@ Partie terminée en 28 coups
 
 ## Interface codé avec Pygame
 
-<img src="presentations/Milan/images/defense.png" width="45%">
-<img src="presentations/Milan/images/attaque.png" width="45%">
-
-Placer ses bateaux et couler la flotte adverse
+<img src="presentations/Milan/images/defense.png" width="40%"> <img src="presentations/Milan/images/attaque.png" width="40%">
 
 ## Matrices de probabilité de quelques situations
 
+<img src="presentations/Pierre/Screenshots/defense.png" width="40%">
 
 ## Comparaison des différents algorithmes
 
