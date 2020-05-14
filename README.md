@@ -64,51 +64,61 @@ Quelles performances peut on attendre de ces IA ?
 
 Implémentation en Python3. Modules utilisés : numpy, matplotlib, pygame
 
-##Exemple d'utilisation
+## Exemple d'utilisation
 
-  Modes :
-  0 : Jeu
-  1 : Performances
-  2 : Enregistrer un cornichon
-  3 : Enregistrer une IA
-  4 : Entraîner une IA
-  5 : Afficher proba diapo
-  6 : Mode manuel
-  > 0
+```
+Modes :
+0 : Jeu
+1 : Performances
+2 : Enregistrer un cornichon
+3 : Enregistrer une IA
+4 : Entraîner une IA
+5 : Afficher proba diapo
+6 : Mode manuel
+> 0
 
-  Interface :
-  0 : Non
-  1 : Oui
-  > 0
+Interface :
+0 : Non
+1 : Oui
+> 0
 
-  Defenseur :
-  0 : Humain
-  1 : HasardDefense
-  2 : HasardDefenseCornichon
-  3 : ConfigInit
-  > 1
+Defenseur :
+0 : Humain
+1 : HasardDefense
+2 : HasardDefenseCornichon
+3 : ConfigInit
+> 1
 
-  Attaquant :
-  0 : Humain
-  1 : HasardDebile
-  2 : HasardMalin
-  3 : ChasseEtPeche
-  4 : ChassePecheCroix
-  5 : ChassePecheCroixProba
-  6 : ChassePecheProba
-  7 : ChassePecheProbaCroixDecroissanceLineaire
-  8 : ChassePecheProbaCroixDecroissanceExpo
-  9 : IaSl
-  > 6
+Attaquant :
+0 : Humain
+1 : HasardDebile
+2 : HasardMalin
+3 : ChasseEtPeche
+4 : ChassePecheCroix
+5 : ChassePecheCroixProba
+6 : ChassePecheProba
+7 : ChassePecheProbaCroixDecroissanceLineaire
+8 : ChassePecheProbaCroixDecroissanceExpo
+9 : IaSl
+> 6
 
-  Partie terminée en 28 coups
+Partie terminée en 28 coups
+```
+
+## Interface codé avec Pygame
+
+![Defenseur](presentations/Milan/defense.png)
+Placer ses bateaux
+
+![Attaquant](presentations/Milan/attaque.png)
+Couler la flotte adverse
 
 # Progression
 
 État des objectifs en mars 2020 :
-- [x] Comprendre les enjeux du jeu de la bataille navale : ****
+- [x] Comprendre les enjeux du jeu de la bataille navale
 - [x] Implémenter un environnement et une interface permettant de jouer à la bataille navale :
 - [x] Concevoir et Implémenter une IA utilisant une stratégie probabiliste
 - [ ] Concevoir, implémenter et entraîner une IA utilisant l'apprentissage supervisé grâce à un réseau de neurone : **Stade avancé**
 - [ ] Concevoir, implémenter et entraîner une IA utilisant l'apprentissage par renforcement : **Théorie acquise**
-- [x] Comparer les performances (en terme de temps et de résultats) des différentes IA et en tirer une conclusion
+- [x] Comparer les performances (en terme de temps et de résultats) des différentes IA et en tirer une conclusion **Pour les algorithmes déjà implémentés**
