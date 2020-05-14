@@ -108,6 +108,7 @@ Partie terminée en 28 coups
 ## Interface codé avec Pygame
 
 ![Defenseur](https://github.com/wilangt/bataillenavale/presentations/Milan/images/defense.png?raw=true)
+<img src="presentations/Milan/images/defense.png" width="45%" alt="Défenseur">
 Placer ses bateaux
 
 ![Attaquant](presentations/Milan/images/attaque.png)
